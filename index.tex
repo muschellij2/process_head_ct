@@ -1,0 +1,128 @@
+\documentclass[]{elsarticle} %review=doublespace preprint=single 5p=2 column
+%%% Begin My package additions %%%%%%%%%%%%%%%%%%%
+\usepackage[hyphens]{url}
+
+  \journal{NeuroImage} % Sets Journal name
+
+
+\usepackage{lineno} % add
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+\bibliographystyle{elsarticle-harv}
+\biboptions{sort&compress} % For natbib
+\usepackage{graphicx}
+\usepackage{booktabs} % book-quality tables
+%%%%%%%%%%%%%%%% end my additions to header
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \usepackage{fontspec}
+  \ifxetex
+    \usepackage{xltxtra,xunicode}
+  \fi
+  \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+  \newcommand{\euro}{€}
+\fi
+% use microtype if available
+\IfFileExists{microtype.sty}{\usepackage{microtype}}{}
+\ifxetex
+  \usepackage[setpagesize=false, % page size defined by xetex
+              unicode=false, % unicode breaks when used with xetex
+              xetex]{hyperref}
+\else
+  \usepackage[unicode=true]{hyperref}
+\fi
+\hypersetup{breaklinks=true,
+            bookmarks=true,
+            pdfauthor={},
+            pdftitle={Recommendations for Processing Head CT Data},
+            colorlinks=false,
+            urlcolor=blue,
+            linkcolor=magenta,
+            pdfborder={0 0 0}}
+\urlstyle{same}  % don't use monospace font for urls
+
+\setcounter{secnumdepth}{0}
+% Pandoc toggle for numbering sections (defaults to be off)
+\setcounter{secnumdepth}{0}
+% Pandoc header
+
+
+
+\begin{document}
+\begin{frontmatter}
+
+  \title{Recommendations for Processing Head CT Data}
+    \author[Some Institute of Technology]{Alice Anonymous\corref{c1}}
+   \ead{alice@example.com} 
+   \cortext[c1]{Corresponding Author}
+    \author[Another University]{Bob Security}
+   \ead{bob@example.com} 
+  
+      \address[Some Institute of Technology]{Department, Street, City, State, Zip}
+    \address[Another University]{Department, Street, City, State, Zip}
+  
+  \begin{abstract}
+  This is the abstract.
+  
+  It consists of two paragraphs.
+  \end{abstract}
+  
+ \end{frontmatter}
+
+\hypertarget{introduction}{%
+\section{Introduction}\label{introduction}}
+
+\hypertarget{section}{%
+\section{}\label{section}}
+
+\begin{itemize}
+\tightlist
+\item
+  DICOM data
+
+  \begin{itemize}
+  \tightlist
+  \item
+    DICOM anonymizer
+  \item
+    longitudinal data
+
+    \begin{itemize}
+    \tightlist
+    \item
+      keep time, but do days from Jan-01-1900
+    \item
+      or could keep date
+    \end{itemize}
+  \end{itemize}
+\item
+  Remove Localizers and scouts
+\end{itemize}
+
+NIfTI data - why to convert to this format - many options out there -
+dcm2niix best - dcm2niir, divest, \& python equivalents - scale of image
+(-1024 to 3071) - what about \texttt{scl\_slope} and \texttt{scl\_inter}
+- Cormack vs.~HU units
+
+Skull Stripping\\
+-
+
+Registration - clinical toolbox -
+
+\hypertarget{references}{%
+\section*{References}\label{references}}
+\addcontentsline{toc}{section}{References}
+
+\end{document}
+
+

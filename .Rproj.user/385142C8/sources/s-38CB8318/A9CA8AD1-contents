@@ -1,0 +1,68 @@
+#' @title Cormack to Hounsfield Units
+#' @description Converts Cormack to Hounsfield units, with code adapted from
+#' clinical_c2h.m from http://www.mccauslandcenter.sc.edu/CRNL/clinical-toolbox
+#' @param img filename or object of class nifti
+#' @return object of class nifti
+#' @export
+clinical_c2h = function(img){
+  img = check_nifti(img)
+  kUninterestingDarkUnits = 900; 
+  # e.g. -1000..-100
+  kInterestingMidUnits = 200; 
+  #e.g. -100..+300
+  kScaleRatio = 10;
+  # increase dynamic range of interesting voxels by 3
+  kMax = kInterestingMidUnits * (kScaleRatio+1); 
+  
+  change.ind = which(img > kUninterestingDarkUnits)
+  vals = img[change.ind]
+  vals = vals - kUninterestingDarkUnits;
+  
+  ind = vals > kMax
+  
+  vals[ind] = kInterestingMidUnits + (vals[ind]-kMax);
+  vals[!ind] = lExtra = round(vals[!ind]/(kScaleRatio+1));
+  
+  vals = kUninterestingDarkUnits + vals;
+  
+  img[change.ind] = vals
+  img = img - 1024
+  img@scl_slope = 1
+  img@scl_inter = 0
+  img
+}
+
+#' @title Hounsfield to Cormack Units
+#' @description Converts Hounsfield to Cormack units, with code adapted from
+#' clinical_h2c.m from http://www.mccauslandcenter.sc.edu/CRNL/clinical-toolbox
+#' @param img filename or object of class nifti
+#' @return object of class nifti
+#' @export
+#' @importFrom neurobase check_outfile checknii datatyper nii.stub
+#' @importFrom neurobase tempimg writenii window_img robust_window rescale_img
+#' @importFrom neurobase zscore_img zero_pad mask_img niftiarr newnii
+#' @importFrom grDevices dev.cur gray
+#' @importFrom graphics par
+#' @importFrom stats lm complete.cases coef fft fisher.test model.matrix pt
+#' @importFrom methods new
+clinical_h2c = function(img){ 
+  
+  img = check_nifti(img)
+  kUninterestingDarkUnits = 900; 
+  # e.g. -1000..-100
+  kInterestingMidUnits = 200; 
+  #e.g. -100..+300
+  kScaleRatio = 10;
+  # increase dynamic range of interesting voxels by 3
+  kMax = kInterestingMidUnits * (kScaleRatio+1); 
+  mn = min(img)
+
+  v16 = img - mn
+  lExtra = v16-kUninterestingDarkUnits;
+  lExtra[lExtra > kInterestingMidUnits] = kInterestingMidUnits
+  lExtra[lExtra > 0] = lExtra[lExtra > 0]*kScaleRatio;
+  lExtra[lExtra < 0] = 0;
+  out = v16 + lExtra;
+  out = niftiarr(img, out)
+  return(out)
+}

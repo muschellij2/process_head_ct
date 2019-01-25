@@ -1,0 +1,18 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+# process_head_ct
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of process_head_ct is to discuss ways to process head CT data.
