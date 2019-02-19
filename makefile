@@ -1,12 +1,12 @@
 all:
-	Rscript -e "rmarkdown::render('README.Rmd')"
+	Rscript -e "rmarkdown::render('index.Rmd')"
 
-README.pdf: README.Rmd 
-	Rscript -e "rmarkdown::render('README.Rmd')"
+index.pdf: index.Rmd 
+	Rscript -e "rmarkdown::render('index.Rmd')"
 
 
-README.md: README.Rmd 
-	Rscript -e "rmarkdown::render('README.Rmd', output_format = rmarkdown::github_document())"
+index.md: index.Rmd 
+	Rscript -e "rmarkdown::render('index.Rmd', output_format = rmarkdown::github_document())"
 
 clean: 
-	rm -f README.md README.pdf
+	rm -f index.md index.pdf
