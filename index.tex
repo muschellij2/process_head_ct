@@ -178,10 +178,11 @@ software with varying levels. We aim to present software that we have
 had used directly for analysis or preprocessing. Also, other papers and
 tutorials discuss their use (CITE).
 
-For reading DICOM data, there
-
-\hypertarget{converting-dicom-to-nifti}{%
-\subsection{Converting DICOM to NIfTI}\label{converting-dicom-to-nifti}}
+For reading DICOM data, there are multiple options. The MATLAB imaging
+toolbox, \texttt{oro.dicom} \texttt{R} package, \texttt{pydicom}, and
+\texttt{ITK} cinterfaces can read DICOM data amongst others. The DICOM
+toolkit \texttt{dcmtk} has multiple DICOM manipulation tools, including
+\texttt{dcmconv} to convert DICOM files to other imaging formats.
 
 Though most imaging analysis tools can read in DICOM data, there are
 downsides to using the DICOM format. In most cases, a DICOM image is
@@ -194,6 +195,9 @@ is inefficient. Most importantly though, many imaging analyses perform
 3-dimensional operations, such as smoothing. Thus, putting the data into
 a different format may be helpful.
 
+\hypertarget{converting-dicom-to-nifti}{%
+\subsection{Converting DICOM to NIfTI}\label{converting-dicom-to-nifti}}
+
 Many different general 3D medical imaging formats exist, such as
 ANALYZE, NIfTI, NRRD, and MNC. We recommend the NIfTI format as it can
 be read by nearly all medical imaging platforms, has been widely used,
@@ -203,7 +207,7 @@ software to convert DICOM data and the recommended software
 (\texttt{dcm2niix}) outputs data in a NIfTI file.
 
 Although we recommend this software, many good and complete solutions
-exist. Examples include \texttt{dicom2nifti} in the \texttt{read.dicom}
+exist. Examples include \texttt{dicom2nifti} in the \texttt{oro.dicom}
 \texttt{R} package, \texttt{pydicom}, \texttt{dicom2nifti} in
 \texttt{MATLAB}, and using large imaging suites such as using
 \texttt{ITK} image reading functions for DICOM files and can write NIfTI
@@ -277,19 +281,92 @@ transforming the data into Cormack units, adding a value to the data
 are recommended in negative values are of interest.
 
 One of the most common steps in processing imaging of the brain is to
-remove non-brain structures from the image.
+remove non-brain structures from the image. We have published a method
+that uses the brain extraction tool (BET) from FSL, originally built for
+MRI, to perform brain extraction (CITE) with code provided
+(http://bit.ly/CTBET\_BASH). Many papers present brain extracted CT
+images, but do not always disclose the method of extraction. Recently,
+convolutional neural networks and shape propagation techniques have been
+quite successful in this task (Akkus et al. 2018) and models have been
+released (https://github.com/aqqush/CT\_BET). Overall, much research can
+still be done in this area as conditions such as traumatic brain injury
+(TBI) and surgery, such as craniotomies or craniectomies can cause these
+methods to potentially fail.
 
 \hypertarget{registration-to-a-ct-template}{%
 \subsection{Registration to a CT
 template}\label{registration-to-a-ct-template}}
+
+Though many analyses in clinical data may be subject-specific,
+population-level analyses are still of interest. In some cases,
+registration from a template space to a subject space can provide
+information that can be aggregated across people for analysis. For
+example, one can perform a label fusion approach to CT data to infer the
+size of the hippocampus and then analyze hippocampi sizes across the
+population. One issue with these approaches is that most templates and
+approaches rely on an MRI template. These templates were developed by
+taking MRIs of healthy volunteers, which is unethical with CT data due
+to the radiation exposure. To create templates, retrospective searches
+through medical records can provide patients who came in with symptoms
+warranting a CT scan, such as a headache, but had a diagnosis of no
+pathology or damage. Thus, these neuro-normal scans are similar to that
+of those collected those in MRI research studies but with some important
+differences. As these are retrospective, inclusion criteria information
+may not be easily obtainable if not clinically collected, scanning
+protocols and parameters may vary, even within hospital and especially
+over time, and these patients still have neurological symptoms. Though
+these challenges exist, with a large enough patient population and a
+research consent at an institution, these scans can be used to create
+templates and atlases based on CT. To our knowledge, the first publicly
+available head CT template exists was released in 2012 by Rorden et al.
+(2012), for the purpose of spatial normalization.
+
+One interesting aspect of CT image registration is again that CT data
+has units within the same range. To say they are uniformly standardized
+is a bit too strong in our opinion, but you can think of them as much
+more standardized than MRI due to the nature of the data. This
+standardization may warrant or allow the user different search and
+evaluation cost functions for registration, such as least squares. We
+have found though that normalized mutual information still performs well
+in CT-to-CT registration and should be at least considered when using
+CT-to-MRI or CT-to-PET registration. As the data are in NIfTI format,
+almost all image registration software should work, though one should
+consider transforming the units using Cormack units or other
+transformations so negative values do not exist in the data.
+
+\hypertarget{pipeline}{%
+\subsection{Pipeline}\label{pipeline}}
+
+Overall, our recommended pipeline is as follows: 1. Use CTP to organize
+and anonymize the DICOM data from a PACS. 2. Extract relevant header
+information for each DICOM, using software such as \texttt{dcmdump} from
+\texttt{dcmtk} and store, excluding PHI. 3. Convert DICOM to NIfTI using
+\texttt{dcm2niix}, which can create brain imaging data structure (BIDS)
+formatted data. Use the tilt-corrected and data with uniform voxel size.
+
+After, depending on the purpose of the analysis, you may do registration
+then brain extraction, brain extraction then registration, or not do
+registration at all. If you are doing analysis of the skull, you can
+also use brain extraction as a first step to identify areas to be
+removed.
+
+For brain extraction, run \texttt{BET} for CT or \texttt{CT\_BET}
+(especially if you have GPUs for the neural network).
+
+\hypertarget{section}{%
+\subsection{}\label{section}}
+
+Additionally, the spatial constrast is much lower than T1-weighted MRI
+for image segmentation. Therefore, concurrent MRI may be useful. One
+large issue
 
 \hypertarget{conclusions}{%
 \section{Conclusions}\label{conclusions}}
 
 Most
 
-\hypertarget{section}{%
-\section{}\label{section}}
+\hypertarget{section-1}{%
+\section{}\label{section-1}}
 
 \begin{itemize}
 \tightlist
@@ -329,10 +406,22 @@ Skull Stripping\\
 \addcontentsline{toc}{section}{References}
 
 \hypertarget{refs}{}
+\leavevmode\hypertarget{ref-ct_bet}{}%
+Akkus, Zeynettin, Petro M Kostandy, Kenneth A Philbrick, and Bradley J
+Erickson. 2018. ``Extraction of Brain Tissue from CT Head Images Using
+Fully Convolutional Neural Networks.'' In \emph{Medical Imaging 2018:
+Image Processing}, 10574:1057420. International Society for Optics;
+Photonics.
+
 \leavevmode\hypertarget{ref-aryanto2015free}{}%
 Aryanto, KYE, M Oudkerk, and PMA van Ooijen. 2015. ``Free DICOM
 de-Identification Tools in Clinical Research: Functioning and Safety of
 Patient Privacy.'' \emph{European Radiology} 25 (12): 3685--95.
+
+\leavevmode\hypertarget{ref-rorden2012age}{}%
+Rorden, Christopher, Leonardo Bonilha, Julius Fridriksson, Benjamin
+Bender, and Hans-Otto Karnath. 2012. ``Age-Specific Ct and Mri Templates
+for Spatial Normalization.'' \emph{Neuroimage} 61 (4): 957--65.
 
 \end{document}
 
