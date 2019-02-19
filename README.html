@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style type="text/css">
+@font-face {
+font-family: octicons-link;
+src: url(data:font/woff;charset=utf-8;base64,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) format('woff');
+}
+body {
+-webkit-text-size-adjust: 100%;
+text-size-adjust: 100%;
+color: #333;
+font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+font-size: 16px;
+line-height: 1.6;
+word-wrap: break-word;
+}
+a {
+background-color: transparent;
+}
+a:active,
+a:hover {
+outline: 0;
+}
+strong {
+font-weight: bold;
+}
+h1 {
+font-size: 2em;
+margin: 0.67em 0;
+}
+img {
+border: 0;
+}
+hr {
+box-sizing: content-box;
+height: 0;
+}
+pre {
+overflow: auto;
+}
+code,
+kbd,
+pre {
+font-family: monospace, monospace;
+font-size: 1em;
+}
+input {
+color: inherit;
+font: inherit;
+margin: 0;
+}
+html input[disabled] {
+cursor: default;
+}
+input {
+line-height: normal;
+}
+input[type="checkbox"] {
+box-sizing: border-box;
+padding: 0;
+}
+table {
+border-collapse: collapse;
+border-spacing: 0;
+}
+td,
+th {
+padding: 0;
+}
+* {
+box-sizing: border-box;
+}
+input {
+font: 13px / 1.4 Helvetica, arial, nimbussansl, liberationsans, freesans, clean, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+a {
+color: #4078c0;
+text-decoration: none;
+}
+a:hover,
+a:active {
+text-decoration: underline;
+}
+hr {
+height: 0;
+margin: 15px 0;
+overflow: hidden;
+background: transparent;
+border: 0;
+border-bottom: 1px solid #ddd;
+}
+hr:before {
+display: table;
+content: "";
+}
+hr:after {
+display: table;
+clear: both;
+content: "";
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+margin-top: 15px;
+margin-bottom: 15px;
+line-height: 1.1;
+}
+h1 {
+font-size: 30px;
+}
+h2 {
+font-size: 21px;
+}
+h3 {
+font-size: 16px;
+}
+h4 {
+font-size: 14px;
+}
+h5 {
+font-size: 12px;
+}
+h6 {
+font-size: 11px;
+}
+blockquote {
+margin: 0;
+}
+ul,
+ol {
+padding: 0;
+margin-top: 0;
+margin-bottom: 0;
+}
+ol ol,
+ul ol {
+list-style-type: lower-roman;
+}
+ul ul ol,
+ul ol ol,
+ol ul ol,
+ol ol ol {
+list-style-type: lower-alpha;
+}
+dd {
+margin-left: 0;
+}
+code {
+font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+font-size: 12px;
+}
+pre {
+margin-top: 0;
+margin-bottom: 0;
+font: 12px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+}
+.select::-ms-expand {
+opacity: 0;
+}
+.octicon {
+font: normal normal normal 16px/1 octicons-link;
+display: inline-block;
+text-decoration: none;
+text-rendering: auto;
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+-webkit-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+}
+.octicon-link:before {
+content: '\f05c';
+}
+.markdown-body:before {
+display: table;
+content: "";
+}
+.markdown-body:after {
+display: table;
+clear: both;
+content: "";
+}
+.markdown-body>*:first-child {
+margin-top: 0 !important;
+}
+.markdown-body>*:last-child {
+margin-bottom: 0 !important;
+}
+a:not([href]) {
+color: inherit;
+text-decoration: none;
+}
+.anchor {
+display: inline-block;
+padding-right: 2px;
+margin-left: -18px;
+}
+.anchor:focus {
+outline: none;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+margin-top: 1em;
+margin-bottom: 16px;
+font-weight: bold;
+line-height: 1.4;
+}
+h1 .octicon-link,
+h2 .octicon-link,
+h3 .octicon-link,
+h4 .octicon-link,
+h5 .octicon-link,
+h6 .octicon-link {
+color: #000;
+vertical-align: middle;
+visibility: hidden;
+}
+h1:hover .anchor,
+h2:hover .anchor,
+h3:hover .anchor,
+h4:hover .anchor,
+h5:hover .anchor,
+h6:hover .anchor {
+text-decoration: none;
+}
+h1:hover .anchor .octicon-link,
+h2:hover .anchor .octicon-link,
+h3:hover .anchor .octicon-link,
+h4:hover .anchor .octicon-link,
+h5:hover .anchor .octicon-link,
+h6:hover .anchor .octicon-link {
+visibility: visible;
+}
+h1 {
+padding-bottom: 0.3em;
+font-size: 2.25em;
+line-height: 1.2;
+border-bottom: 1px solid #eee;
+}
+h1 .anchor {
+line-height: 1;
+}
+h2 {
+padding-bottom: 0.3em;
+font-size: 1.75em;
+line-height: 1.225;
+border-bottom: 1px solid #eee;
+}
+h2 .anchor {
+line-height: 1;
+}
+h3 {
+font-size: 1.5em;
+line-height: 1.43;
+}
+h3 .anchor {
+line-height: 1.2;
+}
+h4 {
+font-size: 1.25em;
+}
+h4 .anchor {
+line-height: 1.2;
+}
+h5 {
+font-size: 1em;
+}
+h5 .anchor {
+line-height: 1.1;
+}
+h6 {
+font-size: 1em;
+color: #777;
+}
+h6 .anchor {
+line-height: 1.1;
+}
+p,
+blockquote,
+ul,
+ol,
+dl,
+table,
+pre {
+margin-top: 0;
+margin-bottom: 16px;
+}
+hr {
+height: 4px;
+padding: 0;
+margin: 16px 0;
+background-color: #e7e7e7;
+border: 0 none;
+}
+ul,
+ol {
+padding-left: 2em;
+}
+ul ul,
+ul ol,
+ol ol,
+ol ul {
+margin-top: 0;
+margin-bottom: 0;
+}
+li>p {
+margin-top: 16px;
+}
+dl {
+padding: 0;
+}
+dl dt {
+padding: 0;
+margin-top: 16px;
+font-size: 1em;
+font-style: italic;
+font-weight: bold;
+}
+dl dd {
+padding: 0 16px;
+margin-bottom: 16px;
+}
+blockquote {
+padding: 0 15px;
+color: #777;
+border-left: 4px solid #ddd;
+}
+blockquote>:first-child {
+margin-top: 0;
+}
+blockquote>:last-child {
+margin-bottom: 0;
+}
+table {
+display: block;
+width: 100%;
+overflow: auto;
+word-break: normal;
+word-break: keep-all;
+}
+table th {
+font-weight: bold;
+}
+table th,
+table td {
+padding: 6px 13px;
+border: 1px solid #ddd;
+}
+table tr {
+background-color: #fff;
+border-top: 1px solid #ccc;
+}
+table tr:nth-child(2n) {
+background-color: #f8f8f8;
+}
+img {
+max-width: 100%;
+box-sizing: content-box;
+background-color: #fff;
+}
+code {
+padding: 0;
+padding-top: 0.2em;
+padding-bottom: 0.2em;
+margin: 0;
+font-size: 85%;
+background-color: rgba(0,0,0,0.04);
+border-radius: 3px;
+}
+code:before,
+code:after {
+letter-spacing: -0.2em;
+content: "\00a0";
+}
+pre>code {
+padding: 0;
+margin: 0;
+font-size: 100%;
+word-break: normal;
+white-space: pre;
+background: transparent;
+border: 0;
+}
+.highlight {
+margin-bottom: 16px;
+}
+.highlight pre,
+pre {
+padding: 16px;
+overflow: auto;
+font-size: 85%;
+line-height: 1.45;
+background-color: #f7f7f7;
+border-radius: 3px;
+}
+.highlight pre {
+margin-bottom: 0;
+word-break: normal;
+}
+pre {
+word-wrap: normal;
+}
+pre code {
+display: inline;
+max-width: initial;
+padding: 0;
+margin: 0;
+overflow: initial;
+line-height: inherit;
+word-wrap: normal;
+background-color: transparent;
+border: 0;
+}
+pre code:before,
+pre code:after {
+content: normal;
+}
+kbd {
+display: inline-block;
+padding: 3px 5px;
+font-size: 11px;
+line-height: 10px;
+color: #555;
+vertical-align: middle;
+background-color: #fcfcfc;
+border: solid 1px #ccc;
+border-bottom-color: #bbb;
+border-radius: 3px;
+box-shadow: inset 0 -1px 0 #bbb;
+}
+.pl-c {
+color: #969896;
+}
+.pl-c1,
+.pl-s .pl-v {
+color: #0086b3;
+}
+.pl-e,
+.pl-en {
+color: #795da3;
+}
+.pl-s .pl-s1,
+.pl-smi {
+color: #333;
+}
+.pl-ent {
+color: #63a35c;
+}
+.pl-k {
+color: #a71d5d;
+}
+.pl-pds,
+.pl-s,
+.pl-s .pl-pse .pl-s1,
+.pl-sr,
+.pl-sr .pl-cce,
+.pl-sr .pl-sra,
+.pl-sr .pl-sre {
+color: #183691;
+}
+.pl-v {
+color: #ed6a43;
+}
+.pl-id {
+color: #b52a1d;
+}
+.pl-ii {
+background-color: #b52a1d;
+color: #f8f8f8;
+}
+.pl-sr .pl-cce {
+color: #63a35c;
+font-weight: bold;
+}
+.pl-ml {
+color: #693a17;
+}
+.pl-mh,
+.pl-mh .pl-en,
+.pl-ms {
+color: #1d3e81;
+font-weight: bold;
+}
+.pl-mq {
+color: #008080;
+}
+.pl-mi {
+color: #333;
+font-style: italic;
+}
+.pl-mb {
+color: #333;
+font-weight: bold;
+}
+.pl-md {
+background-color: #ffecec;
+color: #bd2c00;
+}
+.pl-mi1 {
+background-color: #eaffea;
+color: #55a532;
+}
+.pl-mdr {
+color: #795da3;
+font-weight: bold;
+}
+.pl-mo {
+color: #1d3e81;
+}
+kbd {
+display: inline-block;
+padding: 3px 5px;
+font: 11px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+line-height: 10px;
+color: #555;
+vertical-align: middle;
+background-color: #fcfcfc;
+border: solid 1px #ccc;
+border-bottom-color: #bbb;
+border-radius: 3px;
+box-shadow: inset 0 -1px 0 #bbb;
+}
+.task-list-item {
+list-style-type: none;
+}
+.task-list-item+.task-list-item {
+margin-top: 3px;
+}
+.task-list-item input {
+margin: 0 0.35em 0.25em -1.6em;
+vertical-align: middle;
+}
+:checked+.radio-label {
+z-index: 1;
+position: relative;
+border-color: #4078c0;
+}
+.sourceLine {
+display: inline-block;
+}
+code .kw { color: #000000; }
+code .dt { color: #ed6a43; }
+code .dv { color: #009999; }
+code .bn { color: #009999; }
+code .fl { color: #009999; }
+code .ch { color: #009999; }
+code .st { color: #183691; }
+code .co { color: #969896; }
+code .ot { color: #0086b3; }
+code .al { color: #a61717; }
+code .fu { color: #63a35c; }
+code .er { color: #a61717; background-color: #e3d2d2; }
+code .wa { color: #000000; }
+code .cn { color: #008080; }
+code .sc { color: #008080; }
+code .vs { color: #183691; }
+code .ss { color: #183691; }
+code .im { color: #000000; }
+code .va {color: #008080; }
+code .cf { color: #000000; }
+code .op { color: #000000; }
+code .bu { color: #000000; }
+code .ex { color: #000000; }
+code .pp { color: #999999; }
+code .at { color: #008080; }
+code .do { color: #969896; }
+code .an { color: #008080; }
+code .cv { color: #008080; }
+code .in { color: #008080; }
+</style>
+<style>
+body {
+  box-sizing: border-box;
+  min-width: 200px;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 45px;
+  padding-top: 0px;
+}
+</style>
+
+</head>
+
+<body>
+
+<h1 id="recommendations-for-processing-head-ct-data">Recommendations for Processing Head CT Data</h1>
+<p>true 2019-02-19</p>
+<h1 id="introduction">Introduction</h1>
+<p>Many research applications of neuroimaging use magnetic resonance imaging (MRI). MRI allows researchers to study a multitude of applications and diseases, including studying healthy controls. Clinical imaging, however, relies heavily on X-ray computed tomography (CT) scans for diagnosis and prognosis. Studies using CT scans cannot generally recruit healthy controls or large non-clinical populations due to the radiation exposure and lack of substantial benefit. As such, much of head CT data is gathered from prospective clinical trials or retrsopective studies based on health medical record data and hospital picture archiving and communication system (PACS). We wish to provide some recommendations and guidelines from our experience with CT data, as well as insights from working with MRI stuies. We will discuss existing software options for neuroimaging in general and those that are specific to CT throughout the paper.</p>
+<p>We will focus on aspects of quantitatively analyzing the CT data and getting the data into a format familiar to most MRI neuroimaging researchers. Therefore, we will not go into detail of DICOM reading tools or imaging suites for radiologists, which are generally proprietary and quite costly. Moreover, we will be focussing specifically on non-contrast head CT data, though many of the recommendations and software is applicable to images of other areas of the body.</p>
+<h1 id="data-organization">Data Organization</h1>
+<p>Most of the data coming from a PACS is in DICOM (Digital Imaging and Communications in Medicine) format. Generally, DICOM files are a combination of metadata about the image (also called a header) and the individual pixel data, many times embedded in a JPEG format. The header has a collection of information, usually referred to as fields or tags. Tags are usually defined by a set of 2 hexadecimal numbers, which are embedded as 4 alphanumeric characters. For example, <code>(0008,103E)</code> denotes the <code>SeriesDescription</code> tag for a DICOM file. Most DICOM readers extract and use these tags for filtering and organizing the files.</p>
+<p>We will use the phrase scanning session (as opposed to “study” and reserve study to denote a trial or analysis), a series for an individual scan, and a slice for an individual picture of the brain. Each series (<code>Series Instance UID</code> tag) and scanning session (<code>Study Instance UID</code> tag) should have a unique value in the DICOM header that allows DICOM readers to organize the data by scanning session and series.</p>
+<h2 id="dicom-anonymization">DICOM Anonymization</h2>
+<p>One of the common issues with DICOM data is that a large amount of protected health information (PHI) can be contained in the header. DICOM is a standard where individual fields in the header are to contain the same values across different scanners and sites, but only if that manufacturer and site are diligent to ascribing to the DICOM standard. Though many DICOM header fields are consistent across neuroimaging studies, duplicate data and additional fields may be required to obtain the full amount of data required for analysis. Moreover, different scanning manufacturers can embed information in non-standard fields. The goal is to remove these fields if they contain PHI but retain these fields if they embed relevant information of the scan for analysis. These fields then represent a challenge to a “lossless” anonymization if the data do not conform to a standard across scanning sites, manufacturers, or protocols.</p>
+<p>We will discuss reading in DICOM data and DICOM header fields in the next section. Though thse steps can be crucial for extracting information from the data, many times the data must be shared or transferred before analysis. Depending on the parties receiving the data, anonymization of the data must be done first. Aryanto, Oudkerk, and Ooijen (2015) provides a look at a multitude of options for DICOM anonymization and recommends the RSNA MIRC Clinical Trials Processor (CTP, <a href="https://www.rsna.org/research/imaging-research-tools">https://www.rsna.org/research/imaging-research-tools</a>) cross-platform Java software as well as the DICOM library (<a href="https://www.dicomlibrary.com/">https://www.dicomlibrary.com/</a>) upload service. We also recommend the <a href="https://www.dclunie.com/pixelmed/software/webstart/DicomCleanerUsage.html">DicomCleaner</a> cross-platform Java program as it has fit many of our needs. Bespoke solutions can be generated using <code>dcm4che</code> (such as <code>dcm4che-deident</code>) and other DICOM reading tools (discussed below), but many of these tools have built-in capabilities that are difficult to add (such as removing PHI embedded in the pixel data).</p>
+<h3 id="a-note-on-de-identification-time-between-scans">A note on de-identification: time between scans</h3>
+<p>Although most of the presented solutions are good at anonymization and de-identification of the header information, only a few such as CTP, have the utilities required for longitudinal preservation of date differences. Though it can be debated whether dates are identifiable information, some clinical trials and other studies rely on serial CT imaging data, and the differences between times are crucial to determine when events occur.</p>
+<h3 id="reading-dicom-data">Reading DICOM data</h3>
+<p>We will focus on 2 analysis platforms for statistical analysis, including <code>R</code> (CITE) and <code>Python</code> as well as standalone software. The main reasons are that <code>R</code> and <code>Python</code> are free, open source, and we have a working knowledge of the utilities these have. We are also involved in the Neuroconductor project (<a href="https://neuroconductor.org/">https://neuroconductor.org/</a>) (Muschelli et al. 2018), which is a repository of <code>R</code> packages for medical image analysis. Other imaging platforms such as the Insight Segmentation and Registration Toolkit (ITK) are great pieces of software that can perform many of the operations that we will be discussing. Moreover, <code>MATLAB</code> has an extensive general imaging suite, as well as large neuroimaging platforms such as SPM (CITE). We will touch on some of this software with varying levels. We aim to present software that we have had used directly for analysis or preprocessing. Also, other papers and tutorials discuss their use (CITE).</p>
+<p>For reading DICOM data, there are multiple options. The MATLAB imaging toolbox, <code>oro.dicom</code> <code>R</code> package, <code>pydicom</code>, and <code>ITK</code> cinterfaces can read DICOM data amongst others. The DICOM toolkit <code>dcmtk</code> has multiple DICOM manipulation tools, including <code>dcmconv</code> to convert DICOM files to other imaging formats.</p>
+<p>Though most imaging analysis tools can read in DICOM data, there are downsides to using the DICOM format. In most cases, a DICOM image is split into a series of slices, where each slice is a different file. This separation can be cumbersome on data organization if using folder structures. As noted above, these files also can contain a large amount of PHI. Some formats may be compressed using proprietary compression such as JPEG2000; alternatively, if data are not compressed file storage is inefficient. Most importantly though, many imaging analyses perform 3-dimensional operations, such as smoothing. Thus, putting the data into a different format may be helpful.</p>
+<h2 id="converting-dicom-to-nifti">Converting DICOM to NIfTI</h2>
+<p>Many different general 3D medical imaging formats exist, such as ANALYZE, NIfTI, NRRD, and MNC. We recommend the NIfTI format as it can be read by nearly all medical imaging platforms, has been widely used, has a format standard, can be stored in a compressed format, and is how much of the data is released online. Moreover, we will present specific software to convert DICOM data and the recommended software (<code>dcm2niix</code>) outputs data in a NIfTI file.</p>
+<p>Although we recommend this software, many good and complete solutions exist. Examples include <code>dicom2nifti</code> in the <code>oro.dicom</code> <code>R</code> package, <code>pydicom</code>, <code>dicom2nifti</code> in <code>MATLAB</code>, and using large imaging suites such as using <code>ITK</code> image reading functions for DICOM files and can write NIfTI outputs. We recommend the <code>dcm2niix</code> (LINK) function from Chris Rorden for CT data. The reasons are 1) it works with all major scanners, 2) incorporates gantry-tilt correction for CT data, 3) can handle variable slice thickness, 4) is open-source, 5) is fast, 6) has responsive developers, and 7) works on all 3 major operating systems (Linux/OSX/Windows) (TRUE??). Moreover, the popular AFNI neuroimaging suite includes a <code>dcm2niix</code> program with its distribution. In <code>R</code>, the <code>divest</code> package (LINK) and the <code>XXXXXXXX</code> Python module wraps the underlying code for <code>dcm2niix</code> to provide the same functionality of <code>dcm2niix</code>, along with the ability to manipulate and subset the header data as necessary.</p>
+<p>We will describe a few of the features above. In some head CT scans, the gantry is tilted to reduce radiation exposure to non-brain areas, such as the eyes. Thus, the slices of the image are at an oblique angle. If slice-by-slice analyses an affine registration (as this tilting is a shearing) are done, this tilting is not an issue. This tilting does cause issues for 3D operations as the distance of the voxels between slices is not correct and especially can show odd visualizations (FIGURE). The <code>dcm2niix</code> output returns both the corrected and non-corrected image. As the correction moves the slices to a different area, <code>dcm2niix</code> may pad the image so that the entire head is still inside the field of view. As such, this may cause issues with algorithms that require the 512x512 axial slice dimensions. Though less common, variable slice thickness can occur in reconstructions where only a specific area of the head is of interest. For example, an image may have 5mm slice thicknesses throughout the image, except for areas near the third ventricle, which has a 2.5mm slice thickness. To correct for this, <code>dcm2niix</code> interpolates between slices to ensure each image has a consistent voxel size. Again, <code>dcm2niix</code> returns both the corrected and non-corrected image.</p>
+<p>Once converted to NIfTI format, one should ensure the scale of the data. Most CT data is betweeen (-1024) and (3071) HU. Values less than (-1024) are commonly found due to areas of the image outside the field of view that were not actually imaged. One first processing step would be to Winsorize the data to the [(-1024), (3071)] range. After this step, the header elements <code>scl_slope</code> and <code>scl_inter</code> elements of the NIfTI image should be set to (1) and (0), respectively, to ensure no data rescaling is done in other software. Though HU is the standard format used in CT analysis, negative HU values may causes issues with standard imaging pipelines built for MRI, which typically have positive values. Rorden (CITE) proposed a lossless transformation, called Cormack units, which have a minimum value of (0).</p>
+<h2 id="brain-extraction-in-ct">Brain Extraction in CT</h2>
+<p>Head CT data typically contains the subject’s head, face, and maybe neck and other lower structures, depending on the field of view. Additionally, other artifacts are typically present, such as the pillow the subject’s head was on, the bed/girney, and any instruments in the field of view. We do not provide a general frameowrk to extract the subject from the artifact data, but provide some recommendations for working heuristics. Typically the range of data for a subject is within (-100) to (300), excluding the skull, other bones, and calcificiations. Creating a mask from this data range tends to remove the bed/girney, most intstruments, the pillow, and the background. Retaining the largest connected component, filling holes (to include the skull), and masking the original data with this resulting mask will return the subject. Note, care must be taken whenever a masking procedure is used with HU values as (0) is a real value: if all values are set to (0) outside the mask in an image with HU values, the value of (0) corresponds to both (0) HU and outside of mask. Either transforming the data into Cormack units, adding a value to the data (such as (1025)) then setting values to (0), or using <code>NaN</code> are recommended in negative values are of interest.</p>
+<p>One of the most common steps in processing imaging of the brain is to remove non-brain structures from the image. We have published a method that uses the brain extraction tool (BET) from FSL, originally built for MRI, to perform brain extraction (CITE) with code provided (<a href="http://bit.ly/CTBET_BASH">http://bit.ly/CTBET_BASH</a>). Many papers present brain extracted CT images, but do not always disclose the method of extraction. Recently, convolutional neural networks and shape propagation techniques have been quite successful in this task (Akkus et al. 2018) and models have been released (<a href="https://github.com/aqqush/CT_BET">https://github.com/aqqush/CT_BET</a>). Overall, much research can still be done in this area as conditions such as traumatic brain injury (TBI) and surgery, such as craniotomies or craniectomies can cause these methods to potentially fail.</p>
+<h2 id="registration-to-a-ct-template">Registration to a CT template</h2>
+<p>Though many analyses in clinical data may be subject-specific, population-level analyses are still of interest. In some cases, registration from a template space to a subject space can provide information that can be aggregated across people for analysis. For example, one can perform a label fusion approach to CT data to infer the size of the hippocampus and then analyze hippocampi sizes across the population. One issue with these approaches is that most templates and approaches rely on an MRI template. These templates were developed by taking MRIs of healthy volunteers, which is unethical with CT data due to the radiation exposure. To create templates, retrospective searches through medical records can provide patients who came in with symptoms warranting a CT scan, such as a headache, but had a diagnosis of no pathology or damage. Thus, these neuro-normal scans are similar to that of those collected those in MRI research studies but with some important differences. As these are retrospective, inclusion criteria information may not be easily obtainable if not clinically collected, scanning protocols and parameters may vary, even within hospital and especially over time, and these patients still have neurological symptoms. Though these challenges exist, with a large enough patient population and a research consent at an institution, these scans can be used to create templates and atlases based on CT. To our knowledge, the first publicly available head CT template exists was released in 2012 by Rorden et al. (2012), for the purpose of spatial normalization.</p>
+<p>One interesting aspect of CT image registration is again that CT data has units within the same range. To say they are uniformly standardized is a bit too strong in our opinion, but you can think of them as much more standardized than MRI due to the nature of the data. This standardization may warrant or allow the user different search and evaluation cost functions for registration, such as least squares. We have found though that normalized mutual information still performs well in CT-to-CT registration and should be at least considered when using CT-to-MRI or CT-to-PET registration. Along with the template above, Rorden et al. (2012) released the clinical toolbox (<a href="https://github.com/neurolabusc/Clinical">https://github.com/neurolabusc/Clinical</a>) for SPM [CITE] to allow researchers to register head CT data to a standard space. However, as the data are in NIfTI format, almost all image registration software should work, though one should consider transforming the units using Cormack units or other transformations as negative values may implicitly be excluded in some software built for MRI registration.</p>
+<h1 id="publicly-available-data">Publicly Available Data</h1>
+<p>With the issues of PHI above coupled with the fact that most CT data is acquired clinically and not in a research setting, there is a dearth of publicly available data for head CT compared to head MRI. Sites for radiological training such as Radiopedia (<a href="https://radiopaedia.org/">https://radiopaedia.org/</a>) have many cases of head CT data, but these are converted from DICOM to standard image formats (e.g. JPEG) so crucial information such as Hounsfield Units and pixel dimensions are lost.</p>
+<p>Large repositories of head CT data do exist, though, and many in DICOM format, with varying licenses and uses. The CQ500 (Chilamkurthy et al. 2018) dataset provides approximately 500 head CT scans with different clinical pathologies and diagnoses, with a non-commercial license. The Cancer Imaging Archive (TCIA) has hundreds of CT scans, many cases with brain cancer. TCIA also has a RESTful API, which allows cases to be downloaded in a scripted way; for example, the <code>TCIApathfinder</code> R package (Russell 2018) and Python <code>tciaclient</code> module provide an interface. The Stroke Imaging Repository Consortium (<a href="http://stir.dellmed.utexas.edu/">http://stir.dellmed.utexas.edu/</a>) also has head CT data available for stroke. The National Biomedical Imaging Archive (NBIA, <a href="https://imaging.nci.nih.gov">https://imaging.nci.nih.gov</a>) demo provides some head CT data, but are duplicated from TCIA. The NeuroImaging Tools &amp; Resources Collaboratory (NITRC, <a href="https://www.nitrc.org/">https://www.nitrc.org/</a>) provides links to many data sets and tools, but no head CT data at this time. The RIRE (Retrospective Image Registration Evaluation, <a href="http://www.insight-journal.org/rire/">http://www.insight-journal.org/rire/</a>) and MIDAS (<a href="http://www.insight-journal.org/midas">http://www.insight-journal.org/midas</a>) projects have a small set of publicly available head CT.</p>
+<h2 id="pipeline">Pipeline</h2>
+<p>Overall, our recommended pipeline is as follows: 1. Use CTP to organize and anonymize the DICOM data from a PACS. 2. Extract relevant header information for each DICOM, using software such as <code>dcmdump</code> from <code>dcmtk</code> and store, excluding PHI. 3. Convert DICOM to NIfTI using <code>dcm2niix</code>, which can create brain imaging data structure (BIDS) formatted data. Use the tilt-corrected and data with uniform voxel size.</p>
+<p>After, depending on the purpose of the analysis, you may do registration then brain extraction, brain extraction then registration, or not do registration at all. If you are doing analysis of the skull, you can also use brain extraction as a first step to identify areas to be removed.</p>
+<p>For brain extraction, run <code>BET</code> for CT or <code>CT_BET</code> (especially if you have GPUs for the neural network).</p>
+<h2 id="concurrent-mri">Concurrent MRI</h2>
+<p>Additionally, the spatial constrast is much lower than T1-weighted MRI for image segmentation. Therefore, concurrent MRI may be useful. One large issue</p>
+<h1 id="conclusions">Conclusions</h1>
+<p>We present a simple pipeline for preprocessing of head CT data, along with software options of reading and transforming the data. We have found that though many tools exist for MRI and are applicable to CT data. Noticeable differences exist between the data in large part due to the collection setting (research vs. clinical), data access, data organization, and population-level data. As CT scans provide fast and clinically relevant information and with the increased interest in machine learning in medical imaging data, particularly deep learning using convolutional neural networks, research and quantitative analysis of head CT data is bound to increase. We believe this presents an overview of a useful set of tools and data for research in head CT.</p>
+<p>For research using head CT scans to have the level of interest and success as MRI, additional publicly available data needs to be released. We saw the explosion of research in MRI, particularly functional MRI, as additional data were released and and consortia created truly large-scale studies. This collaboration is possible at an individual institution, but requires scans to be released from a clinical population, where consent must be first obtained, and upholding patient privacy must be a top priority. Large internal data sets likely exist, but institutions need incentives to release these data sets. Also, though institutions have large amounts of rich data, general methods and applications require data from multiple institutions as parameters, protocols, and population characteristics can vary widely across institutions.</p>
+<p>One of the large hurdles after creating automated analysis tools or supportive tools to help radiologists and clinicians is the reintegration of this information into the healthcare system. We do not present answers to this difficult issue, but note that these tools need to be created to show cases where this reintegration can improve patient care, outcomes, and other performance metrics. We hope the tools and discussion we have provided advances those efforts for researchers starting in this area.</p>
+<h1 id="references">References</h1>
+<div id="refs" class="references">
+
+<div id="ref-ct_bet">
+
+<p>Akkus, Zeynettin, Petro M Kostandy, Kenneth A Philbrick, and Bradley J Erickson. 2018. “Extraction of Brain Tissue from CT Head Images Using Fully Convolutional Neural Networks.” In <em>Medical Imaging 2018: Image Processing</em>, 10574:1057420. International Society for Optics; Photonics.</p>
+</div>
+
+<div id="ref-aryanto2015free">
+
+<p>Aryanto, KYE, M Oudkerk, and PMA van Ooijen. 2015. “Free DICOM de-Identification Tools in Clinical Research: Functioning and Safety of Patient Privacy.” <em>European Radiology</em> 25 (12): 3685–95.</p>
+</div>
+
+<div id="ref-cq500">
+
+<p>Chilamkurthy, Sasank, Rohit Ghosh, Swetha Tanamala, Mustafa Biviji, Norbert G Campeau, Vasantha Kumar Venugopal, Vidur Mahajan, Pooja Rao, and Prashant Warier. 2018. “Deep Learning Algorithms for Detection of Critical Findings in Head Ct Scans: A Retrospective Study.” <em>The Lancet</em> 392 (10162): 2388–96.</p>
+</div>
+
+<div id="ref-neuroconductor">
+
+<p>Muschelli, J., A. Gherman, J. P. Fortin, B. Avants, B. Whitcher, J. D. Clayden, B. S. Caffo, and C. M. Crainiceanu. 2018. “Neuroconductor: An R Platform for Medical Imaging Analysis.” <em>Biostatistics</em>, January.</p>
+</div>
+
+<div id="ref-rorden2012age">
+
+<p>Rorden, Christopher, Leonardo Bonilha, Julius Fridriksson, Benjamin Bender, and Hans-Otto Karnath. 2012. “Age-Specific Ct and Mri Templates for Spatial Normalization.” <em>Neuroimage</em> 61 (4): 957–65.</p>
+</div>
+
+<div id="ref-TCIApathfinder">
+
+<p>Russell, Pamela. 2018. <em>TCIApathfinder: Client for the Cancer Imaging Archive Rest Api</em>. <a href="https://CRAN.R-project.org/package=TCIApathfinder">https://CRAN.R-project.org/package=TCIApathfinder</a>.</p>
+</div>
+
+</div>
+
+</body>
+</html>
