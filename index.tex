@@ -164,19 +164,36 @@ solutions can be generated using \texttt{dcm4che} (such as
 below), but many of these tools have built-in capabilities that are
 difficult to add (such as removing PHI embedded in the pixel data).
 
+\hypertarget{a-note-on-de-identification-time-between-scans}{%
+\subsubsection{A note on de-identification: time between
+scans}\label{a-note-on-de-identification-time-between-scans}}
+
+Although most of the presented solutions are good at anonymization and
+de-identification of the header information, only a few such as CTP,
+have the utilities required for longitudinal preservation of date
+differences. Though it can be debated whether dates are identifiable
+information, some clinical trials and other studies rely on serial CT
+imaging data, and the differences between times are crucial to determine
+when events occur.
+
 \hypertarget{reading-dicom-data}{%
 \subsubsection{Reading DICOM data}\label{reading-dicom-data}}
 
 We will focus on 2 analysis platforms for statistical analysis,
 including \texttt{R} (CITE) and \texttt{Python} as well as standalone
-software. Other imaging platforms such as the Insight Segmentation and
-Registration Toolkit (ITK) are great pieces of software that can perform
-many of the operations that we will be discussing. Moreover,
-\texttt{MATLAB} has an extensive general imaging suite, as well as large
-neuroimaging platforms such as SPM (CITE). We will touch on some of this
-software with varying levels. We aim to present software that we have
-had used directly for analysis or preprocessing. Also, other papers and
-tutorials discuss their use (CITE).
+software. The main reasons are that \texttt{R} and \texttt{Python} are
+free, open source, and we have a working knowledge of the utilities
+these have. We are also involved in the Neuroconductor project
+(https://neuroconductor.org/) (Muschelli et al. 2018), which is a
+repository of \texttt{R} packages for medical image analysis. Other
+imaging platforms such as the Insight Segmentation and Registration
+Toolkit (ITK) are great pieces of software that can perform many of the
+operations that we will be discussing. Moreover, \texttt{MATLAB} has an
+extensive general imaging suite, as well as large neuroimaging platforms
+such as SPM (CITE). We will touch on some of this software with varying
+levels. We aim to present software that we have had used directly for
+analysis or preprocessing. Also, other papers and tutorials discuss
+their use (CITE).
 
 For reading DICOM data, there are multiple options. The MATLAB imaging
 toolbox, \texttt{oro.dicom} \texttt{R} package, \texttt{pydicom}, and
@@ -329,10 +346,44 @@ standardization may warrant or allow the user different search and
 evaluation cost functions for registration, such as least squares. We
 have found though that normalized mutual information still performs well
 in CT-to-CT registration and should be at least considered when using
-CT-to-MRI or CT-to-PET registration. As the data are in NIfTI format,
-almost all image registration software should work, though one should
-consider transforming the units using Cormack units or other
-transformations so negative values do not exist in the data.
+CT-to-MRI or CT-to-PET registration. Along with the template above,
+Rorden et al. (2012) released the clinical toolbox
+(https://github.com/neurolabusc/Clinical) for SPM {[}CITE{]} to allow
+researchers to register head CT data to a standard space. However, as
+the data are in NIfTI format, almost all image registration software
+should work, though one should consider transforming the units using
+Cormack units or other transformations as negative values may implicitly
+be excluded in some software built for MRI registration.
+
+\hypertarget{publicly-available-data}{%
+\section{Publicly Available Data}\label{publicly-available-data}}
+
+With the issues of PHI above coupled with the fact that most CT data is
+acquired clinically and not in a research setting, there is a dearth of
+publicly available data for head CT compared to head MRI. Sites for
+radiological training such as Radiopedia (https://radiopaedia.org/) have
+many cases of head CT data, but these are converted from DICOM to
+standard image formats (e.g.~JPEG) so crucial information such as
+Hounsfield Units and pixel dimensions are lost.
+
+Large repositories of head CT data do exist, though, and many in DICOM
+format, with varying licenses and uses. The CQ500 (Chilamkurthy et al.
+2018) dataset provides approximately 500 head CT scans with different
+clinical pathologies and diagnoses, with a non-commercial license. The
+Cancer Imaging Archive (TCIA) has hundreds of CT scans, many cases with
+brain cancer. TCIA also has a RESTful API, which allows cases to be
+downloaded in a scripted way; for example, the \texttt{TCIApathfinder} R
+package (Russell 2018) and Python \texttt{tciaclient} module provide an
+interface. The Stroke Imaging Repository Consortium
+(http://stir.dellmed.utexas.edu/) also has head CT data available for
+stroke. The National Biomedical Imaging Archive (NBIA,
+https://imaging.nci.nih.gov) demo provides some head CT data, but are
+duplicated from TCIA. The NeuroImaging Tools \& Resources Collaboratory
+(NITRC, https://www.nitrc.org/) provides links to many data sets and
+tools, but no head CT data at this time. The RIRE (Retrospective Image
+Registration Evaluation, http://www.insight-journal.org/rire/) and MIDAS
+(http://www.insight-journal.org/midas) projects have a small set of
+publicly available head CT.
 
 \hypertarget{pipeline}{%
 \subsection{Pipeline}\label{pipeline}}
@@ -353,8 +404,8 @@ removed.
 For brain extraction, run \texttt{BET} for CT or \texttt{CT\_BET}
 (especially if you have GPUs for the neural network).
 
-\hypertarget{section}{%
-\subsection{}\label{section}}
+\hypertarget{concurrent-mri}{%
+\subsection{Concurrent MRI}\label{concurrent-mri}}
 
 Additionally, the spatial constrast is much lower than T1-weighted MRI
 for image segmentation. Therefore, concurrent MRI may be useful. One
@@ -363,43 +414,40 @@ large issue
 \hypertarget{conclusions}{%
 \section{Conclusions}\label{conclusions}}
 
-Most
+We present a simple pipeline for preprocessing of head CT data, along
+with software options of reading and transforming the data. We have
+found that though many tools exist for MRI and are applicable to CT
+data. Noticeable differences exist between the data in large part due to
+the collection setting (research vs.~clinical), data access, data
+organization, and population-level data. As CT scans provide fast and
+clinically relevant information and with the increased interest in
+machine learning in medical imaging data, particularly deep learning
+using convolutional neural networks, research and quantitative analysis
+of head CT data is bound to increase. We believe this presents an
+overview of a useful set of tools and data for research in head CT.
 
-\hypertarget{section-1}{%
-\section{}\label{section-1}}
+For research using head CT scans to have the level of interest and
+success as MRI, additional publicly available data needs to be released.
+We saw the explosion of research in MRI, particularly functional MRI, as
+additional data were released and and consortia created truly
+large-scale studies. This collaboration is possible at an individual
+institution, but requires scans to be released from a clinical
+population, where consent must be first obtained, and upholding patient
+privacy must be a top priority. Large internal data sets likely exist,
+but institutions need incentives to release these data sets. Also,
+though institutions have large amounts of rich data, general methods and
+applications require data from multiple institutions as parameters,
+protocols, and population characteristics can vary widely across
+institutions.
 
-\begin{itemize}
-\tightlist
-\item
-  DICOM data
-
-  \begin{itemize}
-  \tightlist
-  \item
-    DICOM anonymizer
-  \item
-    longitudinal data
-
-    \begin{itemize}
-    \tightlist
-    \item
-      keep time, but do days from Jan-01-1900
-    \item
-      or could keep date
-    \end{itemize}
-  \end{itemize}
-\item
-  Remove Localizers and scouts
-\end{itemize}
-
-Skull Stripping\\
--
-
-\begin{itemize}
-\item
-  clinical toolbox
-\item
-\end{itemize}
+One of the large hurdles after creating automated analysis tools or
+supportive tools to help radiologists and clinicians is the
+reintegration of this information into the healthcare system. We do not
+present answers to this difficult issue, but note that these tools need
+to be created to show cases where this reintegration can improve patient
+care, outcomes, and other performance metrics. We hope the tools and
+discussion we have provided advances those efforts for researchers
+starting in this area.
 
 \hypertarget{references}{%
 \section*{References}\label{references}}
@@ -418,10 +466,28 @@ Aryanto, KYE, M Oudkerk, and PMA van Ooijen. 2015. ``Free DICOM
 de-Identification Tools in Clinical Research: Functioning and Safety of
 Patient Privacy.'' \emph{European Radiology} 25 (12): 3685--95.
 
+\leavevmode\hypertarget{ref-cq500}{}%
+Chilamkurthy, Sasank, Rohit Ghosh, Swetha Tanamala, Mustafa Biviji,
+Norbert G Campeau, Vasantha Kumar Venugopal, Vidur Mahajan, Pooja Rao,
+and Prashant Warier. 2018. ``Deep Learning Algorithms for Detection of
+Critical Findings in Head Ct Scans: A Retrospective Study.'' \emph{The
+Lancet} 392 (10162): 2388--96.
+
+\leavevmode\hypertarget{ref-neuroconductor}{}%
+Muschelli, J., A. Gherman, J. P. Fortin, B. Avants, B. Whitcher, J. D.
+Clayden, B. S. Caffo, and C. M. Crainiceanu. 2018. ``Neuroconductor: An
+R Platform for Medical Imaging Analysis.'' \emph{Biostatistics},
+January.
+
 \leavevmode\hypertarget{ref-rorden2012age}{}%
 Rorden, Christopher, Leonardo Bonilha, Julius Fridriksson, Benjamin
 Bender, and Hans-Otto Karnath. 2012. ``Age-Specific Ct and Mri Templates
 for Spatial Normalization.'' \emph{Neuroimage} 61 (4): 957--65.
+
+\leavevmode\hypertarget{ref-TCIApathfinder}{}%
+Russell, Pamela. 2018. \emph{TCIApathfinder: Client for the Cancer
+Imaging Archive Rest Api}.
+\url{https://CRAN.R-project.org/package=TCIApathfinder}.
 
 \end{document}
 
