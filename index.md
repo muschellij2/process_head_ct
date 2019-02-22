@@ -1,7 +1,7 @@
 Recommendations for Processing Head CT Data
 ================
 true
-2019-02-20
+2019-02-22
 
 # Introduction
 
@@ -13,7 +13,7 @@ Clinical imaging, however, relies heavily on X-ray computed tomography
 generally recruit healthy volunteers or large non-clinical populations
 due to the radiation exposure and lack of substantial benefit. As such,
 much of head CT data is gathered from prospective clinical trials or
-retrsopective studies based on health medical record data and hospital
+retrospective studies based on health medical record data and hospital
 picture archiving and communication system (PACS). We wish to discuss
 transforming this data from clinical to research data and provide some
 recommendations and guidelines from our experience with CT data similar
@@ -25,10 +25,9 @@ We will focus on aspects of quantitatively analyzing the CT data and
 getting the data into a format familiar to most MRI neuroimaging
 researchers. Therefore, we will not go into detail of DICOM reading
 tools or imaging suites designed for radiologists, which may be
-proprietary and quite costly. Moreover, we will be focussing
-specifically on non-contrast head CT data, though many of the
-recommendations and software is applicable to images of other areas of
-the body.
+proprietary and quite costly. Moreover, we will be focusing specifically
+on non-contrast head CT data, though many of the recommendations and
+software is applicable to images of other areas of the body.
 
 # Data Organization
 
@@ -68,7 +67,7 @@ conform to a standard across scanning sites, manufacturers, or
 protocols.
 
 We will discuss reading in DICOM data and DICOM header fields in the
-next section. Though thse steps can be crucial for extracting
+next section. Though these steps can be crucial for extracting
 information from the data, many times the data must be shared or
 transferred before analysis. Depending on the parties receiving the
 data, anonymization of the data must be done first. Aryanto, Oudkerk,
@@ -112,7 +111,7 @@ have had used directly for analysis or preprocessing. Also, other papers
 and tutorials discuss their use (CITE).
 
 For reading DICOM data, there are multiple options. The MATLAB imaging
-toolbox, `oro.dicom` `R` package, `pydicom`, and `ITK` cinterfaces can
+toolbox, `oro.dicom` `R` package, `pydicom`, and `ITK` interfaces can
 read DICOM data amongst others. The DICOM toolkit `dcmtk` has multiple
 DICOM manipulation tools, including `dcmconv` to convert DICOM files to
 other imaging formats.
@@ -126,7 +125,7 @@ may be compressed using proprietary compression such as JPEG2000;
 alternatively, if data are not compressed, file storage is inefficient.
 Most importantly though, many imaging analyses perform 3-dimensional
 operations, such as smoothing. Thus, putting the data into a different
-format that handles 3D images as 1 compresssed file is desirable.
+format that handles 3D images as 1 compressed file is desirable.
 
 ## Converting DICOM to NIfTI
 
@@ -175,7 +174,7 @@ consistent voxel size. Again, `dcm2niix` returns both the corrected and
 non-corrected image.
 
 Once converted to NIfTI format, one should ensure the scale of the data.
-Most CT data is betweeen \(-1024\) and \(3071\) Hounsfield Units (HU).
+Most CT data is between \(-1024\) and \(3071\) Hounsfield Units (HU).
 Values less than \(-1024\)HU are commonly found due to areas of the
 image outside the field of view that were not actually imaged. One first
 processing step would be to Winsorize the data to the \[\(-1024\),
@@ -236,13 +235,13 @@ hardware. The `ANTsR` package (CITE ANTsR) provides the
 Head CT data typically contains the subject’s head, face, and maybe neck
 and other lower structures, depending on the field of view.
 Additionally, other artifacts are typically present, such as the pillow
-the subject’s head was on, the bed/girney, and any instruments in the
-field of view. We do not provide a general frameowrk to extract the
+the subject’s head was on, the bed/gurney, and any instruments in the
+field of view. We do not provide a general framework to extract the
 subject from the artifact data, but provide some recommendations for
 working heuristics. Typically the range of data for the brain and facial
 tissues are within \(-100\) to \(300\)HU, excluding the skull, other
 bones, and calcificiations. Creating a mask from this data range tends
-to remove the bed/girney, most instruments, the pillow, and the
+to remove the bed/gurney, most instruments, the pillow, and the
 background. Retaining the largest connected component, filling holes (to
 include the skull), and masking the original data with this resulting
 mask will return the subject. Note, care must be taken whenever a
@@ -280,22 +279,22 @@ example, one can perform a label fusion approach to CT data to infer the
 size of the hippocampus and then analyze hippocampi sizes across the
 population. One issue with these approaches is that most templates and
 approaches rely on an MRI template. These templates were developed by
-taking MRI scans of volunteers, which is likely unethical with CT due to
-the radiation exposure risk without other benefits. To create templates,
-retrospective searches through medical records can provide patients who
-came in with symptoms warranting a CT scan, such as a migraine, but had
-a diagnosis of no pathology or damage. Thus, these neuro-normal scans
-are similar to that of those collected those in MRI research studies but
-with some important differences. As these are retrospective, inclusion
-criteria information may not be easily obtainable if not clinically
-collected, scanning protocols and parameters may vary, even within
-hospital and especially over time, and these patients still have
-neurological symptoms. Though these challenges exist, with a large
-enough patient population and a research consent at an institution,
-these scans can be used to create templates and atlases based on CT. To
-our knowledge, the first publicly available head CT template exists was
-released by Rorden et al. (2012), for the purpose of spatial
-normalization/registration.
+taking MRI scans of volunteers, which again is likely unethical with CT
+due to the radiation exposure risk without other benefits. To create
+templates, retrospective searches through medical records can provide
+patients who came in with symptoms warranting a CT scan, such as a
+migraine, but had a diagnosis of no pathology or damage. Thus, these
+neuro-normal scans are similar to that of those collected those in MRI
+research studies but with some important differences. As these are
+retrospective, inclusion criteria information may not be easily
+obtainable if not clinically collected, scanning protocols and
+parameters may vary, even within hospital and especially over time, and
+these patients still have neurological symptoms. Though these challenges
+exist, with a large enough patient population and a research consent at
+an institution, these scans can be used to create templates and atlases
+based on CT. To our knowledge, the first publicly available head CT
+template exists was released by Rorden et al. (2012), for the purpose of
+spatial normalization/registration.
 
 One interesting aspect of CT image registration is again that CT data
 has units within the same range. To say they are uniformly standardized
@@ -367,7 +366,7 @@ have GPUs for the neural network).
 
 ## Concurrent MRI
 
-Additionally, the spatial constrast is much lower than T1-weighted MRI
+Additionally, the spatial contrast is much lower than T1-weighted MRI
 for image segmentation. Therefore, concurrent MRI may be useful. One
 large issue
 
