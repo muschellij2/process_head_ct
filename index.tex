@@ -97,7 +97,7 @@ generally recruit healthy volunteers or large non-clinical populations
 due to the radiation exposure and lack of substantial benefit. As such,
 much of head CT data is gathered from prospective clinical trials or
 retrospective studies based on health medical record data and hospital
-picture archiving and communication system (PACS). We wish to discuss
+picture archiving and communication system (PACS). We discuss
 transforming this data from clinical to research data and provide some
 recommendations and guidelines from our experience with CT data similar
 insights from working with MRI studies. We will discuss existing
@@ -117,7 +117,7 @@ software is applicable to images of other areas of the body.
 
 Most of the data coming from a PACS is in DICOM (Digital Imaging and
 Communications in Medicine) format. Generally, DICOM files are a
-combination of metadata about an image (also called a header) and the
+combination of metadata (i.e.~a header) about an image and the
 individual pixel data, many times embedded in a JPEG format. The header
 has a collection of information, usually referred to as fields or tags.
 Tags are usually defined by a set of 2 hexadecimal numbers, which are
@@ -147,9 +147,9 @@ Though many DICOM header fields are consistent across neuroimaging
 studies, many fields may be required to obtain the full amount of data
 required for analysis. Moreover, different scanning manufacturers can
 embed information in non-standard fields. The goal is to remove these
-fields if they contain PHI but retain these fields if they embed
+fields if they contain PHI, but retain these fields if they embed
 relevant information of the scan for analysis. These fields then
-represent a challenge to a ``lossless'' anonymization if the data do not
+represent a challenge to a lossless anonymization if the data do not
 conform to a standard across scanning sites, manufacturers, or
 protocols.
 
@@ -159,7 +159,7 @@ information from the data, many times the data must be shared or
 transferred before analysis. Depending on the parties receiving the
 data, anonymization of the data must be done first. Aryanto, Oudkerk,
 and Ooijen (2015) provides a look at a multitude of options for DICOM
-anonymization and recommends the RSNA MIRC Clinical Trials Processor
+anonymization and recommend the RSNA MIRC Clinical Trials Processor
 (CTP, https://www.rsna.org/research/imaging-research-tools)
 cross-platform Java software as well as the DICOM library
 (https://www.dicomlibrary.com/) upload service. We also recommend the
@@ -189,18 +189,18 @@ when events occur.
 We will focus on 2 analysis platforms for statistical analysis,
 including \texttt{R} (CITE) and \texttt{Python} as well as standalone
 software. The main reasons are that \texttt{R} and \texttt{Python} are
-free, open source, and we have a working knowledge of the utilities
-these have. We are also involved in the Neuroconductor project
+free, open source, and popular in the neuroimaging analysis community.
+We are also lead the Neuroconductor project
 (https://neuroconductor.org/) (Muschelli et al. 2018), which is a
 repository of \texttt{R} packages for medical image analysis. Other
 imaging platforms such as the Insight Segmentation and Registration
-Toolkit (ITK) are great pieces of software that can perform many of the
-operations that we will be discussing. Moreover, \texttt{MATLAB} has an
-extensive general imaging suite, as well as large neuroimaging platforms
-such as SPM (CITE). We will touch on some of this software with varying
-levels. We aim to present software that we have had used directly for
-analysis or preprocessing. Also, other papers and tutorials discuss
-their use (CITE).
+Toolkit (ITK) are well-maintained, useful pieces of software that can
+perform many of the operations that we will be discussing. Moreover,
+\texttt{MATLAB} has an extensive general imaging suite, as well as large
+neuroimaging platforms such as SPM (CITE). We will touch on some of this
+software with varying levels. We aim to present software that we have
+had used directly for analysis or preprocessing. Also, other papers and
+tutorials discuss their use (CITE).
 
 For reading DICOM data, there are multiple options. The MATLAB imaging
 toolbox, \texttt{oro.dicom} \texttt{R} package, \texttt{pydicom}, and
@@ -213,8 +213,8 @@ downsides to using the DICOM format. In most cases, a DICOM file is a
 single slice of the full 3D image series. This separation can be
 cumbersome on data organization if using folder structures. As noted
 above, these files also can contain a large amount of PHI. Some formats
-may be compressed using proprietary compression such as JPEG2000;
-alternatively, if data are not compressed, file storage is inefficient.
+may be compressed using proprietary compression such as JPEG2000.
+Alternatively, if data are not compressed, file storage is inefficient.
 Most importantly though, many imaging analyses perform 3-dimensional
 operations, such as smoothing. Thus, putting the data into a different
 format that handles 3D images as 1 compressed file is desirable.
@@ -223,7 +223,7 @@ format that handles 3D images as 1 compressed file is desirable.
 \subsection{Converting DICOM to NIfTI}\label{converting-dicom-to-nifti}}
 
 Many different general 3D medical imaging formats exist, such as
-ANALYZE, NIfTI, NRRD, and MNC. We recommend the NIfTI format as it can
+ANALYZE, NIfTI, NRRD, and MNC. We recommend the NIfTI format, as it can
 be read by nearly all medical imaging platforms, has been widely used,
 has a format standard, can be stored in a compressed format, and is how
 much of the data is released online. Moreover, we will present specific
@@ -235,7 +235,8 @@ exist. Examples include \texttt{dicom2nifti} in the \texttt{oro.dicom}
 \texttt{R} package, \texttt{pydicom}, \texttt{dicom2nifti} in
 \texttt{MATLAB}, and using large imaging suites such as using
 \texttt{ITK} image reading functions for DICOM files and then write
-NIfTI outputs. We recommend the \texttt{dcm2niix} (LINK) function from
+NIfTI outputs. We recommend the \texttt{dcm2niix}
+(https://github.com/rordenlab/dcm2niix) (Li et al. 2016) function from
 Chris Rorden for CT data for the following reasons: 1) it works with all
 major scanners, 2) incorporates gantry-tilt correction for CT data, 3)
 can handle variable slice thickness, 4) is open-source, 5) is fast, 6)
@@ -280,7 +281,85 @@ rescaling is done in other software. Though HU is the standard format
 used in CT analysis, negative HU values may causes issues with standard
 imaging pipelines built for MRI, which typically have positive values.
 Rorden (CITE) proposed a lossless transformation, called Cormack units,
-which have a minimum value of \(0\). The transformation is:
+which have a minimum value of \(0\). The goal of the transformation is
+to increase the range of the data that is usually of interest, from
+\(-100\) to \(300\) HU. The transformation assumes the minimum of the
+data is \(-1024\) and is to increase the dynamic range of interesting
+voxels by 3 from HU, represented by \(x_{HU}\) to Cormack \(x_{C}\) is:
+\(x_{HU} + 1024 - 900\)
+
+\begin{equation}
+    X=
+    \begin{cases}
+      0 & \text{if}\ x_{HU} < 124 \\
+      0, & \text{if}\ a=1 \\
+      1, & \text{otherwise}
+    \end{cases}
+  \end{equation}a
+
+\begin{equation}
+    X=
+    \begin{cases}
+      X_{HU} + 1024 & \text{if}\ x_{HU} < -124 \\
+      (X_{HU} + 1024) * 10 & \text{if}\ x_{HU} \geq -124 \& x_{HU} \leq 76 \\
+      (X_{HU} + 1024) + 1800 & \text{if}\ x_{HU} > 76
+    \end{cases}
+  \end{equation}
+
+\hypertarget{convolution-kernel}{%
+\subsection{Convolution Kernel}\label{convolution-kernel}}
+
+Though we discuss CT as having more standardized Hounsfield unit values,
+this does not imply CT scans cannot have vastly different properties
+depending on parameters of scanning. One notable parameter in image
+reconstruction is the covolution kernel (i.e.~filter, DICOM field
+(0018,1210)) used for reconstruction. Information on which kernel was
+used, and other reconstruction parameter information can be found in the
+DICOM header (e.g.~field (0018,1210)). The kernel is described usually
+by the ltter ``H'' (for head kernel), a number indicating image
+sharpness (e.g.~the higher the number, the sharper the image, the lower
+the number, the smoother the image), and an ending of ``s'' (standard),
+``f'' fast, ``h'' for high resolution modes (Siemens
+http://docshare01.docshare.tips/files/24454/244544233.pdf), though some
+protocols simply name them ``soft-tissue'', ``bone'', ``head'', or
+``blood'', amongst others. The image contrast can depend highly on the
+kernel, and ``medium smooth'' kernels (e.g.~H30f, H30s) can provide good
+contrast in brain tissue. Others, such as ``medium'' kernels (e.g.~H30f,
+H30s) provide contrast in high values of the image, such as bone for
+detecting fractures. (FIGURE HERE). Thus, when combining data from
+multiple sources, the convolution kernel may be used to filter,
+stratify, or exclude data.
+
+Moreover, the noise and image contrast can be different depending on the
+image resolution of the reconstruction. Most standard head CT scans have
+high resolution within the axial plane (e.g.~\(0.5\)mm\(^2\)). Image
+reconstructions can have resolution in the interior-superior plane
+(e.g.~slice thickness) anywhere from \(0.5\)mm (aka `thin-slice') to
+\(2.5\)mm, to \(5\)mm, where \(5\)mm is fairly common. The larger the
+slice thicknesses are, the smoother the reconstruction (as areas are
+averaged). Also, the added benefit for radiologists and clinicians are
+that fewer slices are needed to be reviewed for pathology or to get a
+comprehensive view of the head. In research, however, these thin-slice
+scans can get better estimates of volumes of pathology, such as a
+hemorrhage (CITE), or other brain regions. Moreover, when performing
+operations across images, alogirhtms may need to take this differing
+resolution, and therefore image dimensions, into account. We will
+discuss image registration in the data preprocessing as one way to
+harmonize the data resolution, but registration does not change the
+inherent smoothness or precision of the original data.
+
+\hypertarget{contrast-agent}{%
+\subsection{Contrast Agent}\label{contrast-agent}}
+
+Though we are discussing non-contrast scans, head CT scans with contrast
+agent are common. The contrast/bolus agent again should be identified in
+the DICOM header field (0018,0010), but may be omitted. The contrast
+changes CT images, especially where agent is delivered, notably the
+vascular system of the brain. These changes may affect the steps
+recommended in the next section of data preprocessing, where thresholds
+may need to be adjusted to include areas with with contrast which can
+have higher values than the rest of the tissue (e.g.~\textgreater{}
+100HU). (FIGURE)
 
 \hypertarget{data-preprocessing}{%
 \section{Data Preprocessing}\label{data-preprocessing}}
@@ -294,7 +373,7 @@ necessary.
 \subsection{Bias-field/Inhomogeneity
 Correction}\label{bias-fieldinhomogeneity-correction}}
 
-In MRI, the scan may be ``contaminated'' by a bias field or set of
+In MRI, the scan may be contaminated by a bias field or set of
 inhomogeneities. This field is generally due to
 inhomogeneities/inconsistencies in the MRI coils or can be generated by
 non-uniform physical effects on the coils, such as heating. One of the
@@ -385,7 +464,7 @@ templates, retrospective searches through medical records can provide
 patients who came in with symptoms warranting a CT scan, such as a
 migraine, but had a diagnosis of no pathology or damage. Thus, these
 neuro-normal scans are similar to that of those collected those in MRI
-research studies but with some important differences. As these are
+research studies, but with some important differences. As these are
 retrospective, inclusion criteria information may not be easily
 obtainable if not clinically collected, scanning protocols and
 parameters may vary, even within hospital and especially over time, and
@@ -398,9 +477,9 @@ spatial normalization/registration.
 
 One interesting aspect of CT image registration is again that CT data
 has units within the same range. To say they are uniformly standardized
-is a bit too strong in our opinion, but you can think of them as much
-more standardized than MRI due to the nature of the data. This
-standardization may warrant or allow the user different search and
+is a bit too strong as tomography and other confounds can impact units.
+Thus, it is our practice to thenk of them as more standardized than MRI.
+This standardization may warrant or allow the user different search and
 evaluation cost functions for registration, such as least squares. We
 have found though that normalized mutual information (NMI) still
 performs well in CT-to-CT registration and should be at least considered
@@ -408,13 +487,16 @@ when using CT-to-MRI or CT-to-PET registration. Along with the template
 above, Rorden et al. (2012) released the clinical toolbox
 (https://github.com/neurolabusc/Clinical) for SPM {[}CITE{]} to allow
 researchers to register head CT data to a standard space. However, as
-the data are in NIfTI format, almost all image registration software
+the data are in the NIfTI format, almost all image registration software
 should work, though one should consider transforming the units using
 Cormack units or other transformations as negative values may implicitly
 be excluded in some software built for MRI registration. We have found
 using diffeomorphic registrations such as symmetric normalization (SyN)
 from \texttt{ANTs} and \texttt{ANTsR} with NMI cost functions to perform
 well.
+
+\hypertarget{intensity-normalization}{%
+\subsection{Intensity Normalization}\label{intensity-normalization}}
 
 \hypertarget{publicly-available-data}{%
 \section{Publicly Available Data}\label{publicly-available-data}}
@@ -424,8 +506,8 @@ acquired clinically and not in a research setting, there is a dearth of
 publicly available data for head CT compared to head MRI. Sites for
 radiological training such as Radiopedia (https://radiopaedia.org/) have
 many cases of head CT data, but these are converted from DICOM to
-standard image formats (e.g.~JPEG) so crucial information such as
-Hounsfield Units and pixel dimensions are lost.
+standard image formats (e.g.~JPEG) so crucial information, such as
+Hounsfield Units and pixel dimensions, are lost.
 
 Large repositories of head CT data do exist, though, and many in DICOM
 format, with varying licenses and uses. The CQ500 (Chilamkurthy et al.
@@ -542,6 +624,12 @@ Norbert G Campeau, Vasantha Kumar Venugopal, Vidur Mahajan, Pooja Rao,
 and Prashant Warier. 2018. ``Deep Learning Algorithms for Detection of
 Critical Findings in Head Ct Scans: A Retrospective Study.'' \emph{The
 Lancet} 392 (10162): 2388--96.
+
+\leavevmode\hypertarget{ref-dcm2niix}{}%
+Li, Xiangrui, Paul S Morgan, John Ashburner, Jolinda Smith, and
+Christopher Rorden. 2016. ``The First Step for Neuroimaging Data
+Analysis: DICOM to NIfTI Conversion.'' \emph{Journal of Neuroscience
+Methods} 264: 47--56.
 
 \leavevmode\hypertarget{ref-neuroconductor}{}%
 Muschelli, J., A. Gherman, J. P. Fortin, B. Avants, B. Whitcher, J. D.

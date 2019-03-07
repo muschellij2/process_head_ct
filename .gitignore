@@ -1,3 +1,4 @@
+*.nii.gz
 .DS_Store
 .Rhistory
 .Rproj.user
