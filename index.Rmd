@@ -183,7 +183,7 @@ For brain extraction, run `BET` for CT or `CT_BET` (especially if you have GPUs 
 
 ## Concurrent MRI 
 
-Additionally, the spatial contrast is much lower than T1-weighted MRI for image segmentation.  Therefore, concurrent MRI may be useful.  One large issue 
+Additionally, the spatial contrast is much lower than T1-weighted MRI for image segmentation.  Therefore, concurrent MRI can be useful.  One large issue is that any data gathered with concurrent MRI the high variability in MRI protocol done if it is not standardized within or across institution.  Data is not guaranteed to be even the same type of sequence, let alone the sequence parameters and order. As many studies have shown (CITE), this variability limits the comparability or aggregation of data.   
 
 # Conclusions
 We present a simple pipeline for preprocessing of head CT data, along with software options of reading and transforming the data.  We have found that though many tools exist for MRI and are applicable to CT data.  Noticeable differences exist between the data in large part due to the collection setting (research vs. clinical), data access, data organization, and population-level data.  As CT scans provide fast and clinically relevant information and with the increased interest in machine learning in medical imaging data, particularly deep learning using convolutional neural networks, research and quantitative analysis of head CT data is bound to increase.  We believe this presents an overview of a useful set of tools and data for research in head CT.  

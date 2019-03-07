@@ -1,7 +1,7 @@
 Recommendations for Processing Head CT Data
 ================
 true
-2019-03-06
+2019-03-07
 
 # Introduction
 
@@ -429,8 +429,13 @@ have GPUs for the neural network).
 ## Concurrent MRI
 
 Additionally, the spatial contrast is much lower than T1-weighted MRI
-for image segmentation. Therefore, concurrent MRI may be useful. One
-large issue
+for image segmentation. Therefore, concurrent MRI can be useful. One
+large issue is that any data gathered with concurrent MRI the high
+variability in MRI protocol done if it is not standardized within or
+across institution. Data is not guaranteed to be even the same type of
+sequence, let alone the sequence parameters and order. As many studies
+have shown (CITE), this variability limits the comparability or
+aggregation of data.
 
 # Conclusions
 
