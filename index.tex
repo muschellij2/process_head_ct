@@ -34,6 +34,46 @@
 \fi
 % use microtype if available
 \IfFileExists{microtype.sty}{\usepackage{microtype}}{}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
 \ifxetex
   \usepackage[setpagesize=false, % page size defined by xetex
               unicode=false, % unicode breaks when used with xetex
@@ -283,19 +323,19 @@ imaging pipelines built for MRI, which typically have positive values.
 Rorden (CITE) proposed a lossless transformation, called Cormack units,
 which have a minimum value of \(0\). The goal of the transformation is
 to increase the range of the data that is usually of interest, from
-\(-100\) to \(300\) HU. The transformation assumes the minimum of the
+\(-100\) to \(100\) HU. The transformation assumes the minimum of the
 data is \(-1024\) and is to increase the dynamic range of interesting
 voxels by 3 from HU, represented by \(x_{HU}\) to Cormack \(x_{C}\) is:
 \(x_{HU} + 1024 - 900\)
 
 \begin{equation}
-    X=
-    \begin{cases}
-      0 & \text{if}\ x_{HU} < 124 \\
-      0, & \text{if}\ a=1 \\
-      1, & \text{otherwise}
-    \end{cases}
-  \end{equation}a
+X=
+\begin{cases}
+0 & \text{if}\ x_{HU} < 124 \\
+0, & \text{if}\ a=1 \\
+1, & \text{otherwise}
+\end{cases}
+\end{equation}a
 
 \begin{equation}
     X=
@@ -330,6 +370,14 @@ detecting fractures. (FIGURE HERE). Thus, when combining data from
 multiple sources, the convolution kernel may be used to filter,
 stratify, or exclude data.
 
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{knitr}\OperatorTok{::}\KeywordTok{include_graphics}\NormalTok{(}\StringTok{"overlaid_slices.png"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics[width=1\linewidth]{overlaid_slices}
+
 Moreover, the noise and image contrast can be different depending on the
 image resolution of the reconstruction. Most standard head CT scans have
 high resolution within the axial plane (e.g.~\(0.5\)mm\(^2\)). Image
@@ -345,8 +393,15 @@ hemorrhage (CITE), or other brain regions. Moreover, when performing
 operations across images, alogirhtms may need to take this differing
 resolution, and therefore image dimensions, into account. We will
 discuss image registration in the data preprocessing as one way to
-harmonize the data resolution, but registration does not change the
-inherent smoothness or precision of the original data.
+harmonize the data dimensions, but registration does not change the
+inherent smoothness or resolution of the original data.
+
+In some instances, only certain images are available for certain
+subjects. For example, most of the subjects have a non-contrast head CT
+with a soft-tissue convolution kernel, whereas some only have a bone
+convolution kernel. Post-processing smoothing can be done, such as 3D
+Gaussian or aniosotropic (Perona-Malik) smoothing (Perona and Malik
+1990) (Figure XX). This changes the smoothness of the data and
 
 \hypertarget{contrast-agent}{%
 \subsection{Contrast Agent}\label{contrast-agent}}
@@ -641,6 +696,11 @@ Muschelli, J., A. Gherman, J. P. Fortin, B. Avants, B. Whitcher, J. D.
 Clayden, B. S. Caffo, and C. M. Crainiceanu. 2018. ``Neuroconductor: An
 R Platform for Medical Imaging Analysis.'' \emph{Biostatistics},
 January.
+
+\leavevmode\hypertarget{ref-peronamalik}{}%
+Perona, Pietro, and Jitendra Malik. 1990. ``Scale-Space and Edge
+Detection Using Anisotropic Diffusion.'' \emph{IEEE Transactions on
+Pattern Analysis and Machine Intelligence} 12 (7): 629--39.
 
 \leavevmode\hypertarget{ref-rorden2012age}{}%
 Rorden, Christopher, Leonardo Bonilha, Julius Fridriksson, Benjamin

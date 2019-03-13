@@ -1,3 +1,4 @@
+data/
 *.nii.gz
 .DS_Store
 .Rhistory
