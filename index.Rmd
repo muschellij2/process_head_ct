@@ -221,8 +221,7 @@ For research using head CT scans to have the level of interest and success as MR
 
 One of the large hurdles after creating automated analysis tools or supportive tools to help radiologists and clinicians is the reintegration of this information into the healthcare system.  We do not present answers to this difficult issue, but note that these tools first need to be created to show cases where this reintegration can improve patient care, outcomes, and other performance metrics.  We hope the tools and discussion we have provided advances those efforts for researchers starting in this area.
 
-
-
+All of the code used to generate the figures in this paper is located at https://github.com/muschellij2/process_head_ct.  The code uses packages from Neuroconductor in `R`.  All data presented was from the CQ500 data set, which can be downloaded from http://headctstudy.qure.ai/dataset.  
 
 
 

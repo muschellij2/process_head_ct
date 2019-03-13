@@ -1,7 +1,7 @@
 Recommendations for Processing Head CT Data
 ================
 true
-2019-03-07
+2019-03-13
 
 # Introduction
 
@@ -161,18 +161,21 @@ slice-based analyses are done or an affine registration (as this tilting
 is a shearing) are applied to the 3D data, this tilting is not an issue.
 This tilting does cause issues for 3D operations as the distance of the
 voxels between slices is not correct and especially can show odd
-visualizations (FIGURE). The `dcm2niix` output returns both the
-corrected and non-corrected image. As the correction moves the slices to
-a different area, `dcm2niix` may pad the image so that the entire head
-is still inside the field of view. As such, this may cause issues with
-algorithms that require the 512x512 axial slice dimensions. Though less
-common, variable slice thickness can occur in reconstructions where only
-a specific area of the head is of interest. For example, an image may
-have 5mm slice thicknesses throughout the image, except for areas near
-the third ventricle, where slices are 2.5mm thick. To correct for this,
-`dcm2niix` interpolates between slices to ensure each image has a
-consistent voxel size. Again, `dcm2niix` returns both the corrected and
-non-corrected image.
+visualizations. The `dcm2niix` output returns both the corrected and
+non-corrected image (Figure @ref(fig:gantry)). As the correction moves
+the slices to a different area, `dcm2niix` may pad the image so that the
+entire head is still inside the field of view. As such, this may cause
+issues with algorithms that require the 512x512 axial slice dimensions.
+Though less common, variable slice thickness can occur in
+reconstructions where only a specific area of the head is of interest.
+For example, an image may have 5mm slice thicknesses throughout the
+image, except for areas near the third ventricle, where slices are 2.5mm
+thick. To correct for this, `dcm2niix` interpolates between slices to
+ensure each image has a consistent voxel size. Again, `dcm2niix` returns
+both the corrected and non-corrected
+image.
+
+<img src="index_files/figure-gfm/gantry-1.png" title="Example of Gantry-tilt Correction.  Using `dcm2niix`, we converted the DICOM files to a NIfTI file, which had a 30 degree tilt.  The output provides the uncorrected image (A) and the tilt-corrected image (B).  We see that the reconstructed image without correction appears fine within the axial plane, but out of plane has an odd 3D shape.  This shape will be corrected with an affine transformation, which is done in the conversion, correcting the image as seen in (B). " alt="Example of Gantry-tilt Correction.  Using `dcm2niix`, we converted the DICOM files to a NIfTI file, which had a 30 degree tilt.  The output provides the uncorrected image (A) and the tilt-corrected image (B).  We see that the reconstructed image without correction appears fine within the axial plane, but out of plane has an odd 3D shape.  This shape will be corrected with an affine transformation, which is done in the conversion, correcting the image as seen in (B). " width="100%" />
 
 Once converted to NIfTI format, one should ensure the scale of the data.
 Most CT data is between \(-1024\) and \(3071\) Hounsfield Units (HU).
@@ -187,13 +190,44 @@ HU values may causes issues with standard imaging pipelines built for
 MRI, which typically have positive values. Rorden (CITE) proposed a
 lossless transformation, called Cormack units, which have a minimum
 value of \(0\). The goal of the transformation is to increase the range
-of the data that is usually of interest, from \(-100\) to \(300\) HU.
-The transformation assumes the minimum of the data is \(-1024\) and is
-to increase the dynamic range of interesting voxels by 3 from HU,
-represented by \(x_{HU}\) to Cormack \(x_{C}\) is:
-\(x_{HU} + 1024 - 900\)
+of the data that is usually of interest, from \(-100\) to \(100\)
+HU.
 
-a
+<!-- The transformation assumes the minimum of the data is $-1000$ and is to increase the dynamic range of interesting voxels by 3 from HU, represented by $x_{HU}$ to Cormack $x_{C}$ is: -->
+
+<!-- $x_{HU} + 1024 - 900$ -->
+
+<!-- \begin{equation} -->
+
+<!-- X= -->
+
+<!-- \begin{cases} -->
+
+<!-- 0 & \text{if}\ x_{HU} < 124 \\ -->
+
+<!-- 0, & \text{if}\ a=1 \\ -->
+
+<!-- 1, & \text{otherwise} -->
+
+<!-- \end{cases} -->
+
+<!-- \end{equation} -->
+
+<!--   \begin{equation} -->
+
+<!--     X= -->
+
+<!--     \begin{cases} -->
+
+<!--       X_{HU} + 1024 & \text{if}\ x_{HU} < -124 \\ -->
+
+<!--       (X_{HU} + 1024) * 10 & \text{if}\ x_{HU} \geq -124 \& x_{HU} \leq 76 \\ -->
+
+<!--       (X_{HU} + 1024) + 1800 & \text{if}\ x_{HU} > 76 -->
+
+<!--     \end{cases} -->
+
+<!--   \end{equation} -->
 
 ## Convolution Kernel
 
@@ -201,40 +235,58 @@ Though we discuss CT as having more standardized Hounsfield unit values,
 this does not imply CT scans cannot have vastly different properties
 depending on parameters of scanning. One notable parameter in image
 reconstruction is the covolution kernel (i.e. filter, DICOM field
-(0018,1210)) used for reconstruction. Information on which kernel was
-used, and other reconstruction parameter information can be found in the
-DICOM header (e.g. field (0018,1210)). The kernel is described usually
-by the ltter “H” (for head kernel), a number indicating image sharpness
-(e.g. the higher the number, the sharper the image, the lower the
-number, the smoother the image), and an ending of “s” (standard), “f”
-fast, “h” for high resolution modes (Siemens
+(0018,1210)) used for reconstruction. We present slices from an
+individual subject from the CQ500 (Chilamkurthy et al. 2018) dataset
+(described below) in Figure @ref(fig:overlay). Information on which
+kernel was used, and other reconstruction parameter information can be
+found in the DICOM header (e.g. field (0018,1210)). The kernel is
+described usually by the ltter “H” (for head kernel), a number
+indicating image sharpness (e.g. the higher the number, the sharper the
+image, the lower the number, the smoother the image), and an ending of
+“s” (standard), “f” fast, “h” for high resolution modes (Siemens
 <http://docshare01.docshare.tips/files/24454/244544233.pdf>), though
-some protocols simply name them “soft-tissue”, “bone”, “head”, or
-“blood”, amongst others. The image contrast can depend highly on the
-kernel, and “medium smooth” kernels (e.g. H30f, H30s) can provide good
-contrast in brain tissue. Others, such as “medium” kernels (e.g. H30f,
-H30s) provide contrast in high values of the image, such as bone for
-detecting fractures. (FIGURE HERE). Thus, when combining data from
-multiple sources, the convolution kernel may be used to filter,
-stratify, or exclude data.
+some protocols simply name them “soft-tissue”, “standard”, “bone”,
+“head”, or “blood”, amongst others. The image contrast can depend
+highly on the kernel, and “medium smooth” kernels (e.g. H30f, H30s) can
+provide good contrast in brain tissue (Figure @ref(fig:overlay)E).
+Others, such as “medium” kernels (e.g. H30f, H30s) provide contrast in
+high values of the image, such as bone for detecting fractures (Figure
+@ref(fig:overlay)A), but not as good contrast in brain tissue (Figure
+@ref(fig:overlay)B). Thus, when combining data from multiple sources,
+the convolution kernel may be used to filter, stratify, or exclude
+data.
+
+<img src="overlaid_slices.png" title="Different Series for a Scanning Study.  Here we present different non-contrast head CT exported from a PACS.  We display a reconstructed scan with a bone convolution kernel (A), showing bright areas of the skull, which can be investigated for breaks or fractures.  When applying a window of 0 - 100 Hounsfield units (HU) of this image, we see the image resolution (B).  Using a Gaussian (C) or Perona-Malik (D) smoother, we see we get smoother images, similar to the image reconstructed with a soft-tissue convolution kernel (E).  Images (A-E) had a slice thickness of 5mm.  The thin-slice scan (F) had a slice thickess of 0.62mm and a soft-tissue convolution kernel." alt="Different Series for a Scanning Study.  Here we present different non-contrast head CT exported from a PACS.  We display a reconstructed scan with a bone convolution kernel (A), showing bright areas of the skull, which can be investigated for breaks or fractures.  When applying a window of 0 - 100 Hounsfield units (HU) of this image, we see the image resolution (B).  Using a Gaussian (C) or Perona-Malik (D) smoother, we see we get smoother images, similar to the image reconstructed with a soft-tissue convolution kernel (E).  Images (A-E) had a slice thickness of 5mm.  The thin-slice scan (F) had a slice thickess of 0.62mm and a soft-tissue convolution kernel." width="100%" />
 
 Moreover, the noise and image contrast can be different depending on the
 image resolution of the reconstruction. Most standard head CT scans have
 high resolution within the axial plane (e.g. \(0.5\)mm\(^2\)). Image
 reconstructions can have resolution in the interior-superior plane
-(e.g. slice thickness) anywhere from \(0.5\)mm (aka ‘thin-slice’) to
-\(2.5\)mm, to \(5\)mm, where \(5\)mm is fairly common. The larger the
-slice thicknesses are, the smoother the reconstruction (as areas are
-averaged). Also, the added benefit for radiologists and clinicians are
-that fewer slices are needed to be reviewed for pathology or to get a
-comprehensive view of the head. In research, however, these thin-slice
-scans can get better estimates of volumes of pathology, such as a
-hemorrhage (CITE), or other brain regions. Moreover, when performing
-operations across images, alogirhtms may need to take this differing
-resolution, and therefore image dimensions, into account. We will
-discuss image registration in the data preprocessing as one way to
-harmonize the data resolution, but registration does not change the
-inherent smoothness or precision of the original data.
+(e.g. slice thickness) anywhere from \(0.5\)mm (aka ‘thin-slice’,
+Figure @ref(fig:overlay)F)) to \(2.5\)mm, to \(5\)mm, where \(5\)mm is
+fairly common. The larger the slice thicknesses are, the smoother the
+reconstruction (as areas are averaged). Also, the added benefit for
+radiologists and clinicians are that fewer slices are needed to be
+reviewed for pathology or to get a comprehensive view of the head. In
+research, however, these thin-slice scans can get better estimates of
+volumes of pathology, such as a hemorrhage (CITE), or other brain
+regions. Moreover, when performing operations across images, algorithms
+may need to take this differing resolution, and therefore image
+dimensions, into account. We will discuss image registration in the data
+preprocessing as one way to harmonize the data dimensions, but
+registration does not change the inherent smoothness or resolution of
+the original data.
+
+In some instances, only certain images are available for certain
+subjects. For example, most of the subjects have a non-contrast head CT
+with a soft-tissue convolution kernel, whereas some only have a bone
+convolution kernel. Post-processing smoothing can be done, such as 3D
+Gaussian or aniosotropic (Perona-Malik) smoothing (Perona and Malik
+1990) (Figure @ref(fig:overlay)C-D). This process changes the smoothness
+of the data, contrast of certain areas, can cause artifacts in
+segmentation, but can make the within-plane properties similar for scans
+with bone convolution kernel reconstructions compared to soft-tissue
+kernels in areas of the brain.
 
 ## Contrast Agent
 
@@ -316,18 +368,23 @@ recommended in values not of interest.
 One of the most common steps in processing imaging of the brain is to
 remove non-brain structures from the image. We have published a method
 that uses the brain extraction tool (BET) from FSL, originally built for
-MRI, to perform brain extraction (CITE) with code provided
-(<http://bit.ly/CTBET_BASH>). Many papers present brain extracted CT
-images, but do not always disclose the method of extraction. Recently,
-convolutional neural networks and shape propagation techniques have been
-quite successful in this task (Akkus et al. 2018) and models have been
-released (<https://github.com/aqqush/CT_BET>). Overall, much research
-can still be done in this area as conditions such as traumatic brain
-injury (TBI) and surgery, such as craniotomies or craniectomies can
-cause these methods to potentially fail. Overall, however, large
-contrast between the skull and brain tissue and the standardized nature
-of Hounsfield Units can make brain segmentation more straightforward
-than in MRI.
+MRI, to perform brain extraction (Muschelli et al. 2015) with code
+provided (<http://bit.ly/CTBET_BASH>). An example of this algorithm
+performance on a 5mm slice, non-contrast head CT with a soft-tissue
+convolution kernel is seen in Figure @ref(fig:ss). Many papers present
+brain extracted CT images, but do not always disclose the method of
+extraction. Recently, convolutional neural networks and shape
+propagation techniques have been quite successful in this task (Akkus et
+al. 2018) and models have been released
+(<https://github.com/aqqush/CT_BET>). Overall, much research can still
+be done in this area as conditions such as traumatic brain injury (TBI)
+and surgery, such as craniotomies or craniectomies can cause these
+methods to potentially fail. Overall, however, large contrast between
+the skull and brain tissue and the standardized nature of Hounsfield
+Units can make brain segmentation more straightforward than in
+MRI.
+
+<img src="ss_image.png" title="Brain Extraction Result.  Here we present a 5mm slice, non-contrast head CT with a soft-tissue convolution kernel, overlaid with a brain mask.  The brain mask was crated using an adaptation of the Brain Extraction Tool (BET) from FSL, published by Muschelli et al. (2015)." alt="Brain Extraction Result.  Here we present a 5mm slice, non-contrast head CT with a soft-tissue convolution kernel, overlaid with a brain mask.  The brain mask was crated using an adaptation of the Brain Extraction Tool (BET) from FSL, published by Muschelli et al. (2015)." width="100%" />
 
 ## Registration to a CT template
 
@@ -373,7 +430,12 @@ should work, though one should consider transforming the units using
 Cormack units or other transformations as negative values may implicitly
 be excluded in some software built for MRI registration. We have found
 using diffeomorphic registrations such as symmetric normalization (SyN)
-from `ANTs` and `ANTsR` with NMI cost functions to perform well.
+from `ANTs` and `ANTsR` with NMI cost functions to perform well. We
+present results of registering the head CT presented in brain extraction
+to the template from Rorden et al. (2012) using SyN in Figure
+@ref(fig:reg).
+
+<img src="reg_image.png" title="Image Registration Result.  Here we use the same scan that we performed brain extraction before, and register it to a CT template (Rorden, 2012).  We registered the image using symmetric normalization (SyN), a non-linear registration done after affine registration.  We see areas of the image that align generally well, but may not be perfect." alt="Image Registration Result.  Here we use the same scan that we performed brain extraction before, and register it to a CT template (Rorden, 2012).  We registered the image using symmetric normalization (SyN), a non-linear registration done after affine registration.  We see areas of the image that align generally well, but may not be perfect." width="100%" />
 
 ## Intensity Normalization
 
@@ -406,11 +468,12 @@ Registration Evaluation, <http://www.insight-journal.org/rire/>) and
 MIDAS (<http://www.insight-journal.org/midas>) projects have small set
 of publicly available head CT.
 
-## Pipeline
+### Pipeline
 
 Overall, our recommended pipeline is as follows:
 
-1.  Use CTP to organize and anonymize the DICOM data from a PACS.
+1.  Use CTP or `DicomCleaner` to organize and anonymize the DICOM data
+    from a PACS.
 2.  Extract relevant header information for each DICOM, using software
     such as `dcmdump` from `dcmtk` and store, excluding PHI.
 3.  Convert DICOM to NIfTI using `dcm2niix`, which can create brain
@@ -421,10 +484,12 @@ After, depending on the purpose of the analysis, you may do registration
 then brain extraction, brain extraction then registration, or not do
 registration at all. If you are doing analysis of the skull, you can
 also use brain extraction as a first step to identify areas to be
-removed.
-
-For brain extraction, run `BET` for CT or `CT_BET` (especially if you
-have GPUs for the neural network).
+removed. For brain extraction, run `BET` for CT or `CT_BET` (especially
+if you have GPUs for the neural network). If registration is performed,
+keeping the transformations back into the native, subject image space is
+usually necessary as many radiologists and clinicians are comfortable to
+subject-specific predictions or segmentations. Converting the data from
+NIfTI back to DICOM is not commonly done, but is possible.
 
 ## Concurrent MRI
 
@@ -474,6 +539,11 @@ patient care, outcomes, and other performance metrics. We hope the tools
 and discussion we have provided advances those efforts for researchers
 starting in this area.
 
+All of the code used to generate the figures in this paper is located at
+<https://github.com/muschellij2/process_head_ct>. The code uses packages
+from Neuroconductor in `R`. All data presented was from the CQ500 data
+set, which can be downloaded from <http://headctstudy.qure.ai/dataset>.
+
 # References
 
 <div id="refs" class="references">
@@ -522,10 +592,26 @@ Platform for Medical Imaging Analysis.” *Biostatistics*, January.
 
 </div>
 
+<div id="ref-ctbet">
+
+Muschelli, John, Natalie L Ullman, W Andrew Mould, Paul Vespa, Daniel F
+Hanley, and Ciprian M Crainiceanu. 2015. “Validated Automatic Brain
+Extraction of Head CT Images.” *Neuroimage* 114: 379–85.
+
+</div>
+
+<div id="ref-peronamalik">
+
+Perona, Pietro, and Jitendra Malik. 1990. “Scale-Space and Edge
+Detection Using Anisotropic Diffusion.” *IEEE Transactions on Pattern
+Analysis and Machine Intelligence* 12 (7): 629–39.
+
+</div>
+
 <div id="ref-rorden2012age">
 
 Rorden, Christopher, Leonardo Bonilha, Julius Fridriksson, Benjamin
-Bender, and Hans-Otto Karnath. 2012. “Age-Specific Ct and Mri Templates
+Bender, and Hans-Otto Karnath. 2012. “Age-Specific CT and MRI Templates
 for Spatial Normalization.” *Neuroimage* 61 (4): 957–65.
 
 </div>
