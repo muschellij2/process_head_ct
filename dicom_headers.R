@@ -4,6 +4,10 @@ library(purrr)
 library(dcmsort)
 library(here)
 setwd(here::here())
+xx = read_rds("data/CQ500CT285_CT-5mm.rds")
+wide = subset_hdr(xx, keep_tags = c("(0018,1120)", relevant_tags()))
+unique(wide$GantryDetectorTilt)
+
 
 fnames = c(std = "data/CQ500CT23_CT-PRE-CONTRAST-5MM-STD.rds",
            bone = "data/CQ500CT23_CT-PRE-CONTRAST-BONE.rds",

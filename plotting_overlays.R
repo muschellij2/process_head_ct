@@ -52,7 +52,8 @@ L = c(list("(A) Bone Non-Windowed" = bone),
 #     rep(2, length(L)))
 
 L = c(L,
-      list("(F) Thin-slice" = wimgs$thin))
+      list("(F) Thin-slice" = wimgs$thin),
+      list("(G) Post-Contrast" = wimgs$post))
 
 
 slices = lapply(L, function(x) {

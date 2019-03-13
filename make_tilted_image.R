@@ -2,10 +2,11 @@ library(neurobase)
 library(fslr)
 library(extrantsr)
 library(here)
+library(magrittr)
 setwd(here::here())
 
-tilt = readnii("data/5mm_0_2.nii.gz")
-corr = readnii("data/5mm_0_2_Tilt_1.nii.gz")
+tilt = readnii("data/CQ500CT285_CT-5mm.nii.gz")
+corr = readnii("data/CQ500CT285_CT-5mm_Tilt_1.nii.gz")
 
 cc_tilt = largest_component(tilt > -400 & tilt < 1000)
 cc_tilt = filler(img = cc_tilt)
@@ -21,17 +22,18 @@ cc_corr = cc_corr %>%
   oMath("MD", 2)
 ind_corr = getEmptyImageDimensions(cc_corr)
 ocorred = mask_img(corr, cc_corr)
-corred = applyEmptyImageDimensions(ocorred, inds = ind_tilt)
+corred = applyEmptyImageDimensions(ocorred, inds = ind_corr)
 
 wcorr = window_img(corred)
 wtilt = window_img(tilted)
 
 pngname = "original_image.png"
-png(pngname, height = 5, width = 10, units = "in", res = 600)
-ortho2(wtilt, text = "Original\nImage")
+png(pngname, height = 5, width = 5, units = "in", res = 600)
+ortho2(wtilt, text = "(A)\nOriginal\nImage")
 dev.off()
 
 pngname = "tilt_corr_image.png"
-png(pngname, height = 5, width = 10, units = "in", res = 600)
-ortho2(wcorr, text = "Tilt-Corrected\nImage")
+png(pngname, height = 5, width = 5, units = "in", res = 600)
+ortho2(wcorr, text = "(B)\nTilt-Corrected\nImage")
 dev.off()
+
