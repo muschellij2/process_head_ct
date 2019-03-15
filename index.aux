@@ -29,39 +29,39 @@
 \newlabel{dicom-anonymization}{{2.1}{2}{DICOM Anonymization}{subsection.2.1}{}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {2.1.1}A note on de-identification: time between scans}{3}{subsubsection.2.1.1}}
 \newlabel{a-note-on-de-identification-time-between-scans}{{2.1.1}{3}{A note on de-identification: time between scans}{subsubsection.2.1.1}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.1.2}Reading DICOM data}{3}{subsubsection.2.1.2}}
-\newlabel{reading-dicom-data}{{2.1.2}{3}{Reading DICOM data}{subsubsection.2.1.2}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Converting DICOM to NIfTI}{3}{subsection.2.2}}
-\newlabel{converting-dicom-to-nifti}{{2.2}{3}{Converting DICOM to NIfTI}{subsection.2.2}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Convolution Kernel}{4}{subsection.2.3}}
-\newlabel{convolution-kernel}{{2.3}{4}{Convolution Kernel}{subsection.2.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Publicly Available Data}{3}{subsection.2.2}}
+\newlabel{publicly-available-data}{{2.2}{3}{Publicly Available Data}{subsection.2.2}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.2.1}Reading DICOM data}{3}{subsubsection.2.2.1}}
+\newlabel{reading-dicom-data}{{2.2.1}{3}{Reading DICOM data}{subsubsection.2.2.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Converting DICOM to NIfTI}{4}{subsection.2.3}}
+\newlabel{converting-dicom-to-nifti}{{2.3}{4}{Converting DICOM to NIfTI}{subsection.2.3}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Example of Gantry-tilt Correction. Using `dcm2niix`, we converted the DICOM files to a NIfTI file, which had a 30 degree tilt. The output provides the uncorrected image (A) and the tilt-corrected image (B). We see that the reconstructed image without correction appears fine within the axial plane, but out of plane has an odd 3D shape. This shape will be corrected with an affine transformation, which is done in the conversion, correcting the image as seen in (B). }}{5}{figure.1}}
 \newlabel{fig:gantry}{{1}{5}{Example of Gantry-tilt Correction. Using `dcm2niix`, we converted the DICOM files to a NIfTI file, which had a 30 degree tilt. The output provides the uncorrected image (A) and the tilt-corrected image (B). We see that the reconstructed image without correction appears fine within the axial plane, but out of plane has an odd 3D shape. This shape will be corrected with an affine transformation, which is done in the conversion, correcting the image as seen in (B)}{figure.1}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Different Series for a Scanning Study. Here we present different non-contrast head CT exported from a PACS. We display a reconstructed scan with a bone convolution kernel (A), showing bright areas of the skull, which can be investigated for breaks or fractures. When applying a window of 0 - 100 Hounsfield units (HU) of this image, we see the image resolution (B). Using a Gaussian (C) or Perona-Malik (D) smoother, we see we get smoother images, similar to the image reconstructed with a soft-tissue convolution kernel (E). Images (A-E) had a slice thickness of 5mm. The thin-slice scan (F) had a slice thickess of 0.62mm and a soft-tissue convolution kernel.}}{6}{figure.2}}
 \newlabel{fig:overlay}{{2}{6}{Different Series for a Scanning Study. Here we present different non-contrast head CT exported from a PACS. We display a reconstructed scan with a bone convolution kernel (A), showing bright areas of the skull, which can be investigated for breaks or fractures. When applying a window of 0 - 100 Hounsfield units (HU) of this image, we see the image resolution (B). Using a Gaussian (C) or Perona-Malik (D) smoother, we see we get smoother images, similar to the image reconstructed with a soft-tissue convolution kernel (E). Images (A-E) had a slice thickness of 5mm. The thin-slice scan (F) had a slice thickess of 0.62mm and a soft-tissue convolution kernel}{figure.2}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Contrast Agent}{6}{subsection.2.4}}
-\newlabel{contrast-agent}{{2.4}{6}{Contrast Agent}{subsection.2.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Convolution Kernel}{6}{subsection.2.4}}
+\newlabel{convolution-kernel}{{2.4}{6}{Convolution Kernel}{subsection.2.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.5}Contrast Agent}{7}{subsection.2.5}}
+\newlabel{contrast-agent}{{2.5}{7}{Contrast Agent}{subsection.2.5}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {3}Data Preprocessing}{7}{section.3}}
 \newlabel{data-preprocessing}{{3}{7}{Data Preprocessing}{section.3}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Bias-field/Inhomogeneity Correction}{7}{subsection.3.1}}
 \newlabel{bias-fieldinhomogeneity-correction}{{3.1}{7}{Bias-field/Inhomogeneity Correction}{subsection.3.1}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Brain Extraction in CT}{7}{subsection.3.2}}
-\newlabel{brain-extraction-in-ct}{{3.2}{7}{Brain Extraction in CT}{subsection.3.2}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Registration to a CT template}{8}{subsection.3.3}}
-\newlabel{registration-to-a-ct-template}{{3.3}{8}{Registration to a CT template}{subsection.3.3}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Brain Extraction Result. Here we present a 5mm slice, non-contrast head CT with a soft-tissue convolution kernel, overlaid with a brain mask. The brain mask was crated using an adaptation of the Brain Extraction Tool (BET) from FSL, published by Muschelli et al. (2015).}}{9}{figure.3}}
-\newlabel{fig:ss}{{3}{9}{Brain Extraction Result. Here we present a 5mm slice, non-contrast head CT with a soft-tissue convolution kernel, overlaid with a brain mask. The brain mask was crated using an adaptation of the Brain Extraction Tool (BET) from FSL, published by Muschelli et al. (2015)}{figure.3}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Image Registration Result. Here we use the same scan that we performed brain extraction before, and register it to a CT template (Rorden, 2012). We registered the image using symmetric normalization (SyN), a non-linear registration done after affine registration. We see areas of the image that align generally well, but may not be perfect.}}{10}{figure.4}}
-\newlabel{fig:reg}{{4}{10}{Image Registration Result. Here we use the same scan that we performed brain extraction before, and register it to a CT template (Rorden, 2012). We registered the image using symmetric normalization (SyN), a non-linear registration done after affine registration. We see areas of the image that align generally well, but may not be perfect}{figure.4}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Intensity Normalization}{10}{subsection.3.4}}
-\newlabel{intensity-normalization}{{3.4}{10}{Intensity Normalization}{subsection.3.4}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {4}Publicly Available Data}{10}{section.4}}
-\newlabel{publicly-available-data}{{4}{10}{Publicly Available Data}{section.4}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.0.1}Pipeline}{11}{subsubsection.4.0.1}}
-\newlabel{pipeline}{{4.0.1}{11}{Pipeline}{subsubsection.4.0.1}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Concurrent MRI}{11}{subsection.4.1}}
-\newlabel{concurrent-mri}{{4.1}{11}{Concurrent MRI}{subsection.4.1}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {5}Conclusions}{12}{section.5}}
-\newlabel{conclusions}{{5}{12}{Conclusions}{section.5}{}}
-\newlabel{references}{{5}{12}{References}{section*.1}{}}
-\@writefile{toc}{\contentsline {section}{References}{12}{section*.1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Brain Extraction in CT}{8}{subsection.3.2}}
+\newlabel{brain-extraction-in-ct}{{3.2}{8}{Brain Extraction in CT}{subsection.3.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Registration to a CT template}{9}{subsection.3.3}}
+\newlabel{registration-to-a-ct-template}{{3.3}{9}{Registration to a CT template}{subsection.3.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Brain Extraction Result. Here we present a 5mm slice, non-contrast head CT with a soft-tissue convolution kernel, overlaid with a brain mask. The brain mask was crated using an adaptation of the Brain Extraction Tool (BET) from FSL, published by Muschelli et al. (2015).}}{10}{figure.3}}
+\newlabel{fig:ss}{{3}{10}{Brain Extraction Result. Here we present a 5mm slice, non-contrast head CT with a soft-tissue convolution kernel, overlaid with a brain mask. The brain mask was crated using an adaptation of the Brain Extraction Tool (BET) from FSL, published by Muschelli et al. (2015)}{figure.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Image Registration Result. Here we use the same scan that we performed brain extraction before, and register it to a CT template (Rorden, 2012). We registered the image using symmetric normalization (SyN), a non-linear registration done after affine registration. We see areas of the image that align generally well, but may not be perfect.}}{11}{figure.4}}
+\newlabel{fig:reg}{{4}{11}{Image Registration Result. Here we use the same scan that we performed brain extraction before, and register it to a CT template (Rorden, 2012). We registered the image using symmetric normalization (SyN), a non-linear registration done after affine registration. We see areas of the image that align generally well, but may not be perfect}{figure.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Intensity Normalization}{11}{subsection.3.4}}
+\newlabel{intensity-normalization}{{3.4}{11}{Intensity Normalization}{subsection.3.4}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.1}Pipeline}{11}{subsubsection.3.4.1}}
+\newlabel{pipeline}{{3.4.1}{11}{Pipeline}{subsubsection.3.4.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Concurrent MRI}{12}{subsection.3.5}}
+\newlabel{concurrent-mri}{{3.5}{12}{Concurrent MRI}{subsection.3.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Conclusions}{12}{section.4}}
+\newlabel{conclusions}{{4}{12}{Conclusions}{section.4}{}}
+\newlabel{references}{{4}{13}{References}{section*.1}{}}
+\@writefile{toc}{\contentsline {section}{References}{13}{section*.1}}
