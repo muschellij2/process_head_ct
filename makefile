@@ -6,10 +6,19 @@ index.pdf: index.Rmd
 README.md: README.Rmd 
 	Rscript -e "rmarkdown::render('README.Rmd')"
 
-figures: make_reg_image.R make_ss_image.R make_tilted_image.R plotting_overlays.R
-	Rscript -e "source('make_reg_image.R')"
+figures: original_image.png overlaid_slices.png reg_image.png reg_ss_image.png \
+reg_ss2_image.png ss_image.png tilt_corr_image.png
+
+ss_image.png: make_ss_image.R
 	Rscript -e "source('make_ss_image.R')"
+
+reg_image.png reg_ss2_image.png reg_ss_image.png: make_reg_image.R 
+	Rscript -e "source('make_reg_image.R')"
+
+original_image.png tilt_corr_image.png: make_tilted_image.R
 	Rscript -e "source('make_tilted_image.R')"
+
+overlaid_slices.png: plotting_overlays.R
 	Rscript -e "source('plotting_overlays.R')"		
 
 index.md: index.Rmd 
