@@ -22,6 +22,7 @@ pngname = "ss_image.png"
 png(pngname, height = 5, width = 5, units = "in", res = 600)
 ortho2(img, mask,
        col.y = scales::alpha("red", 0.5),
-       text = "Image with\nBrain Mask (red)")
+       text = "Image with\nBrain Mask (red)",
+       crosshairs = FALSE)
 dev.off()
 

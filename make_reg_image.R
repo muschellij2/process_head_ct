@@ -23,7 +23,7 @@ double_ortho(
   wout,
   timg,
   text = "Registered\nImage (left)",
-  text.y = 33)
+  text.y = 33, crosshairs = FALSE)
 text("Template\n(right)", col = "white", x = 0.9, y = 0.08, cex = 1.25)
 dev.off()
 
@@ -47,7 +47,7 @@ double_ortho(
   ss_out,
   ss_timg,
   text = "Registered\nBrain (left)",
-  text.y = 33)
+  text.y = 33, crosshairs = FALSE)
 text("Template Brain\n(right)", col = "white", x = 0.88, y = 0.08, cex = 1.25)
 dev.off()
 
@@ -58,6 +58,6 @@ double_ortho(
   ss_out,
   timg,
   text = "Registered\nBrain (left)",
-  text.y = 33)
+  text.y = 33, crosshairs = FALSE)
 text("Template\n(right)", col = "white", x = 0.88, y = 0.08, cex = 1.25)
 dev.off()
