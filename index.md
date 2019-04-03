@@ -1,7 +1,7 @@
 Recommendations for Processing Head CT Data
 ================
 true
-2019-03-15
+2019-04-03
 
 # Introduction
 
@@ -364,25 +364,28 @@ to harmonize the data spatially with one of these correction procedures
 improves performance of a method. Though we do not recommend this
 procedure generally, as it may reduce contrasts between areas of
 interest, such as hemorrhages in the brain, we would like to discuss
-methods.
+potnetial methods.
 
 Overall, the assumptions of this bias field are that it is
 multiplicative and is smoothly varying. One of the most popular
-inhomogeneity corrections are the N3 (CITE N3) an its updated
-improvement N4 (CITE N4) in ANTs, though other methods exist in FSL
-(CITE zhang) and other software (CITE, SPM, AFNI versions, and others).
-Given the assumption of the multiplicative nature of the field, N4
-performs an expectation–maximization (EM) algorithm on the
-log-transformed image, assuming a noise-free system. As CT data in HU
-has negative values, the log transform is inappropriate.
-Pre-transforming or shifting the data values may be necessary to perform
-this algorithm, though these transforms may affect performance.
-Moreover, artifacts or objects that are not the subject (described
-below) may largely effect the estimation of the field and segmentation
-may be appropriate before running these corrections, such as brain
-extraction or extracting only subject-related data and not imaged
-hardware. The `ANTsR` package (CITE ANTsR) provides the
-`n4BiasFieldCorrection` function in `R`.
+inhomogeneity corrections are the N3 (Sled, Zijdenbos, and Evans 1998)
+an its updated improvement N4 (Tustison et al. 2010) in ANTs, though
+other methods exist in FSL (Zhang, Brady, and Smith 2001) and other
+software (Ashburner and Friston 1998; Belaroussi et al. 2006). Given the
+assumption of the multiplicative nature of the field, N4 performs an
+expectation–maximization (EM) algorithm on the log-transformed image,
+assuming a noise-free system. As CT data in HU has negative values, the
+log transform is inappropriate. Pre-transforming or shifting the data
+values may be necessary to perform this algorithm, though these
+transforms may affect performance. Moreover, artifacts or objects
+(described below), such as the bed, may largely effect the estimation of
+the field and segmentation may be appropriate before running these
+corrections, such as brain extraction or extracting only subject-related
+data and not imaged hardware. The `ANTsR` package
+(<https://github.com/ANTsX/ANTsR>) provides the `n4BiasFieldCorrection`
+function in `R`; `ANTsPy` and NiPype (Gorgolewski et al. 2011)
+(<https://github.com/ANTsX/ANTsPy>) provides `n4_bias_field_correction`
+and `N4BiasFieldCorrection` in `Python`, respectively.
 
 ## Brain Extraction in CT
 
@@ -391,39 +394,41 @@ and other lower structures, depending on the field of view.
 Additionally, other artifacts are typically present, such as the pillow
 the subject’s head was on, the bed/gurney, and any instruments in the
 field of view. We do not provide a general framework to extract the
-subject from the artifact data, but provide some recommendations for
+complete head from hardware, but provide some recommendations for
 working heuristics. Typically the range of data for the brain and facial
 tissues are within \(-100\) to \(300\)HU, excluding the skull, other
 bones, and calcificiations. Creating a mask from this data range tends
 to remove the bed/gurney, most instruments, the pillow, and the
 background. Retaining the largest connected component, filling holes (to
 include the skull), and masking the original data with this resulting
-mask will return the subject. Note, care must be taken whenever a
-masking procedure is used as one standard way is to set values outside
-an area of interest to \(0\). With CT data \(0\) HU is a real value of
-interest: if all values are set to \(0\) outside the mask, the value of
-\(0\) is aliased to both \(0\) HU and outside of mask. Either
-transforming the data into Cormack units, adding a value to the data
-(such as \(1025\)) then setting values to \(0\), or using `NaN` are
-recommended in values not of interest.
+mask will return the subject.
+
+Note, care must be taken whenever a masking procedure is used as one
+standard way is to set values outside an area of interest to \(0\). With
+CT data \(0\) HU is a real value of interest: if all values are set to
+\(0\) outside the mask, the value of \(0\) is aliased to both \(0\) HU
+and outside of mask. Either transforming the data into Cormack units,
+adding a value to the data (such as \(1025\)) then setting values to
+\(0\), or using `NaN` are recommended in values not of interest.
 
 One of the most common steps in processing imaging of the brain is to
-remove non-brain structures from the image. We have published a method
-that uses the brain extraction tool (BET) from FSL, originally built for
-MRI, to perform brain extraction (Muschelli et al. 2015) with code
-provided (<http://bit.ly/CTBET_BASH>). An example of this algorithm
+remove non-brain structures from the image. Many papers present brain
+extracted CT images, but do not always disclose the method of
+extraction. We have published a method that uses the brain extraction
+tool (BET) from FSL, originally built for MRI, to perform brain
+extraction (Muschelli et al. 2015) with the `CT_Skull_Strip` function in
+the `ichseg` `R` package (Muschelli 2019). An example of this algorithm
 performance on a 5mm slice, non-contrast head CT with a soft-tissue
-convolution kernel is seen in Figure @ref(fig:ss). Many papers present
-brain extracted CT images, but do not always disclose the method of
-extraction. Recently, convolutional neural networks and shape
-propagation techniques have been quite successful in this task (Akkus et
-al. 2018) and models have been released
+convolution kernel is seen in Figure @ref(fig:ss), which extracts the
+relevant areas for analysis. Recently, convolutional neural networks and
+shape propagation techniques have been quite successful in this task
+(Akkus et al. 2018) and models have been released
 (<https://github.com/aqqush/CT_BET>). Overall, much research can still
-be done in this area as conditions such as traumatic brain injury (TBI)
-and surgery, such as craniotomies or craniectomies can cause these
-methods to potentially fail. Overall, however, large contrast between
-the skull and brain tissue and the standardized nature of Hounsfield
-Units can make brain segmentation more straightforward than in
+be done in this area as traumatic brain injury (TBI) and surgery, such
+as craniotomies or craniectomies, can cause these methods to potentially
+fail. Overall, however, large contrast between the skull and brain
+tissue and standardized Hounsfield Units can make brain segmentation an
+easier task than in
 MRI.
 
 <img src="ss_image.png" title="Brain Extraction Result.  Here we present a 5mm slice, non-contrast head CT with a soft-tissue convolution kernel, overlaid with a brain mask.  The brain mask was crated using an adaptation of the Brain Extraction Tool (BET) from FSL, published by Muschelli et al. (2015)." alt="Brain Extraction Result.  Here we present a 5mm slice, non-contrast head CT with a soft-tissue convolution kernel, overlaid with a brain mask.  The brain mask was crated using an adaptation of the Brain Extraction Tool (BET) from FSL, published by Muschelli et al. (2015)." width="100%" />
@@ -431,22 +436,19 @@ MRI.
 ## Registration to a CT template
 
 Though many analyses in clinical data may be subject-specific,
-population-level analyses are still of interest. In some cases,
-registration from a template space to a subject space can provide
-information that can be aggregated across people for analysis. For
-example, one can perform a label fusion approach to CT data to infer the
-size of the hippocampus and then analyze hippocampi sizes across the
-population. One issue with these approaches is that most templates and
-approaches rely on an MRI template. These templates were developed by
-taking MRI scans of volunteers, which again is likely unethical with CT
-due to the radiation exposure risk without other benefits. To create
-templates, retrospective searches through medical records can provide
-patients who came in with symptoms warranting a CT scan, such as a
-migraine, but had a diagnosis of no pathology or damage. Thus, these
-neuro-normal scans are similar to that of those collected those in MRI
-research studies, but with some important differences. As these are
-retrospective, inclusion criteria information may not be easily
-obtainable if not clinically collected, scanning protocols and
+population-level analyses are still of interest. Some analyses want
+spatial results at the population-level, which require regisration to a
+population template. One issue with these approaches is that most
+templates and approaches rely on an MRI template. These templates were
+developed by taking MRI scans of volunteers, which again is likely
+unethical with CT due to the radiation exposure risk without other
+benefits. To create templates, retrospective searches through medical
+records can provide patients who came in with symptoms warranting a CT
+scan, such as a migraine, but had a diagnosis of no pathology or damage.
+Thus, these neuro-normal scans are similar to that of those collected
+those in MRI research studies, but with some important differences. As
+these are retrospective, inclusion criteria information may not be
+easily obtainable if not clinically collected, scanning protocols and
 parameters may vary, even within hospital and especially over time, and
 these patients still have neurological symptoms. Though these challenges
 exist, with a large enough patient population and a research consent at
@@ -458,30 +460,48 @@ spatial normalization/registration.
 One interesting aspect of CT image registration is again that CT data
 has units within the same range. To say they are uniformly standardized
 is a bit too strong as tomography and other confounds can impact units.
-Thus, it is our practice to thenk of them as more standardized than MRI.
+Thus, it is our practice to think of them as more standardized than MRI.
 This standardization may warrant or allow the user different search and
 evaluation cost functions for registration, such as least squares. We
 have found though that normalized mutual information (NMI) still
 performs well in CT-to-CT registration and should be at least considered
 when using CT-to-MRI or CT-to-PET registration. Along with the template
 above, Rorden et al. (2012) released the clinical toolbox
-(<https://github.com/neurolabusc/Clinical>) for SPM \[CITE\] to allow
-researchers to register head CT data to a standard space. However, as
-the data are in the NIfTI format, almost all image registration software
-should work, though one should consider transforming the units using
-Cormack units or other transformations as negative values may implicitly
-be excluded in some software built for MRI registration. We have found
-using diffeomorphic registrations such as symmetric normalization (SyN)
-from `ANTs` and `ANTsR` with NMI cost functions to perform well. We
-present results of registering the head CT presented in brain extraction
-to the template from Rorden et al. (2012) using SyN in Figure
+(<https://github.com/neurolabusc/Clinical>) for SPM to allow researchers
+to register head CT data to a standard space. However, as the data are
+in the NIfTI format, almost all image registration software should work,
+though one should consider transforming the units using Cormack units or
+other transformations as negative values may implicitly be excluded in
+some software built for MRI registration. We have found using
+diffeomorphic registrations such as symmetric normalization (SyN) from
+`ANTs` and `ANTsR` with NMI cost functions to perform well. We present
+results of registering the head CT presented in brain extraction to the
+template from Rorden et al. (2012) using SyN in Figure
 @ref(fig:reg).
 
 <img src="reg_image.png" title="Image Registration Result.  Here we use the same scan that we performed brain extraction before, and register it to a CT template (Rorden, 2012).  We registered the image using symmetric normalization (SyN), a non-linear registration done after affine registration.  We see areas of the image that align generally well, but may not be perfect." alt="Image Registration Result.  Here we use the same scan that we performed brain extraction before, and register it to a CT template (Rorden, 2012).  We registered the image using symmetric normalization (SyN), a non-linear registration done after affine registration.  We see areas of the image that align generally well, but may not be perfect." width="100%" />
 
-## Intensity Normalization
+In some cases, population-level analyses can be done, but while keeping
+information at a subject-specific level. For example, registration from
+a template to a subject space can provide information about brain
+structures that can be aggregated across people. For example, one can
+perform a label fusion approach to CT data to infer the size of the
+hippocampus and then analyze hippocampi sizes across the population.
+Numerous label fusion approaches exist (Wang et al. 2013; Sabuncu et al.
+2010; Asman and Landman 2013; Langerak et al. 2010; Collins and
+Pruessner 2010), but rely on multiple templates and publicly available
+segmented CT images are still lacking. Additionally, the spatial
+contrast in CT is much lower than T1-weighted MRI for image
+segmentation. Therefore, concurrent MRI can be useful. One large issue
+is that any data gathered with concurrent MRI the high variability in
+MRI protocol done if it is not generally standardized within or across
+institution. We see these limits as a large area of growth and
+opportunity in CT image analysis.
+<!-- Data is not guaranteed to be even the same type of sequence, let alone the sequence parameters and order.   -->
 
-### Pipeline
+### Concurrent MRI
+
+## Pipeline
 
 Overall, our recommended pipeline is as follows:
 
@@ -503,17 +523,6 @@ keeping the transformations back into the native, subject image space is
 usually necessary as many radiologists and clinicians are comfortable to
 subject-specific predictions or segmentations. Converting the data from
 NIfTI back to DICOM is not commonly done, but is possible.
-
-## Concurrent MRI
-
-Additionally, the spatial contrast is much lower than T1-weighted MRI
-for image segmentation. Therefore, concurrent MRI can be useful. One
-large issue is that any data gathered with concurrent MRI the high
-variability in MRI protocol done if it is not standardized within or
-across institution. Data is not guaranteed to be even the same type of
-sequence, let alone the sequence parameters and order. As many studies
-have shown (CITE), this variability limits the comparability or
-aggregation of data.
 
 # Conclusions
 
@@ -578,6 +587,30 @@ Patient Privacy.” *European Radiology* 25 (12): 3685–95.
 
 </div>
 
+<div id="ref-ashburner1998mri">
+
+Ashburner, John, and Karl Friston. 1998. “MRI Sensitivity Correction and
+Tissue Classification.” *NeuroImage* 7 (4 PART I).
+
+</div>
+
+<div id="ref-asman2013non">
+
+Asman, Andrew J, and Bennett A Landman. 2013. “Non-Local Statistical
+Label Fusion for Multi-Atlas Segmentation.” *Medical Image Analysis* 17
+(2): 194–208.
+
+</div>
+
+<div id="ref-belaroussi2006intensity">
+
+Belaroussi, Boubakeur, Julien Milles, Sabin Carme, Yue Min Zhu, and
+Hugues Benoit-Cattin. 2006. “Intensity Non-Uniformity Correction in MRI:
+Existing Methods and Their Validation.” *Medical Image Analysis* 10 (2):
+234–46.
+
+</div>
+
 <div id="ref-cq500">
 
 Chilamkurthy, Sasank, Rohit Ghosh, Swetha Tanamala, Mustafa Biviji,
@@ -592,6 +625,15 @@ Critical Findings in Head Ct Scans: A Retrospective Study.” *The Lancet*
 
 Clayden, Jon, and Chris Rorden. 2018. *divest: Get Images Out of DICOM
 Format Quickly*. <https://CRAN.R-project.org/package=divest>.
+
+</div>
+
+<div id="ref-collins2010towards">
+
+Collins, D Louis, and Jens C Pruessner. 2010. “Towards Accurate,
+Automatic Segmentation of the Hippocampus and Amygdala from Mri by
+Augmenting ANIMAL with a Template Library and Label Fusion.”
+*Neuroimage* 52 (4): 1355–66.
 
 </div>
 
@@ -612,6 +654,16 @@ Gorgolewski, Krzysztof, Christopher D Burns, Cindee Madison, Dav Clark,
 Yaroslav O Halchenko, Michael L Waskom, and Satrajit S Ghosh. 2011.
 “Nipype: A Flexible, Lightweight and Extensible Neuroimaging Data
 Processing Framework in Python.” *Frontiers in Neuroinformatics* 5: 13.
+
+</div>
+
+<div id="ref-langerak2010label">
+
+Langerak, Thomas Robin, Uulke A van der Heide, Alexis NTJ Kotte, Max A
+Viergever, Van VulpenMarco, Josien PW Pluim, and others. 2010. “Label
+Fusion in Atlas-Based Segmentation Using a Selective and Iterative
+Method for Performance Level Estimation (SIMPLE).” *IEEE Transactions on
+Medical Imaging* 29 (12): 2000–2008.
 
 </div>
 
@@ -636,6 +688,13 @@ Mason, D. 2011. “SU-E-T-33: pydicom: An Open Source DICOM Library.”
 Muschelli, J., A. Gherman, J. P. Fortin, B. Avants, B. Whitcher, J. D.
 Clayden, B. S. Caffo, and C. M. Crainiceanu. 2018. “Neuroconductor: An R
 Platform for Medical Imaging Analysis.” *Biostatistics*, January.
+
+</div>
+
+<div id="ref-ichseg">
+
+Muschelli, John. 2019. *ichseg: Intracerebral Hemorrhage Segmentation of
+X-Ray Computed Tomography (CT) Images*.
 
 </div>
 
@@ -693,10 +752,45 @@ Convenient Extraction of Medical Image Metadata.” *F1000Research* 7.
 
 </div>
 
+<div id="ref-sabuncu2010generative">
+
+Sabuncu, Mert R, BT Thomas Yeo, Van LeemputKoen, Bruce Fischl, and
+Polina Golland. 2010. “A Generative Model for Image Segmentation Based
+on Label Fusion.” *IEEE Transactions on Medical Imaging* 29 (10):
+1714–29.
+
+</div>
+
 <div id="ref-itk">
 
 Schroeder, Will, Lydia Ng, and Josh Cates. 2003. “The ITK Software
 Guide.”
+
+</div>
+
+<div id="ref-sled1998nonparametric">
+
+Sled, John G, Alex P Zijdenbos, and Alan C Evans. 1998. “A Nonparametric
+Method for Automatic Correction of Intensity Nonuniformity in Mri Data.”
+*IEEE Transactions on Medical Imaging* 17 (1): 87–97.
+
+</div>
+
+<div id="ref-n4">
+
+Tustison, Nicholas J, Brian B Avants, Philip A Cook, Yuanjie Zheng,
+Alexander Egan, Paul A Yushkevich, and James C Gee. 2010. “N4ITK:
+Improved N3 Bias Correction.” *IEEE Transactions on Medical Imaging* 29
+(6): 1310.
+
+</div>
+
+<div id="ref-malf">
+
+Wang, Hongzhi, Jung W Suh, Sandhitsu R Das, John B Pluta, Caryne Craige,
+and Paul A Yushkevich. 2013. “Multi-Atlas Segmentation with Joint Label
+Fusion.” *IEEE Transactions on Pattern Analysis and Machine
+Intelligence* 35 (3): 611–23.
 
 </div>
 
@@ -705,6 +799,16 @@ Guide.”
 Whitcher, Brandon, Volker J Schmid, and Andrew Thornton. 2011. “Working
 with the DICOM and NIfTI Data Standards in R.” *Journal of Statistical
 Software*, no. 6.
+
+</div>
+
+<div id="ref-zhang_segmentation_2001">
+
+Zhang, Yongyue, Michael Brady, and Stephen Smith. 2001. “Segmentation of
+Brain MR Images Through a Hidden Markov Random Field Model and the
+Expectation-Maximization Algorithm.” *Medical Imaging, IEEE Transactions
+on* 20 (1): 45–57.
+<http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=906424>.
 
 </div>
 
