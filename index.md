@@ -1,7 +1,7 @@
 Recommendations for Processing Head CT Data
 ================
 true
-2019-04-03
+2019-04-05
 
 # Introduction
 
@@ -23,11 +23,11 @@ general and those that are specific to CT throughout the paper.
 
 We will focus on aspects of quantitatively analyzing the CT data and
 getting the data into a format familiar to most MRI neuroimaging
-researchers. Therefore, we will not go into detail of DICOM reading
-tools or imaging suites designed for radiologists, which may be
-proprietary and quite costly. Moreover, we will be focusing specifically
-on non-contrast head CT data, though many of the recommendations and
-software is applicable to images of other areas of the body.
+researchers. Therefore, we will not go into detail of imaging suites
+designed for radiologists, which may be proprietary and quite costly.
+Moreover, we will be focusing specifically on non-contrast head CT data,
+though many of the recommendations and software is applicable to images
+of other areas of the body.
 
 # Data Organization
 
@@ -69,29 +69,30 @@ information if the data do not conform to a standard across scanning
 sites, manufacturers, or protocols.
 
 We will discuss reading in DICOM data and DICOM header fields in the
-next section. Though these steps can be crucial for extracting
-information from the data, many times the data must be transferred
-before analysis. Depending on the parties receiving the data,
-anonymization of the data must be done first. Aryanto, Oudkerk, and
-Ooijen (2015) provides a look at a multitude of options for DICOM
-anonymization and recommend the RSNA MIRC Clinical Trials Processor
-(CTP, <https://www.rsna.org/research/imaging-research-tools>)
-cross-platform Java software as well as the DICOM library
+next section. Reading DICOM data may be necessary for extracting
+information, but many times the data must be transferred before
+analysis. Depending on the parties receiving the data, anonymization of
+the data must be done first. Aryanto, Oudkerk, and Ooijen (2015)
+provides a look at a multitude of options for DICOM anonymization and
+recommend the RSNA MIRC Clinical Trials Processor (CTP,
+<https://www.rsna.org/research/imaging-research-tools>) a,
+cross-platform Java software, as well as the DICOM library
 (<https://www.dicomlibrary.com/>) upload service. We also recommend the
 [DicomCleaner](https://www.dclunie.com/pixelmed/software/webstart/DicomCleanerUsage.html)
 cross-platform Java program as it has similar functionality. Bespoke
-solutions can be generated using `dcm4che` (such as `dcm4che-deident`)
-and other DICOM reading tools (discussed below), but many of these tools
-have built-in capabilities that are difficult to add (such as removing
-PHI embedded in the pixel data, aka “burned in”).
+solutions can be generated using `dcm4che` (such as `dcm4che-deident`,
+<https://www.dcm4che.org/>) and other DICOM reading tools (discussed
+below), but many of these tools have built-in capabilities that are
+difficult to add (such as removing PHI embedded in the pixel data, aka
+“burned in”).
 
 ### A note on de-identification: time between scans
 
 Although most of the presented solutions are good at anonymization and
 de-identification of the header information, only a few such as CTP,
 have the utilities required for longitudinal preservation of date
-differences. Though it can be debated whether dates are identifiable
-information, some clinical trials and other studies rely on serial CT
+differences. Dates are considered removable identifiable information
+under HIPAA, some clinical trials and other studies rely on serial CT
 imaging data, and the differences between times are crucial to determine
 when events occur or are used in analysis.
 
@@ -118,12 +119,13 @@ provide an interface. The Stroke Imaging Repository Consortium
 (<http://stir.dellmed.utexas.edu/>) also has head CT data available for
 stroke. The National Biomedical Imaging Archive (NBIA,
 <https://imaging.nci.nih.gov>) demo provides some head CT data, but are
-duplicated from TCIA. The NeuroImaging Tools & Resources Collaboratory
-(NITRC, <https://www.nitrc.org/>) provides links to many data sets and
-tools, but no head CT data at this time. The RIRE (Retrospective Image
-Registration Evaluation, <http://www.insight-journal.org/rire/>) and
-MIDAS (<http://www.insight-journal.org/midas>) projects have small set
-of publicly available head CT.
+mostly duplicated from TCIA. The NeuroImaging Tools & Resources
+Collaboratory (NITRC, <https://www.nitrc.org/>) provides links to many
+data sets and tools, but no head CT images at this time. The RIRE
+(Retrospective Image Registration Evaluation,
+<http://www.insight-journal.org/rire/>) and MIDAS
+(<http://www.insight-journal.org/midas>) projects have small set of
+publicly available head CT (under 10 participants).
 
 ### Reading DICOM data
 
@@ -133,15 +135,15 @@ Though `MATLAB` has an extensive general imaging suite, including SPM
 standalone software. The main reasons are that `R` and `Python` are
 free, open source, and have a lot of functionality with neuroimaging and
 interface with popular imaging suites. We are also lead the
-Neuroconductor project (<https://neuroconductor.org/>) (Muschelli et al.
-2018), which is a repository of `R` packages for medical image analysis.
-Other imaging platforms such as the Insight Segmentation and
+Neuroconductor project (<https://neuroconductor.org/>) (J. Muschelli et
+al. 2018), which is a repository of `R` packages for medical image
+analysis. Other imaging platforms such as the Insight Segmentation and
 Registration Toolkit (ITK) are well-maintained, useful pieces of
 software that can perform many of the operations that we will be
 discussing. We will touch on some of this software with varying levels.
 We aim to present software that we have had used directly for analysis
-or preprocessing. Also, other papers and tutorials discuss their use
-(<https://neuroconductor.org/tutorials>).
+or preprocessing. Also, other papers and tutorials discuss the use of
+these tools in analysis (<https://neuroconductor.org/tutorials>).
 
 For reading DICOM data, there are multiple options. The `oro.dicom`
 (Whitcher, Schmid, and Thornton 2011) and `radtools` (Russell and Ghosh
@@ -155,13 +157,13 @@ downsides to using the DICOM format. In most cases, a DICOM file is a
 single slice of the full 3D image series. This separation can be
 cumbersome on data organization if using folder structures. As noted
 above, these files also can contain a large amount of PHI. Some image
-data may be compressed (JPEG2000). Alternatively, if data are not
-compressed, file storage is inefficient. Most importantly, many imaging
-analyses perform 3-dimensional (3D) operations, such as smoothing. Thus,
-putting the data into a different format that handles 3D images as 1
-compressed file is desirable. We present examples of reading DICOM data
-above, but generally recommend using 3D imaging formats and using the
-above tools to read the DICOM header information.
+data may be compressed, such as JPEG2000 format. Alternatively, if data
+are not compressed, file storage is inefficient. Most importantly, many
+imaging analyses perform 3-dimensional (3D) operations, such as
+smoothing. Thus, putting the data into a different format that handles
+3D images as 1 compressed file is desirable. We present examples of
+reading DICOM data above, but generally recommend using 3D imaging
+formats and using the above tools to read the DICOM header information.
 
 ## Converting DICOM to NIfTI
 
@@ -173,18 +175,19 @@ much of the data is released online. Moreover, we will present specific
 software to convert DICOM data and the recommended software (`dcm2niix`)
 outputs data in a NIfTI file.
 
-Many sufficient and complete solutions exist. Examples include
-`dicom2nifti` in the `oro.dicom` `R` package, `pydicom`, `dicom2nifti`
-in `MATLAB`, and using large imaging suites such as using `ITK` image
-reading functions for DICOM files and then write NIfTI outputs. We
-recommend `dcm2niix` (<https://github.com/rordenlab/dcm2niix>) (Li et
-al. 2016) from for CT data for the following reasons: 1) it works with
-all major scanners, 2) incorporates gantry-tilt correction for CT data,
-3) can handle variable slice thickness, 4) is open-source, 5) is fast,
-6) is an actively maintained project, and 7) works on all 3 major
-operating systems (Linux/OSX/Windows). Moreover, the popular AFNI
-neuroimaging suite includes a `dcm2niix` program with its distribution.
-Interfaces exist, such as the `dcm2niir` package in `R` and `nipype`
+Many sufficient and complete solutions exist for DICOM to NIfTI
+conversion. Examples include `dicom2nifti` in the `oro.dicom` `R`
+package, `pydicom`, `dicom2nifti` in `MATLAB`, and using large imaging
+suites such as using `ITK` image reading functions for DICOM files and
+then write NIfTI outputs. We recommend `dcm2niix`
+(<https://github.com/rordenlab/dcm2niix>) (Li et al. 2016) from for CT
+data for the following reasons: 1) it works with all major scanners, 2)
+incorporates gantry-tilt correction for CT data, 3) can handle variable
+slice thickness, 4) is open-source, 5) is fast, 6) is an actively
+maintained project, and 7) works on all 3 major operating systems
+(Linux/OSX/Windows). Moreover, the popular AFNI neuroimaging suite
+includes a `dcm2niix` program with its distribution. Interfaces exist,
+such as the `dcm2niir` (John Muschelli 2018) package in `R` and `nipype`
 `Python` module (Gorgolewski et al. 2011). Moreover, the `divest`
 package (Clayden and Rorden 2018) wraps the underlying code for
 `dcm2niix` to provide the same functionality of `dcm2niix`, along with
@@ -195,8 +198,8 @@ head CT scans, the gantry is tilted to reduce radiation exposure to
 non-brain areas, such as the eyes. Thus, the slices of the image are at
 an oblique angle. If slice-based analyses are done or an affine
 registration (as this tilting is a shearing) are applied to the 3D data,
-this tilting may implicitly be corrected. This tilting does cause issues
-for 3D operations as the distance of the voxels between slices is not
+this tilting may implicitly be corrected. This tilting causes issues for
+3D operations as the distance of the voxels between slices is not
 correct and especially can show odd visualizations (Figure
 @ref(fig:gantry)A). The `dcm2niix` output returns both the corrected and
 non-corrected image (Figure @ref(fig:gantry)). As the correction moves
@@ -223,12 +226,13 @@ processing step would be to Winsorize the data to the \[\(-1024\),
 `scl_inter` elements of the NIfTI image should be set to \(1\) and
 \(0\), respectively, to ensure no data rescaling is done in other
 software. Though HU is the standard format used in CT analysis, negative
-HU values may causes issues with standard imaging pipelines built for
+HU values may cause issues with standard imaging pipelines built for
 MRI, which typically have positive values. Rorden (CITE) proposed a
 lossless transformation, called Cormack units, which have a minimum
 value of \(0\). The goal of the transformation is to increase the range
-of the data that is usually of interest, from \(-100\) to \(100\) HU.
-Most analyses are done using HU,
+of the data that is usually of interest, from \(-100\) to \(100\)HU and
+is implemented in the Clinical toolbox (discussed below). Most analyses
+are done using HU,
 however.
 
 <!-- The transformation assumes the minimum of the data is $-1000$ and is to increase the dynamic range of interesting voxels by 3 from HU, represented by $x_{HU}$ to Cormack $x_{C}$ is: -->
@@ -273,24 +277,24 @@ however.
 Though we discuss CT as having more standardized Hounsfield unit values,
 this does not imply CT scans cannot have vastly different properties
 depending on parameters of scanning and reconstruction. One notable
-parameter in image reconstruction is the covolution kernel (i.e. filter,
-DICOM field `(0018,1210)`) used for reconstruction. We present slices
-from an individual subject from the CQ500 (Chilamkurthy et al. 2018)
-dataset (described below) in Figure @ref(fig:overlay). Information on
-which kernel was used, and other reconstruction parameter information
-can be found in the DICOM header (e.g. field (0018,1210)). The kernel is
-described usually by the ltter “H” (for head kernel), a number
-indicating image sharpness (e.g. the higher the number, the sharper the
-image, the lower the number, the smoother the image), and an ending of
-“s” (standard), “f” (fast), “h” for high resolution modes (Siemens
-SOMATOM Definition Application Guide),
+parameter in image reconstruction is the convolution kernel
+(i.e. filter, DICOM field `(0018,1210)`) used for reconstruction. We
+present slices from an individual subject from the CQ500 (Chilamkurthy
+et al. 2018) dataset in Figure @ref(fig:overlay). Information on which
+kernel was used, and other reconstruction parameter information can be
+found in the DICOM header. The kernel is described usually by the letter
+“H” (for head kernel), a number indicating image sharpness (e.g. the
+higher the number, the sharper the image, the lower the number, the
+smoother the image), and an ending of “s” (standard), “f” (fast), “h”
+for high resolution modes (Siemens SOMATOM Definition Application
+Guide),
 <!-- http://docshare01.docshare.tips/files/24454/244544233.pdf--> though
 some protocols simply name them “soft-tissue”, “standard”, “bone”,
 “head”, or “blood”, amongst others. The image contrast can depend
 highly on the kernel, and “medium smooth” kernels (e.g. H30f, H30s) can
 provide good contrast in brain tissue (Figure @ref(fig:overlay)E).
 Others, such as “medium” kernels (e.g. H60f, H60s) provide contrast in
-high values of the image, such as bone for detecting fractures (Figure
+high values of the image, such as detecting bone fractures (Figure
 @ref(fig:overlay)A), but not as good contrast in brain tissue (Figure
 @ref(fig:overlay)B). Thus, when combining data from multiple sources,
 the convolution kernel may be used to filter, stratify, or exclude
@@ -300,7 +304,7 @@ data.
 
 Moreover, the noise and image contrast can be different depending on the
 image resolution of the reconstruction. Most standard head CT scans have
-high resolution within the axial plane (e.g. \(0.5\)mm\(^2\)). Image
+high resolution within the axial plane (e.g. \(0.5\)x\(0.5\)mm). Image
 reconstructions can have resolution in the interior-superior plane
 (e.g. slice thickness) anywhere from \(0.5\)mm (aka ‘thin-slice’,
 Figure @ref(fig:overlay)F)) to \(2.5\)mm, to \(5\)mm, where \(5\)mm is
@@ -321,7 +325,7 @@ In some instances, only certain images are available for certain
 subjects. For example, most of the subjects have a non-contrast head CT
 with a soft-tissue convolution kernel, whereas some only have a bone
 convolution kernel. Post-processing smoothing can be done, such as 3D
-Gaussian (Figure @ref(fig:overlay)C) or aniosotropic (Perona-Malik)
+Gaussian (Figure @ref(fig:overlay)C) or anisotropic (Perona-Malik)
 smoothing (Perona and Malik 1990) (Figure @ref(fig:overlay)D). This
 process changes the smoothness of the data, contrast of certain areas,
 can cause artifacts in segmentation, but can make the within-plane
@@ -333,7 +337,7 @@ reconstructions compared to soft-tissue kernels in areas of the brain
 
 Though we are discussing non-contrast scans, head CT scans with contrast
 agent are common. The contrast/bolus agent again should be identified in
-the DICOM header field (0018,0010), but may be omitted. The contrast
+the DICOM header field `(0018,0010)`, but may be omitted. The contrast
 changes CT images, especially where agent is delivered, notably the
 vascular system of the brain (Figure @ref(fig:overlay)G). These changes
 may affect the steps recommended in the next section of data
@@ -345,8 +349,8 @@ tissue (e.g. \> 100HU). (FIGURE)
 
 Now that the data is in a standard file format, we can discuss data
 preprocessing. As the data are in NIfTI format, most software built for
-MRI should work, but adaptations and other considerations may be
-necessary.
+MRI and other imaging modalities should work, but adaptations and other
+considerations may be necessary.
 
 ## Bias-field/Inhomogeneity Correction
 
@@ -363,8 +367,9 @@ assumed bias field due to the nature of the data, one can test if trying
 to harmonize the data spatially with one of these correction procedures
 improves performance of a method. Though we do not recommend this
 procedure generally, as it may reduce contrasts between areas of
-interest, such as hemorrhages in the brain, we would like to discuss
-potnetial methods.
+interest, such as hemorrhages in the brain, but has been used to improve
+segmentation (Cauley et al. 2018). We would like to discuss potential
+methods and CT-specific issues.
 
 Overall, the assumptions of this bias field are that it is
 multiplicative and is smoothly varying. One of the most popular
@@ -383,9 +388,9 @@ the field and segmentation may be appropriate before running these
 corrections, such as brain extraction or extracting only subject-related
 data and not imaged hardware. The `ANTsR` package
 (<https://github.com/ANTsX/ANTsR>) provides the `n4BiasFieldCorrection`
-function in `R`; `ANTsPy` and NiPype (Gorgolewski et al. 2011)
-(<https://github.com/ANTsX/ANTsPy>) provides `n4_bias_field_correction`
-and `N4BiasFieldCorrection` in `Python`, respectively.
+function in `R`; `ANTsPy` (<https://github.com/ANTsX/ANTsPy>) and NiPype
+(Gorgolewski et al. 2011) provide `n4_bias_field_correction` and
+`N4BiasFieldCorrection` in `Python`, respectively.
 
 ## Brain Extraction in CT
 
@@ -437,7 +442,7 @@ MRI.
 
 Though many analyses in clinical data may be subject-specific,
 population-level analyses are still of interest. Some analyses want
-spatial results at the population-level, which require regisration to a
+spatial results at the population-level, which require registration to a
 population template. One issue with these approaches is that most
 templates and approaches rely on an MRI template. These templates were
 developed by taking MRI scans of volunteers, which again is likely
@@ -463,10 +468,10 @@ is a bit too strong as tomography and other confounds can impact units.
 Thus, it is our practice to think of them as more standardized than MRI.
 This standardization may warrant or allow the user different search and
 evaluation cost functions for registration, such as least squares. We
-have found though that normalized mutual information (NMI) still
-performs well in CT-to-CT registration and should be at least considered
-when using CT-to-MRI or CT-to-PET registration. Along with the template
-above, Rorden et al. (2012) released the clinical toolbox
+have found that normalized mutual information (NMI) still performs well
+in CT-to-CT registration and should be at least considered when using
+CT-to-MRI or CT-to-PET registration. Along with the template above,
+Rorden et al. (2012) released the Clinical toolbox
 (<https://github.com/neurolabusc/Clinical>) for SPM to allow researchers
 to register head CT data to a standard space. However, as the data are
 in the NIfTI format, almost all image registration software should work,
@@ -510,8 +515,8 @@ Overall, our recommended pipeline is as follows:
 2.  Extract relevant header information for each DICOM, using software
     such as `dcmdump` from `dcmtk` and store, excluding PHI.
 3.  Convert DICOM to NIfTI using `dcm2niix`, which can create brain
-    imaging data structure (BIDS) formatted data. Use the tilt-corrected
-    and data with uniform voxel size.
+    imaging data structure (BIDS) formatted data (Gorgolewski et al.,
+    n.d.). Use the tilt-corrected and data with uniform voxel size.
 
 After, depending on the purpose of the analysis, you may do registration
 then brain extraction, brain extraction then registration, or not do
@@ -519,24 +524,26 @@ registration at all. If you are doing analysis of the skull, you can
 also use brain extraction as a first step to identify areas to be
 removed. For brain extraction, run `BET` for CT or `CT_BET` (especially
 if you have GPUs for the neural network). If registration is performed,
-keeping the transformations back into the native, subject image space is
+keeping the transformations back into the native, subject space is
 usually necessary as many radiologists and clinicians are comfortable to
 subject-specific predictions or segmentations. Converting the data from
-NIfTI back to DICOM is not commonly done, but is possible.
+NIfTI back to DICOM is not commonly done, but is possible as most PACS
+are built for DICOM data.
 
 # Conclusions
 
 We present a simple pipeline for preprocessing of head CT data, along
 with software options of reading and transforming the data. We have
-found that though many tools exist for MRI and are applicable to CT
-data. Noticeable differences exist between the data in large part due to
-the collection setting (research vs. clinical), data access, data
-organization, and population-level data. As CT scans provide fast and
-clinically relevant information and with the increased interest in
-machine learning in medical imaging data, particularly deep learning
-using convolutional neural networks, research and quantitative analysis
-of head CT data is bound to increase. We believe this presents an
-overview of a useful set of tools and data for research in head CT.
+found that many tools exist for MRI and are applicable to CT data.
+Noticeable differences exist between the data in large part due to the
+collection setting (research vs. clinical), data access, data
+organization, image intensity ranges, image contrast, and
+population-level data. As CT scans provide fast and clinically relevant
+information and with the increased interest in machine learning in
+medical imaging data, particularly deep learning using convolutional
+neural networks, research and quantitative analysis of head CT data is
+bound to increase. We believe this presents an overview of a useful set
+of tools and data for research in head CT.
 
 For research using head CT scans to have the level of interest and
 success as MRI, additional publicly available data needs to be released.
@@ -611,6 +618,14 @@ Existing Methods and Their Validation.” *Medical Image Analysis* 10 (2):
 
 </div>
 
+<div id="ref-biasct">
+
+Cauley, Keith A, Joe Och, Patrick J Yorks, and Samuel W Fielden. 2018.
+“Automated Segmentation of Head Computed Tomography Images Using FSL.”
+*Journal of Computer Assisted Tomography* 42 (1): 104–10.
+
+</div>
+
 <div id="ref-cq500">
 
 Chilamkurthy, Sasank, Rohit Ghosh, Swetha Tanamala, Mustafa Biviji,
@@ -657,6 +672,16 @@ Processing Framework in Python.” *Frontiers in Neuroinformatics* 5: 13.
 
 </div>
 
+<div id="ref-bids">
+
+Gorgolewski, Krzysztof J., Tibor Auer, Vince D. Calhoun, R. Cameron
+Craddock, Samir Das, Eugene P. Duff, Guillaume Flandin, et al. n.d. “The
+Brain Imaging Data Structure, a Format for Organizing and Describing
+Outputs of Neuroimaging Experiments.” *Scientific Data* 3: 160044 EP.
+<https://doi.org/10.1038/sdata.2016.44>.
+
+</div>
+
 <div id="ref-langerak2010label">
 
 Langerak, Thomas Robin, Uulke A van der Heide, Alexis NTJ Kotte, Max A
@@ -691,10 +716,17 @@ Platform for Medical Imaging Analysis.” *Biostatistics*, January.
 
 </div>
 
+<div id="ref-dcm2niir">
+
+Muschelli, John. 2018. *dcm2niir: Conversion of DICOM to NIfTI Imaging
+Files Through R*. <https://github.com/muschellij2/dcm2niir>.
+
+</div>
+
 <div id="ref-ichseg">
 
-Muschelli, John. 2019. *ichseg: Intracerebral Hemorrhage Segmentation of
-X-Ray Computed Tomography (CT) Images*.
+———. 2019. *ichseg: Intracerebral Hemorrhage Segmentation of X-Ray
+Computed Tomography (CT) Images*.
 
 </div>
 

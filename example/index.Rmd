@@ -1,18 +1,19 @@
 ---
 title: "Skull Stripping CT data"
-output: 
+output:
   html_document:
-    keep_md: true
+    keep_md: yes
+    number_sections: yes
+    code_download: true    
     theme: cosmo
-    toc: true
+    toc: yes
     toc_depth: 3
     toc_float:
-      collapsed: false
-    number_sections: true      
+      collapsed: no
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
 ---
-
-
-All code for this document is located at [here](https://raw.githubusercontent.com/muschellij2/neuroc/master/ss_ct/index.R).
 
 
 ```{r setup, include=FALSE}
