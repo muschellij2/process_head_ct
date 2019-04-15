@@ -1,18 +1,17 @@
 ---
-title: "Skull Stripping CT data"
-output: 
+title: "Supplement: Skull Stripping CT data"
+output:
   html_document:
-    keep_md: true
+    keep_md: yes
+    code_download: true    
     theme: cosmo
-    toc: true
+    toc: yes
     toc_depth: 3
     toc_float:
-      collapsed: false
-    number_sections: true      
+      collapsed: no
+  pdf_document:
+    keep_tex: false
 ---
-
-
-All code for this document is located at [here](https://raw.githubusercontent.com/muschellij2/neuroc/master/ss_ct/index.R).
 
 
 
@@ -87,7 +86,7 @@ dcm_result = dcm2nii(file_list$dirs)
 ```
 
 ```
-'/Library/Frameworks/R.framework/Versions/3.5/Resources/library/dcm2niir/dcm2niix' -9 -z y -f %p_%t_%s '/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpAss3PG/filed80c29c783c4'
+'/Library/Frameworks/R.framework/Versions/3.5/Resources/library/dcm2niir/dcm2niix' -9 -z y -f %p_%t_%s '/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpCKkbQp/file57f819f285be'
 ```
 
 ```r
@@ -95,8 +94,8 @@ dcm_result$nii_after
 ```
 
 ```
-[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpAss3PG/filed80c29c783c4/HEAD_STD_20010124161800_2_Tilt_1.nii.gz"
-[2] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpAss3PG/filed80c29c783c4/HEAD_STD_20010124161800_2.nii.gz"       
+[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpCKkbQp/file57f819f285be/HEAD_STD_20010124161800_2_Tilt_1.nii.gz"
+[2] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpCKkbQp/file57f819f285be/HEAD_STD_20010124161800_2.nii.gz"       
 ```
 
 ```r
@@ -105,9 +104,9 @@ result
 ```
 
 ```
-[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpAss3PG/filed80c29c783c4/HEAD_STD_20010124161800_2_Tilt_1.nii.gz"
+[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpCKkbQp/file57f819f285be/HEAD_STD_20010124161800_2_Tilt_1.nii.gz"
 attr(,"json_file")
-[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpAss3PG/filed80c29c783c4/HEAD_STD_20010124161800_2.json"
+[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpCKkbQp/file57f819f285be/HEAD_STD_20010124161800_2.json"
 ```
 
 Here we read the data into `R` into a `nifti` object:
@@ -200,12 +199,12 @@ reg = extrantsr::registration(
 
 ```
 $fwdtransforms
-[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpAss3PG/filed80c12c41cfe1Warp.nii.gz"      
-[2] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpAss3PG/filed80c12c41cfe0GenericAffine.mat"
+[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpCKkbQp/file57f8159e34a11Warp.nii.gz"      
+[2] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpCKkbQp/file57f8159e34a10GenericAffine.mat"
 
 $invtransforms
-[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpAss3PG/filed80c12c41cfe0GenericAffine.mat" 
-[2] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpAss3PG/filed80c12c41cfe1InverseWarp.nii.gz"
+[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpCKkbQp/file57f8159e34a10GenericAffine.mat" 
+[2] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpCKkbQp/file57f8159e34a11InverseWarp.nii.gz"
 
 $prev_transforms
 character(0)
@@ -219,17 +218,17 @@ character(0)
  [1] "-d"                                                                                             
  [2] "3"                                                                                              
  [3] "-i"                                                                                             
- [4] "<pointer: 0x7fcf1b047e60>"                                                                      
+ [4] "<pointer: 0x7fc7ba3482e0>"                                                                      
  [5] "-o"                                                                                             
- [6] "<pointer: 0x7fcf13f01b50>"                                                                      
+ [6] "<pointer: 0x7fc7ba1589f0>"                                                                      
  [7] "-r"                                                                                             
- [8] "<pointer: 0x7fcf1b38c700>"                                                                      
+ [8] "<pointer: 0x7fc7ba39e8f0>"                                                                      
  [9] "-n"                                                                                             
 [10] "linear"                                                                                         
 [11] "-t"                                                                                             
-[12] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpAss3PG/filed80c12c41cfe1Warp.nii.gz"      
+[12] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpCKkbQp/file57f8159e34a11Warp.nii.gz"      
 [13] "-t"                                                                                             
-[14] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpAss3PG/filed80c12c41cfe0GenericAffine.mat"
+[14] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpCKkbQp/file57f8159e34a10GenericAffine.mat"
 ```
 
 ```
@@ -237,7 +236,7 @@ character(0)
 ```
 
 ```
-[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpAss3PG/filed80c2b905cea.nii.gz"
+[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpCKkbQp/file57f846612c38.nii.gz"
 ```
 
 ```
@@ -278,12 +277,12 @@ brain_reg = extrantsr::registration(
 
 ```
 $fwdtransforms
-[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpAss3PG/filed80c23f6da0c1Warp.nii.gz"      
-[2] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpAss3PG/filed80c23f6da0c0GenericAffine.mat"
+[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpCKkbQp/file57f878ebfba81Warp.nii.gz"      
+[2] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpCKkbQp/file57f878ebfba80GenericAffine.mat"
 
 $invtransforms
-[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpAss3PG/filed80c23f6da0c0GenericAffine.mat" 
-[2] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpAss3PG/filed80c23f6da0c1InverseWarp.nii.gz"
+[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpCKkbQp/file57f878ebfba80GenericAffine.mat" 
+[2] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpCKkbQp/file57f878ebfba81InverseWarp.nii.gz"
 
 $prev_transforms
 character(0)
@@ -297,17 +296,17 @@ character(0)
  [1] "-d"                                                                                             
  [2] "3"                                                                                              
  [3] "-i"                                                                                             
- [4] "<pointer: 0x7fcf0f659800>"                                                                      
+ [4] "<pointer: 0x7fc7ba3c9c60>"                                                                      
  [5] "-o"                                                                                             
- [6] "<pointer: 0x7fcf0f4076f0>"                                                                      
+ [6] "<pointer: 0x7fc7ba499e70>"                                                                      
  [7] "-r"                                                                                             
- [8] "<pointer: 0x7fcf1b3856d0>"                                                                      
+ [8] "<pointer: 0x7fc79dd2b500>"                                                                      
  [9] "-n"                                                                                             
 [10] "linear"                                                                                         
 [11] "-t"                                                                                             
-[12] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpAss3PG/filed80c23f6da0c1Warp.nii.gz"      
+[12] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpCKkbQp/file57f878ebfba81Warp.nii.gz"      
 [13] "-t"                                                                                             
-[14] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpAss3PG/filed80c23f6da0c0GenericAffine.mat"
+[14] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpCKkbQp/file57f878ebfba80GenericAffine.mat"
 ```
 
 ```
@@ -315,7 +314,7 @@ character(0)
 ```
 
 ```
-[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpAss3PG/filed80c46edc45d.nii.gz"
+[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpCKkbQp/file57f8744b4245.nii.gz"
 ```
 
 ```

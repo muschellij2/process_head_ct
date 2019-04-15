@@ -1,18 +1,16 @@
 ---
-title: "Skull Stripping CT data"
+title: "Supplement: Skull Stripping CT data"
 output:
+  pdf_document:
+    keep_tex: false
   html_document:
     keep_md: yes
-    number_sections: yes
     code_download: true    
     theme: cosmo
     toc: yes
     toc_depth: 3
     toc_float:
       collapsed: no
-  pdf_document:
-    toc: yes
-    toc_depth: '3'
 ---
 
 
