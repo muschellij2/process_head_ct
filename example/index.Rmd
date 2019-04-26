@@ -1,8 +1,6 @@
 ---
-title: "Supplement: Skull Stripping CT data"
+title: "Skull Stripping and Registration of Head CT Data"
 output:
-  pdf_document:
-    keep_tex: false
   html_document:
     keep_md: yes
     code_download: true    
@@ -11,6 +9,8 @@ output:
     toc_depth: 3
     toc_float:
       collapsed: no
+  pdf_document:
+    keep_tex: false
 ---
 
 

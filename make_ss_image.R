@@ -26,3 +26,4 @@ ortho2(img, mask,
        crosshairs = FALSE)
 dev.off()
 
+

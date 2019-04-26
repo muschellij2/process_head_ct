@@ -1,5 +1,5 @@
 ---
-title: "Supplement: Skull Stripping CT data"
+title: "Skull Stripping and Registration of Head CT Data"
 output:
   html_document:
     keep_md: yes
@@ -86,7 +86,7 @@ dcm_result = dcm2nii(file_list$dirs)
 ```
 
 ```
-'/Library/Frameworks/R.framework/Versions/3.5/Resources/library/dcm2niir/dcm2niix' -9 -z y -f %p_%t_%s '/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpCKkbQp/file57f819f285be'
+'/Library/Frameworks/R.framework/Versions/3.5/Resources/library/dcm2niir/dcm2niix' -9 -z y -f %p_%t_%s '/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmppxXJQQ/filecf7c7782517b'
 ```
 
 ```r
@@ -94,8 +94,8 @@ dcm_result$nii_after
 ```
 
 ```
-[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpCKkbQp/file57f819f285be/HEAD_STD_20010124161800_2_Tilt_1.nii.gz"
-[2] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpCKkbQp/file57f819f285be/HEAD_STD_20010124161800_2.nii.gz"       
+[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmppxXJQQ/filecf7c7782517b/HEAD_STD_20010124161800_2_Tilt_1.nii.gz"
+[2] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmppxXJQQ/filecf7c7782517b/HEAD_STD_20010124161800_2.nii.gz"       
 ```
 
 ```r
@@ -104,9 +104,9 @@ result
 ```
 
 ```
-[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpCKkbQp/file57f819f285be/HEAD_STD_20010124161800_2_Tilt_1.nii.gz"
+[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmppxXJQQ/filecf7c7782517b/HEAD_STD_20010124161800_2_Tilt_1.nii.gz"
 attr(,"json_file")
-[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpCKkbQp/file57f819f285be/HEAD_STD_20010124161800_2.json"
+[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmppxXJQQ/filecf7c7782517b/HEAD_STD_20010124161800_2.json"
 ```
 
 Here we read the data into `R` into a `nifti` object:
@@ -199,12 +199,12 @@ reg = extrantsr::registration(
 
 ```
 $fwdtransforms
-[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpCKkbQp/file57f8159e34a11Warp.nii.gz"      
-[2] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpCKkbQp/file57f8159e34a10GenericAffine.mat"
+[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmppxXJQQ/filecf7c6ffd06be1Warp.nii.gz"      
+[2] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmppxXJQQ/filecf7c6ffd06be0GenericAffine.mat"
 
 $invtransforms
-[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpCKkbQp/file57f8159e34a10GenericAffine.mat" 
-[2] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpCKkbQp/file57f8159e34a11InverseWarp.nii.gz"
+[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmppxXJQQ/filecf7c6ffd06be0GenericAffine.mat" 
+[2] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmppxXJQQ/filecf7c6ffd06be1InverseWarp.nii.gz"
 
 $prev_transforms
 character(0)
@@ -218,17 +218,17 @@ character(0)
  [1] "-d"                                                                                             
  [2] "3"                                                                                              
  [3] "-i"                                                                                             
- [4] "<pointer: 0x7fc7ba3482e0>"                                                                      
+ [4] "<pointer: 0x7fb60a1b1f80>"                                                                      
  [5] "-o"                                                                                             
- [6] "<pointer: 0x7fc7ba1589f0>"                                                                      
+ [6] "<pointer: 0x7fb60a172020>"                                                                      
  [7] "-r"                                                                                             
- [8] "<pointer: 0x7fc7ba39e8f0>"                                                                      
+ [8] "<pointer: 0x7fb60a3b53b0>"                                                                      
  [9] "-n"                                                                                             
 [10] "linear"                                                                                         
 [11] "-t"                                                                                             
-[12] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpCKkbQp/file57f8159e34a11Warp.nii.gz"      
+[12] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmppxXJQQ/filecf7c6ffd06be1Warp.nii.gz"      
 [13] "-t"                                                                                             
-[14] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpCKkbQp/file57f8159e34a10GenericAffine.mat"
+[14] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmppxXJQQ/filecf7c6ffd06be0GenericAffine.mat"
 ```
 
 ```
@@ -236,7 +236,7 @@ character(0)
 ```
 
 ```
-[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpCKkbQp/file57f846612c38.nii.gz"
+[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmppxXJQQ/filecf7c2505126e.nii.gz"
 ```
 
 ```
@@ -277,12 +277,12 @@ brain_reg = extrantsr::registration(
 
 ```
 $fwdtransforms
-[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpCKkbQp/file57f878ebfba81Warp.nii.gz"      
-[2] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpCKkbQp/file57f878ebfba80GenericAffine.mat"
+[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmppxXJQQ/filecf7c7e64692f1Warp.nii.gz"      
+[2] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmppxXJQQ/filecf7c7e64692f0GenericAffine.mat"
 
 $invtransforms
-[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpCKkbQp/file57f878ebfba80GenericAffine.mat" 
-[2] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpCKkbQp/file57f878ebfba81InverseWarp.nii.gz"
+[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmppxXJQQ/filecf7c7e64692f0GenericAffine.mat" 
+[2] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmppxXJQQ/filecf7c7e64692f1InverseWarp.nii.gz"
 
 $prev_transforms
 character(0)
@@ -296,17 +296,17 @@ character(0)
  [1] "-d"                                                                                             
  [2] "3"                                                                                              
  [3] "-i"                                                                                             
- [4] "<pointer: 0x7fc7ba3c9c60>"                                                                      
+ [4] "<pointer: 0x7fb5ee545c10>"                                                                      
  [5] "-o"                                                                                             
- [6] "<pointer: 0x7fc7ba499e70>"                                                                      
+ [6] "<pointer: 0x7fb60a167f20>"                                                                      
  [7] "-r"                                                                                             
- [8] "<pointer: 0x7fc79dd2b500>"                                                                      
+ [8] "<pointer: 0x7fb60a1b0e70>"                                                                      
  [9] "-n"                                                                                             
 [10] "linear"                                                                                         
 [11] "-t"                                                                                             
-[12] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpCKkbQp/file57f878ebfba81Warp.nii.gz"      
+[12] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmppxXJQQ/filecf7c7e64692f1Warp.nii.gz"      
 [13] "-t"                                                                                             
-[14] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpCKkbQp/file57f878ebfba80GenericAffine.mat"
+[14] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmppxXJQQ/filecf7c7e64692f0GenericAffine.mat"
 ```
 
 ```
@@ -314,7 +314,7 @@ character(0)
 ```
 
 ```
-[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmpCKkbQp/file57f8744b4245.nii.gz"
+[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmppxXJQQ/filecf7c3c57297b.nii.gz"
 ```
 
 ```
