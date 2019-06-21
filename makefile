@@ -24,5 +24,8 @@ overlaid_slices.png: plotting_overlays.R
 index.md: index.Rmd 
 	Rscript -e "rmarkdown::render('index.Rmd', output_format = rmarkdown::github_document())"
 
+example: example/index.Rmd 
+	Rscript -e "rmarkdown::render('example/index.Rmd')"
+
 clean: 
 	rm -f index.md index.pdf README.md

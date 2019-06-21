@@ -1,0 +1,4 @@
+- A primer of head CT image analysis provides a foundation for new analysts used to MRI
+- Head CT image processing is similar to that of MRI, but not all methods work out of the box.
+- Functions exist in R for converting CT DICOM data to NIfTI, skull stripping, and registration to a template.
+- A tutorial and all code to run these steps are available at https://github.com/muschellij2/process_head_ct 

@@ -1,7 +1,7 @@
 Recommendations for Processing Head CT Data
 ================
 true
-2019-04-05
+2019-06-21
 
 # Introduction
 
@@ -402,11 +402,12 @@ field of view. We do not provide a general framework to extract the
 complete head from hardware, but provide some recommendations for
 working heuristics. Typically the range of data for the brain and facial
 tissues are within \(-100\) to \(300\)HU, excluding the skull, other
-bones, and calcificiations. Creating a mask from this data range tends
-to remove the bed/gurney, most instruments, the pillow, and the
-background. Retaining the largest connected component, filling holes (to
+bones, and calcificiations. Creating a mask from values from the
+\(-100\) to \(1000\)HU range tends to remove some instruments, the
+pillow, and the background. Retaining the largest connected component
+will remove high values such as the bed/gurney, filling holes (to
 include the skull), and masking the original data with this resulting
-mask will return the subject.
+mask will return the subject (Figure @ref(fig:ss)).
 
 Note, care must be taken whenever a masking procedure is used as one
 standard way is to set values outside an area of interest to \(0\). With
@@ -436,7 +437,7 @@ tissue and standardized Hounsfield Units can make brain segmentation an
 easier task than in
 MRI.
 
-<img src="ss_image.png" title="Brain Extraction Result.  Here we present a 5mm slice, non-contrast head CT with a soft-tissue convolution kernel, overlaid with a brain mask.  The brain mask was crated using an adaptation of the Brain Extraction Tool (BET) from FSL, published by Muschelli et al. (2015)." alt="Brain Extraction Result.  Here we present a 5mm slice, non-contrast head CT with a soft-tissue convolution kernel, overlaid with a brain mask.  The brain mask was crated using an adaptation of the Brain Extraction Tool (BET) from FSL, published by Muschelli et al. (2015)." width="100%" />
+<img src="index_files/figure-gfm/ss-1.png" title="Human and Brain Extraction Results.  Here we present a 5mm slice, non-contrast head CT with a soft-tissue convolution kernel.  The left figure represents the CT image, showing all the areas imaged, overlaid with the extracted head mask as described in the section of &quot;Brain Extraction in CT&quot;.  The right hand side is the image overlaid with a brain mask.  The brain mask was created using an adaptation of the Brain Extraction Tool (BET) from FSL, published by Muschelli et al. (2015)." alt="Human and Brain Extraction Results.  Here we present a 5mm slice, non-contrast head CT with a soft-tissue convolution kernel.  The left figure represents the CT image, showing all the areas imaged, overlaid with the extracted head mask as described in the section of &quot;Brain Extraction in CT&quot;.  The right hand side is the image overlaid with a brain mask.  The brain mask was created using an adaptation of the Brain Extraction Tool (BET) from FSL, published by Muschelli et al. (2015)." width="100%" />
 
 ## Registration to a CT template
 
@@ -572,6 +573,12 @@ All of the code used to generate the figures in this paper is located at
 <https://github.com/muschellij2/process_head_ct>. The code uses packages
 from Neuroconductor in `R`. All data presented was from the CQ500 data
 set, which can be downloaded from <http://headctstudy.qure.ai/dataset>.
+
+# Acknowledgments
+
+This work has been been supported by the R01NS060910 and 5U01NS080824
+grants from the National Institute of Neurological Disorders and Stroke
+at the National Institutes of Health (NINDS/NIH).
 
 # References
 

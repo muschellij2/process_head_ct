@@ -1,0 +1,9 @@
+Christopher Rorden: University of South Carolina: RORDEN@mailbox.sc.edu
+	- Extensive work in image processing, including adapting processing methods for CT analysis.  Has created a CT template and pipeline for CT analysis.
+Celine Gillebert: KU Leuven: celine.gillebert@kuleuven.be	
+	- Previous in CT image analysis, including the paper "Automated delineation of stroke lesions using brain CT images.
+" <doi:10.1016/j.nicl.2014.03.009>, which handles image processing and analysis of CT images.
+Zeynettin Akkus: Mayo Clinic: akkus.zeynettin@mayo.edu
+	- Work in CT image segmentation, including brain extraction work: "Robust Brain Extraction Tool for CT Head Images" <doi:10.1016/j.neucom.2018.12.085>.
+Kamal Jnawali: Rochester Institute of Technology:  
+- Work in CT image analysis, including "Deep 3D convolution neural network for CT brain hemorrhage classification" <doi.org/10.1117/12.2293725>.

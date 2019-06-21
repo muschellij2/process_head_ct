@@ -1,6 +1,8 @@
 ---
 title: "Skull Stripping and Registration of Head CT Data"
 output:
+  pdf_document:
+    keep_tex: false
   html_document:
     keep_md: yes
     code_download: true    
@@ -9,15 +11,13 @@ output:
     toc_depth: 3
     toc_float:
       collapsed: no
-  pdf_document:
-    keep_tex: false
+bibliography: refs.bib
 ---
 
 
 ```{r setup, include=FALSE}
 library(dcm2niir)
 library(ichseg)
-library(dplyr)
 library(fslr)
 library(extrantsr)
 library(TCIApathfinder)
@@ -26,15 +26,26 @@ knitr::opts_chunk$set(echo = TRUE, comment = "")
 
 
 # Goal
-In this tutorial, we will discuss skull-stripping (or brain-extracting) x_ray computed tomography (CT) scans.  We will use data from TCIA (http://www.cancerimagingarchive.net/) as there is a great package called [`TCIApathfinder`](https://CRAN.R-project.org/package=TCIApathfinder) to interface with TCIA.
+In this tutorial, we will discuss skull-stripping (or brain-extracting) X-ray computed tomography (CT) scans.  We will use data from TCIA (http://www.cancerimagingarchive.net/).  The entire pipeline goes from raw DICOM data, converts it to NIfTI images, performs brain extraction, and then spatially normalizes the brain to a template using non-linear registration.  All of the packages are open source and are available through [CRAN](https://cran.r-project.org/) or [Neuroconductor (https://neuroconductor.org/)](https://neuroconductor.org/) for the R programming language.  We extract data from TCIA from the [`TCIApathfinder`](https://CRAN.R-project.org/package=TCIApathfinder) R package.
+
+## Installing Packages
+
+In order to run all the code in this tutorial, these packages need to be installed.  The following code should install all the packages. 
+
+```{r, eval = FALSE}
+install.packages(c("TCIApathfinder", "dplyr"))
+source("https://neuroconductor.org/neurocLite.R") 
+neuro_install(c("dcm2niir", "ichseg", "fslr", "extrantsr"))
+```
+
+
 
 ## Using TCIApathfinder
 
-In order to use `TCIApathfinder`, please see the [vignette to obtain API keys](https://cran.r-project.org/web/packages/TCIApathfinder/vignettes/introduction.html).  Here we will look at the collections:
+In order to use `TCIApathfinder`, please see the [vignette to obtain API keys](https://cran.r-project.org/web/packages/TCIApathfinder/vignettes/introduction.html) [@TCIApathfinder].  Here we will look at the collections of data available givent the code below:
 
 ```{r}
 library(TCIApathfinder)
-library(dplyr)
 series_instance_uid = "1.3.6.1.4.1.14519.5.2.1.2857.3707.893926543922125108620513439908"
 download_unzip_series = function(series_instance_uid,
                                  verbose = TRUE) {
@@ -66,9 +77,11 @@ file_list = download_unzip_series(
   series_instance_uid = series_instance_uid)
 ```
 
+Here we extracted a single series of a CT brain scan.  The data are in DICOM format.
+
 ## Converting DICOM to NIfTI
 
-We will use [`dcm2niix`](https://github.com/rordenlab/dcm2niix) to convert from DICOM to NIfTI.  The function `dcm2niix` is wrapped in `dcm2niir`.  We will use `dcm2niir::dcm2nii` to convert the file.  We use `check_dcm2nii` to grab the relevant output files:
+We will use [`dcm2niix`](https://github.com/rordenlab/dcm2niix) to convert the data from DICOM to NIfTI.  The function `dcm2niix` is wrapped in the `dcm2niir` R package [@dcm2niir].  We will use `dcm2niir::dcm2nii` to convert the file.  We use `check_dcm2nii` to grab the relevant output files:
  
 ```{r}
 library(dcm2niir)
@@ -77,8 +90,9 @@ dcm_result$nii_after
 result = check_dcm2nii(dcm_result)
 result
 ```
+Here we see the output is a single NIfTI file.  If there is any gantry tilt or variable slice thickness, `dcm2niix` has accounted for this.  
 
-Here we read the data into `R` into a `nifti` object:
+Next we read the data into `R` into a `nifti` object:
 ```{r}
 library(neurobase)
 img = readnii(result)
@@ -94,9 +108,11 @@ ortho2(img)
 ortho2(img, window = c(0, 100))
 ```
 
+We see the image has high resolution within the axial plane, but not as high resolution in the sagittal plane.  We see high values in the skull and other dense areas and lower values within the brain and the darkest values outside of the head.
+
 ## Skull Strip
 
-We can skull strip the image using `CT_Skull_Strip` or `CT_Skull_Stripper`.  The `CT_Skull_Stripper` has a simple switch to use `CT_Skull_Strip` or `CT_Skull_Strip_robust`.  
+We can skull strip the image using `CT_Skull_Strip` or `CT_Skull_Stripper` from the `ichseg` R package.  The `CT_Skull_Stripper` has a simple switch to use `CT_Skull_Strip` or `CT_Skull_Strip_robust` [@ichseg].  
 ```{r}
 library(ichseg)
 ss = CT_Skull_Strip(img, verbose = FALSE)
@@ -105,11 +121,11 @@ ortho2(img, ss > 0,
        col.y = scales::alpha("red", 0.5))
 ```
 
-The `CT_Skull_Strip_robust` function does 2 neck removals using `remove_neck` from `extrantsr` and then find the center of gravity (COG) twice to make sure the segmentation focuses on the head.  In some instances, the whole neck is included in the scan, such as some of the head-neck studies in TCIA.
+The `CT_Skull_Strip_robust` function does 2 neck removals using `remove_neck` from `extrantsr` and then find the center of gravity (COG) twice to make sure the segmentation focuses on the head, which uses some FSL [@fsl] functions in the `fslr` package [@fslr].  In some instances, the whole neck is included in the scan, such as some of the head-neck studies in TCIA.
 
 ## Registration
 
-Here we register the image to the template image from Rorden (2012).  We will use the `registration` function from the `extrantsr` package.  The `extrantsr` package uses the `ANTsR` package to perform the registration, and simply wraps multiple commands together.  We will use a Symmetric Normalization (SyN) type of registration, which first uses an affine registration, then combines it with a symmetric non-linear diffeomorphism.  The output file `reg$outfile` is the registered image.
+Here we register the image to the template image from Rorden (2012).  We will use the `registration` function from the `extrantsr` R package [@extrantsr].  The `extrantsr` package uses the `ANTsR` R package to perform the registration, and simply wraps multiple commands together [@ANTsR].  We will use a Symmetric Normalization (SyN) type of registration, which first uses an affine registration, then combines it with a symmetric non-linear diffeomorphism.  The output file `reg$outfile` is the registered image.
 
 ```{r}
 template_image = ichseg::ct_template(type = "image")

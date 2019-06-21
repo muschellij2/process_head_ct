@@ -11,6 +11,7 @@ output:
       collapsed: no
   pdf_document:
     keep_tex: false
+bibliography: refs.bib
 ---
 
 
@@ -18,16 +19,55 @@ output:
 
 
 # Goal
-In this tutorial, we will discuss skull-stripping (or brain-extracting) x_ray computed tomography (CT) scans.  We will use data from TCIA (http://www.cancerimagingarchive.net/) as there is a great package called [`TCIApathfinder`](https://CRAN.R-project.org/package=TCIApathfinder) to interface with TCIA.
+In this tutorial, we will discuss skull-stripping (or brain-extracting) X-ray computed tomography (CT) scans.  We will use data from TCIA (http://www.cancerimagingarchive.net/).  The entire pipeline goes from raw DICOM data, converts it to NIfTI images, performs brain extraction, and then spatially normalizes the brain to a template using non-linear registration.  All of the packages are open source and are available through [CRAN](https://cran.r-project.org/) or [Neuroconductor (https://neuroconductor.org/)](https://neuroconductor.org/) for the R programming language.  We extract data from TCIA from the [`TCIApathfinder`](https://CRAN.R-project.org/package=TCIApathfinder) R package.
+
+## Installing Packages
+
+In order to run all the code in this tutorial, these packages need to be installed.  The following code should install all the packages. 
+
+
+```r
+install.packages(c("TCIApathfinder", "dplyr"))
+source("https://neuroconductor.org/neurocLite.R") 
+neuro_install(c("dcm2niir", "ichseg", "fslr", "extrantsr"))
+```
+
+
 
 ## Using TCIApathfinder
 
-In order to use `TCIApathfinder`, please see the [vignette to obtain API keys](https://cran.r-project.org/web/packages/TCIApathfinder/vignettes/introduction.html).  Here we will look at the collections:
+In order to use `TCIApathfinder`, please see the [vignette to obtain API keys](https://cran.r-project.org/web/packages/TCIApathfinder/vignettes/introduction.html) [@TCIApathfinder].  Here we will look at the collections of data available givent the code below:
 
 
 ```r
 library(TCIApathfinder)
 library(dplyr)
+```
+
+```
+
+Attaching package: 'dplyr'
+```
+
+```
+The following object is masked from 'package:oro.nifti':
+
+    slice
+```
+
+```
+The following objects are masked from 'package:stats':
+
+    filter, lag
+```
+
+```
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+```
+
+```r
 series_instance_uid = "1.3.6.1.4.1.14519.5.2.1.2857.3707.893926543922125108620513439908"
 download_unzip_series = function(series_instance_uid,
                                  verbose = TRUE) {
@@ -67,9 +107,11 @@ Downloading Series
 Unzipping Series
 ```
 
+Here we extracted a single series of a CT brain scan.  The data are in DICOM format.
+
 ## Converting DICOM to NIfTI
 
-We will use [`dcm2niix`](https://github.com/rordenlab/dcm2niix) to convert from DICOM to NIfTI.  The function `dcm2niix` is wrapped in `dcm2niir`.  We will use `dcm2niir::dcm2nii` to convert the file.  We use `check_dcm2nii` to grab the relevant output files:
+We will use [`dcm2niix`](https://github.com/rordenlab/dcm2niix) to convert the data from DICOM to NIfTI.  The function `dcm2niix` is wrapped in the `dcm2niir` R package [@dcm2niir].  We will use `dcm2niir::dcm2nii` to convert the file.  We use `check_dcm2nii` to grab the relevant output files:
  
 
 ```r
@@ -86,7 +128,7 @@ dcm_result = dcm2nii(file_list$dirs)
 ```
 
 ```
-'/Library/Frameworks/R.framework/Versions/3.5/Resources/library/dcm2niir/dcm2niix' -9 -z y -f %p_%t_%s '/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmppxXJQQ/filecf7c7782517b'
+'/Library/Frameworks/R.framework/Versions/3.6/Resources/library/dcm2niir/dcm2niix' -9 -z y -f %p_%t_%s '/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//Rtmp5zn4fm/file90e86ff1b312'
 ```
 
 ```r
@@ -94,8 +136,8 @@ dcm_result$nii_after
 ```
 
 ```
-[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmppxXJQQ/filecf7c7782517b/HEAD_STD_20010124161800_2_Tilt_1.nii.gz"
-[2] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmppxXJQQ/filecf7c7782517b/HEAD_STD_20010124161800_2.nii.gz"       
+[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//Rtmp5zn4fm/file90e86ff1b312/HEAD_STD_20010124161800_2_Tilt_1.nii.gz"
+[2] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//Rtmp5zn4fm/file90e86ff1b312/HEAD_STD_20010124161800_2.nii.gz"       
 ```
 
 ```r
@@ -104,12 +146,13 @@ result
 ```
 
 ```
-[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmppxXJQQ/filecf7c7782517b/HEAD_STD_20010124161800_2_Tilt_1.nii.gz"
+[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//Rtmp5zn4fm/file90e86ff1b312/HEAD_STD_20010124161800_2_Tilt_1.nii.gz"
 attr(,"json_file")
-[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmppxXJQQ/filecf7c7782517b/HEAD_STD_20010124161800_2.json"
+[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//Rtmp5zn4fm/file90e86ff1b312/HEAD_STD_20010124161800_2.json"
 ```
+Here we see the output is a single NIfTI file.  If there is any gantry tilt or variable slice thickness, `dcm2niix` has accounted for this.  
 
-Here we read the data into `R` into a `nifti` object:
+Next we read the data into `R` into a `nifti` object:
 
 ```r
 library(neurobase)
@@ -117,7 +160,7 @@ img = readnii(result)
 ortho2(img)
 ```
 
-![](index_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
+![](index_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
 
 ```r
 range(img)
@@ -135,17 +178,19 @@ img = rescale_img(img, min.val = -1024, max.val = 3071)
 ortho2(img)
 ```
 
-![](index_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
+![](index_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
 
 ```r
 ortho2(img, window = c(0, 100))
 ```
 
-![](index_files/figure-html/unnamed-chunk-4-2.png)<!-- -->
+![](index_files/figure-html/unnamed-chunk-5-2.png)<!-- -->
+
+We see the image has high resolution within the axial plane, but not as high resolution in the sagittal plane.  We see high values in the skull and other dense areas and lower values within the brain and the darkest values outside of the head.
 
 ## Skull Strip
 
-We can skull strip the image using `CT_Skull_Strip` or `CT_Skull_Stripper`.  The `CT_Skull_Stripper` has a simple switch to use `CT_Skull_Strip` or `CT_Skull_Strip_robust`.  
+We can skull strip the image using `CT_Skull_Strip` or `CT_Skull_Stripper` from the `ichseg` R package.  The `CT_Skull_Stripper` has a simple switch to use `CT_Skull_Strip` or `CT_Skull_Strip_robust` [@ichseg].  
 
 ```r
 library(ichseg)
@@ -166,13 +211,13 @@ ortho2(img, ss > 0,
        col.y = scales::alpha("red", 0.5))
 ```
 
-![](index_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
+![](index_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
 
-The `CT_Skull_Strip_robust` function does 2 neck removals using `remove_neck` from `extrantsr` and then find the center of gravity (COG) twice to make sure the segmentation focuses on the head.  In some instances, the whole neck is included in the scan, such as some of the head-neck studies in TCIA.
+The `CT_Skull_Strip_robust` function does 2 neck removals using `remove_neck` from `extrantsr` and then find the center of gravity (COG) twice to make sure the segmentation focuses on the head, which uses some FSL [@fsl] functions in the `fslr` package [@fslr].  In some instances, the whole neck is included in the scan, such as some of the head-neck studies in TCIA.
 
 ## Registration
 
-Here we register the image to the template image from Rorden (2012).  We will use the `registration` function from the `extrantsr` package.  The `extrantsr` package uses the `ANTsR` package to perform the registration, and simply wraps multiple commands together.  We will use a Symmetric Normalization (SyN) type of registration, which first uses an affine registration, then combines it with a symmetric non-linear diffeomorphism.  The output file `reg$outfile` is the registered image.
+Here we register the image to the template image from Rorden (2012).  We will use the `registration` function from the `extrantsr` R package [@extrantsr].  The `extrantsr` package uses the `ANTsR` R package to perform the registration, and simply wraps multiple commands together [@ANTsR].  We will use a Symmetric Normalization (SyN) type of registration, which first uses an affine registration, then combines it with a symmetric non-linear diffeomorphism.  The output file `reg$outfile` is the registered image.
 
 
 ```r
@@ -180,7 +225,7 @@ template_image = ichseg::ct_template(type = "image")
 ortho2(template_image, window = c(0, 100))
 ```
 
-![](index_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+![](index_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
 
 ```r
 reg = extrantsr::registration(
@@ -199,12 +244,12 @@ reg = extrantsr::registration(
 
 ```
 $fwdtransforms
-[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmppxXJQQ/filecf7c6ffd06be1Warp.nii.gz"      
-[2] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmppxXJQQ/filecf7c6ffd06be0GenericAffine.mat"
+[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//Rtmp5zn4fm/file90e81554bff81Warp.nii.gz"      
+[2] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//Rtmp5zn4fm/file90e81554bff80GenericAffine.mat"
 
 $invtransforms
-[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmppxXJQQ/filecf7c6ffd06be0GenericAffine.mat" 
-[2] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmppxXJQQ/filecf7c6ffd06be1InverseWarp.nii.gz"
+[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//Rtmp5zn4fm/file90e81554bff80GenericAffine.mat" 
+[2] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//Rtmp5zn4fm/file90e81554bff81InverseWarp.nii.gz"
 
 $prev_transforms
 character(0)
@@ -218,17 +263,17 @@ character(0)
  [1] "-d"                                                                                             
  [2] "3"                                                                                              
  [3] "-i"                                                                                             
- [4] "<pointer: 0x7fb60a1b1f80>"                                                                      
+ [4] "<pointer: 0x7fcac8fe1c20>"                                                                      
  [5] "-o"                                                                                             
- [6] "<pointer: 0x7fb60a172020>"                                                                      
+ [6] "<pointer: 0x7fcac8fb3c70>"                                                                      
  [7] "-r"                                                                                             
- [8] "<pointer: 0x7fb60a3b53b0>"                                                                      
+ [8] "<pointer: 0x7fcab4c0b2f0>"                                                                      
  [9] "-n"                                                                                             
 [10] "linear"                                                                                         
 [11] "-t"                                                                                             
-[12] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmppxXJQQ/filecf7c6ffd06be1Warp.nii.gz"      
+[12] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//Rtmp5zn4fm/file90e81554bff81Warp.nii.gz"      
 [13] "-t"                                                                                             
-[14] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmppxXJQQ/filecf7c6ffd06be0GenericAffine.mat"
+[14] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//Rtmp5zn4fm/file90e81554bff80GenericAffine.mat"
 ```
 
 ```
@@ -236,7 +281,7 @@ character(0)
 ```
 
 ```
-[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmppxXJQQ/filecf7c2505126e.nii.gz"
+[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//Rtmp5zn4fm/file90e86c15f438.nii.gz"
 ```
 
 ```
@@ -248,7 +293,7 @@ wimg = window_img(reg$outfile, window = c(0, 100))
 double_ortho(template_image, wimg, window = c(0, 100))
 ```
 
-![](index_files/figure-html/unnamed-chunk-6-2.png)<!-- -->
+![](index_files/figure-html/unnamed-chunk-7-2.png)<!-- -->
 We see relatively good alignment between the template image (left) and the registered image (right)
 
 Here we will use the skull-stripped template and perform the same registration with the skull-stripped image.  
@@ -258,7 +303,7 @@ template_brain = ichseg::ct_template(type = "brain")
 ortho2(template_brain, window = c(0, 100))
 ```
 
-![](index_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
+![](index_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
 
 ```r
 brain_reg = extrantsr::registration(
@@ -277,12 +322,12 @@ brain_reg = extrantsr::registration(
 
 ```
 $fwdtransforms
-[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmppxXJQQ/filecf7c7e64692f1Warp.nii.gz"      
-[2] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmppxXJQQ/filecf7c7e64692f0GenericAffine.mat"
+[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//Rtmp5zn4fm/file90e87a2ad82c1Warp.nii.gz"      
+[2] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//Rtmp5zn4fm/file90e87a2ad82c0GenericAffine.mat"
 
 $invtransforms
-[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmppxXJQQ/filecf7c7e64692f0GenericAffine.mat" 
-[2] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmppxXJQQ/filecf7c7e64692f1InverseWarp.nii.gz"
+[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//Rtmp5zn4fm/file90e87a2ad82c0GenericAffine.mat" 
+[2] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//Rtmp5zn4fm/file90e87a2ad82c1InverseWarp.nii.gz"
 
 $prev_transforms
 character(0)
@@ -296,17 +341,17 @@ character(0)
  [1] "-d"                                                                                             
  [2] "3"                                                                                              
  [3] "-i"                                                                                             
- [4] "<pointer: 0x7fb5ee545c10>"                                                                      
+ [4] "<pointer: 0x7fcab4e8ad90>"                                                                      
  [5] "-o"                                                                                             
- [6] "<pointer: 0x7fb60a167f20>"                                                                      
+ [6] "<pointer: 0x7fcad0a6c660>"                                                                      
  [7] "-r"                                                                                             
- [8] "<pointer: 0x7fb60a1b0e70>"                                                                      
+ [8] "<pointer: 0x7fcab4e46050>"                                                                      
  [9] "-n"                                                                                             
 [10] "linear"                                                                                         
 [11] "-t"                                                                                             
-[12] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmppxXJQQ/filecf7c7e64692f1Warp.nii.gz"      
+[12] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//Rtmp5zn4fm/file90e87a2ad82c1Warp.nii.gz"      
 [13] "-t"                                                                                             
-[14] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmppxXJQQ/filecf7c7e64692f0GenericAffine.mat"
+[14] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//Rtmp5zn4fm/file90e87a2ad82c0GenericAffine.mat"
 ```
 
 ```
@@ -314,7 +359,7 @@ character(0)
 ```
 
 ```
-[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//RtmppxXJQQ/filecf7c3c57297b.nii.gz"
+[1] "/var/folders/1s/wrtqcpxn685_zk570bnx9_rr0000gr/T//Rtmp5zn4fm/file90e8141912f2.nii.gz"
 ```
 
 ```
@@ -326,7 +371,7 @@ wbrain = window_img(brain_reg$outfile, window = c(0, 100))
 double_ortho(template_image, wbrain, window = c(0, 100))
 ```
 
-![](index_files/figure-html/unnamed-chunk-7-2.png)<!-- -->
+![](index_files/figure-html/unnamed-chunk-8-2.png)<!-- -->
 
 We see again good alignment, but we see that there are some stark differences in these registrations when we compare them:
 
@@ -335,4 +380,4 @@ We see again good alignment, but we see that there are some stark differences in
 double_ortho(wimg, wbrain)
 ```
 
-![](index_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
+![](index_files/figure-html/unnamed-chunk-9-1.png)<!-- -->

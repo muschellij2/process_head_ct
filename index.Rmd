@@ -9,7 +9,7 @@ address:
     address: Johns Hopkins Bloomberg School of Public Health, Department of Biostatistics, 615 N Wolfe St, Baltimore, MD, 21205
 abstract: |
   Many research applications of neuroimaging use magnetic resonance imaging (MRI).  As such, recommendations for image analysis and standardized imaging pipelines exist. Clinical imaging, however, relies heavily on X-ray computed tomography (CT) scans for diagnosis and prognosis.  We present tools and recommendations for processing CT data, with emphasis on head CT scans and focusing on open-source solutions.  We describe going from raw DICOM data to a spatially normalized brain within CT presenting a full example with code.  Overall, we recommend anonymizing data with Clinical Trials Processor, converting DICOM data to NIfTI using `dcm2niix`, using BET for brain extraction, and registration using a publicly-available CT template for analysis.
-journal: "NeuroImage"
+journal: "NeuroImage: Clinical"
 date: "`r Sys.Date()`"
 bibliography: refs.bib
 output: 
