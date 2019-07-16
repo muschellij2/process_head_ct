@@ -42,7 +42,7 @@ neuro_install(c("dcm2niir", "ichseg", "fslr", "extrantsr"))
 
 ## Using TCIApathfinder
 
-In order to use `TCIApathfinder`, please see the [vignette to obtain API keys](https://cran.r-project.org/web/packages/TCIApathfinder/vignettes/introduction.html) [@TCIApathfinder].  Here we will look at the collections of data available givent the code below:
+In order to use `TCIApathfinder`, please see the [vignette to obtain API keys](https://cran.r-project.org/web/packages/TCIApathfinder/vignettes/introduction.html) [@TCIApathfinder].  Here we will look at the collections of data available given the code below:
 
 ```{r}
 library(TCIApathfinder)
@@ -90,7 +90,14 @@ dcm_result$nii_after
 result = check_dcm2nii(dcm_result)
 result
 ```
-Here we see the output is a single NIfTI file.  If there is any gantry tilt or variable slice thickness, `dcm2niix` has accounted for this.  
+Here we see the output is a single NIfTI file.  If there is any gantry tilt or variable slice thickness, `dcm2niix` has accounted for this.  We also see an associated `json` file, which is a BIDS sidecar file.
+
+We can show the `json` file by using `jsonlite::fromJSON`:
+```{r}
+json = jsonlite::fromJSON(attr(result, "json_file"))
+names(json)
+```
+where we see a lot of the information necessary for reporting are given.  
 
 Next we read the data into `R` into a `nifti` object:
 ```{r}
@@ -109,6 +116,19 @@ ortho2(img, window = c(0, 100))
 ```
 
 We see the image has high resolution within the axial plane, but not as high resolution in the sagittal plane.  We see high values in the skull and other dense areas and lower values within the brain and the darkest values outside of the head.
+
+## (Optional) Defacing the Image
+
+If you have [FSL](https://fsl.fmrib.ox.ac.uk/fsl/fslwiki) installed, in the `fslr` R package version (>= 2.23.0), the `deface_image` function should allow for defacing of the image [@fsl; @fslr].  The defacing can be a part of a de-identification protocol to aim for HIPAA compliance:
+
+```{r}
+noface_file = fslr::deface_image(img + 1024, template = NULL, face_mask = NULL)
+noface = readnii(noface_file)
+noface = noface - 1024
+ortho2(noface)
+```
+
+We see that the face has been removed from the image.  If you want the mask instead of the image with the face removed, you can run `fslr::face_removal_mask`.  Alternatively, the `ichseg::ct_biometric_mask` function should try to get masks of the face and ears, running the `ichseg::ct_face_mask` and `ichseg::ct_ear_mask` functions and combining them into one mask.  You can then either remove those areas, randomize the voxels (not recommended), or put a heavy smoother over the area. 
 
 ## Skull Strip
 

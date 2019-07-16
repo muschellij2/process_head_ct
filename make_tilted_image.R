@@ -32,8 +32,15 @@ png(pngname, height = 5, width = 5, units = "in", res = 600)
 ortho2(wtilt, text = "(A)\nOriginal\nImage", crosshairs = FALSE)
 dev.off()
 
+
+
+
 pngname = "tilt_corr_image.png"
 png(pngname, height = 5, width = 5, units = "in", res = 600)
 ortho2(wcorr, text = "(B)\nTilt-Corrected\nImage", crosshairs = FALSE)
 dev.off()
 
+pngname = "nifti_image.png"
+png(pngname, height = 5, width = 5, units = "in", res = 600)
+ortho2(wcorr, text = "\nNIfTI\nImage", crosshairs = FALSE)
+dev.off()

@@ -1,5 +1,5 @@
 ---
-title: Recommendations for Processing Head CT Data
+title: A Complete Pipeline for Processing Head CT Data
 author:
   - name: John Muschelli
     email: jmusche1@jhu.edu
@@ -8,8 +8,8 @@ address:
   - code: JHSPH
     address: Johns Hopkins Bloomberg School of Public Health, Department of Biostatistics, 615 N Wolfe St, Baltimore, MD, 21205
 abstract: |
-  Many research applications of neuroimaging use magnetic resonance imaging (MRI).  As such, recommendations for image analysis and standardized imaging pipelines exist. Clinical imaging, however, relies heavily on X-ray computed tomography (CT) scans for diagnosis and prognosis.  We present tools and recommendations for processing CT data, with emphasis on head CT scans and focusing on open-source solutions.  We describe going from raw DICOM data to a spatially normalized brain within CT presenting a full example with code.  Overall, we recommend anonymizing data with Clinical Trials Processor, converting DICOM data to NIfTI using `dcm2niix`, using BET for brain extraction, and registration using a publicly-available CT template for analysis.
-journal: "NeuroImage: Clinical"
+  Many research applications of neuroimaging use magnetic resonance imaging (MRI).  As such, recommendations for image analysis and standardized imaging pipelines exist. Clinical imaging, however, relies heavily on X-ray computed tomography (CT) scans for diagnosis and prognosis.  Currently, there is only one image processing pipeline for head CT, which focuses mainly on head CT data withlesions. We present tools and a complete pipeline for processing CT data, focusing on open-source solutions, that focus on head CT but are applicable to most CT analyses.  We describe going from raw DICOM data to a spatially normalized brain within CT presenting a full example with code.  Overall, we recommend anonymizing data with Clinical Trials Processor, converting DICOM data to NIfTI using `dcm2niix`, using BET for brain extraction, and registration using a publicly-available CT template for analysis.
+journal: "Medical Image Analysis"
 date: "`r Sys.Date()`"
 bibliography: refs.bib
 output: 
@@ -34,6 +34,10 @@ figures = TRUE
 Many research applications of neuroimaging use magnetic resonance imaging (MRI).  MRI allows researchers to study a multitude of applications and diseases, including studying healthy volunteers.  Clinical imaging, however, relies heavily on X-ray computed tomography (CT) scans for diagnosis and prognosis.  Studies using CT scans cannot generally recruit healthy volunteers or large non-clinical populations due to the radiation exposure and lack of substantial benefit.  As such, much of head CT data is gathered from prospective clinical trials or retrospective studies based on health medical record data and hospital picture archiving and communication system (PACS).  We discuss transforming this data from clinical to research data and provide some recommendations and guidelines from our experience with CT data similar insights from working with MRI studies.  We will discuss existing software options, focusing on open-source tools, for neuroimaging in general and those that are specific to CT throughout the paper.  
 
 We will focus on aspects of quantitatively analyzing the CT data and getting the data into a format familiar to most MRI neuroimaging researchers. Therefore, we will not go into detail of imaging suites designed for radiologists, which may be proprietary and quite costly. Moreover, we will be focusing specifically on non-contrast head CT data, though many of the recommendations and software is applicable to images of other areas of the body. 
+
+The pipeline presented here is similar to that of @csfedema.
+
+<!-- https://www.nitrc.org/projects/clinicaltbx/ -->
 
 # Data Organization
 
@@ -163,7 +167,7 @@ In some instances, only certain images are available for certain subjects.  For 
 
 ## Contrast Agent 
 
-Though we are discussing non-contrast scans, head CT scans with contrast agent are common.  The contrast/bolus agent again should be identified in the DICOM header field `(0018,0010)`, but may be omitted.  The contrast changes CT images, especially where agent is delivered, notably the vascular system of the brain (Figure \@ref(fig:overlay)G).  These changes may affect the steps recommended in the next section of data preprocessing, where thresholds may need to be adjusted to include areas with with contrast which can have higher values than the rest of the tissue (e.g. > 100HU).  (FIGURE)
+Though we are discussing non-contrast scans, head CT scans with contrast agent are common.  The contrast/bolus agent again should be identified in the DICOM header field `(0018,0010)`, but may be omitted.  The contrast changes CT images, especially where agent is delivered, notably the vascular system of the brain (Figure \@ref(fig:overlay)G).  These changes may affect the steps recommended in the next section of data preprocessing, where thresholds may need to be adjusted to include areas with with contrast which can have higher values than the rest of the tissue (e.g. > 100HU) (Figure \@ref(fig:overlay)G).
 
 
 # Data Preprocessing

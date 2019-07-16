@@ -2,7 +2,7 @@
 %%% Begin My package additions %%%%%%%%%%%%%%%%%%%
 \usepackage[hyphens]{url}
 
-  \journal{NeuroImage: Clinical} % Sets Journal name
+  \journal{Medical Image Analysis} % Sets Journal name
 
 
 \usepackage{lineno} % add
@@ -45,7 +45,7 @@
 \hypersetup{breaklinks=true,
             bookmarks=true,
             pdfauthor={},
-            pdftitle={Recommendations for Processing Head CT Data},
+            pdftitle={A Complete Pipeline for Processing Head CT Data},
             colorlinks=false,
             urlcolor=blue,
             linkcolor=magenta,
@@ -61,14 +61,14 @@
 \begin{document}
 \begin{frontmatter}
 
-  \title{Recommendations for Processing Head CT Data}
+  \title{A Complete Pipeline for Processing Head CT Data}
     \author[JHSPH]{John Muschelli}
    \ead{jmusche1@jhu.edu} 
   
       \address[JHSPH]{Johns Hopkins Bloomberg School of Public Health, Department of Biostatistics, 615 N Wolfe St, Baltimore, MD, 21205}
   
   \begin{abstract}
-  Many research applications of neuroimaging use magnetic resonance imaging (MRI). As such, recommendations for image analysis and standardized imaging pipelines exist. Clinical imaging, however, relies heavily on X-ray computed tomography (CT) scans for diagnosis and prognosis. We present tools and recommendations for processing CT data, with emphasis on head CT scans and focusing on open-source solutions. We describe going from raw DICOM data to a spatially normalized brain within CT presenting a full example with code. Overall, we recommend anonymizing data with Clinical Trials Processor, converting DICOM data to NIfTI using \texttt{dcm2niix}, using BET for brain extraction, and registration using a publicly-available CT template for analysis.
+  Many research applications of neuroimaging use magnetic resonance imaging (MRI). As such, recommendations for image analysis and standardized imaging pipelines exist. Clinical imaging, however, relies heavily on X-ray computed tomography (CT) scans for diagnosis and prognosis. Currently, there are limited to no automated, complete image processing pipeline for head CT exist. We present tools and a complete pipeline for processing CT data, focusing on open-source solutions. We describe going from raw DICOM data to a spatially normalized brain within CT presenting a full example with code. Overall, we recommend anonymizing data with Clinical Trials Processor, converting DICOM data to NIfTI using \texttt{dcm2niix}, using BET for brain extraction, and registration using a publicly-available CT template for analysis.
   \end{abstract}
   
  \end{frontmatter}
