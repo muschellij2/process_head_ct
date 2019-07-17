@@ -117,18 +117,6 @@ ortho2(img, window = c(0, 100))
 
 We see the image has high resolution within the axial plane, but not as high resolution in the sagittal plane.  We see high values in the skull and other dense areas and lower values within the brain and the darkest values outside of the head.
 
-## (Optional) Defacing the Image
-
-If you have [FSL](https://fsl.fmrib.ox.ac.uk/fsl/fslwiki) installed, in the `fslr` R package version (>= 2.23.0), the `deface_image` function should allow for defacing of the image [@fsl; @fslr].  The defacing can be a part of a de-identification protocol to aim for HIPAA compliance:
-
-```{r}
-noface_file = fslr::deface_image(img + 1024, template = NULL, face_mask = NULL)
-noface = readnii(noface_file)
-noface = noface - 1024
-ortho2(noface)
-```
-
-We see that the face has been removed from the image.  If you want the mask instead of the image with the face removed, you can run `fslr::face_removal_mask`.  Alternatively, the `ichseg::ct_biometric_mask` function should try to get masks of the face and ears, running the `ichseg::ct_face_mask` and `ichseg::ct_ear_mask` functions and combining them into one mask.  You can then either remove those areas, randomize the voxels (not recommended), or put a heavy smoother over the area. 
 
 ## Skull Strip
 
@@ -142,6 +130,31 @@ ortho2(img, ss > 0,
 ```
 
 The `CT_Skull_Strip_robust` function does 2 neck removals using `remove_neck` from `extrantsr` and then find the center of gravity (COG) twice to make sure the segmentation focuses on the head, which uses some FSL [@fsl] functions in the `fslr` package [@fslr].  In some instances, the whole neck is included in the scan, such as some of the head-neck studies in TCIA.
+
+
+## (Optional) Defacing the Image
+
+If you have [FSL](https://fsl.fmrib.ox.ac.uk/fsl/fslwiki) installed, in the `fslr` R package version (>= 2.23.0), the `deface_image` function should allow for defacing of the image [@fsl; @fslr].  The defacing can be a part of a de-identification protocol to aim for HIPAA compliance:
+
+```{r}
+noface_file = fslr::deface_image(img + 1024, template = NULL, face_mask = NULL)
+noface = readnii(noface_file)
+noface = noface - 1024
+ortho2(noface)
+```
+
+We see that the face has been removed from the image.  If you want the mask instead of the image with the face removed, you can run `fslr::face_removal_mask`.  Alternatively, the `ichseg::ct_biometric_mask` function should try to get masks of the face and ears, running the `ichseg::ct_face_mask` and `ichseg::ct_ear_mask` functions and combining them into one mask.  You can then either remove those areas, randomize the voxels (not recommended), or put a heavy smoother over the area. 
+
+
+### Defacing using Quickshear method
+If you have the `fslr` package 2.23.1 or above, the `quickshear` method [@quickshear] has been implemented.  This is different from the `deface_image` above, but requires a brain mask.  
+
+```{r}
+qs_noface = fslr::quickshear_deface_image(file = img, brain_mask = ss > 0)
+ortho2(qs_noface)
+```
+
+
 
 ## Registration
 

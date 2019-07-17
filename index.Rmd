@@ -35,7 +35,7 @@ Many research applications of neuroimaging use magnetic resonance imaging (MRI).
 
 We will focus on aspects of quantitatively analyzing the CT data and getting the data into a format familiar to most MRI neuroimaging researchers. Therefore, we will not go into detail of imaging suites designed for radiologists, which may be proprietary and quite costly. Moreover, we will be focusing specifically on non-contrast head CT data, though many of the recommendations and software is applicable to images of other areas of the body. 
 
-The pipeline presented here is similar to that of @csfedema.  We aim to discuss the merits of each part of the pipeline with a set of choices that have available code.  In addition, the supplement has a working example, with code, to go from DICOM data to a spatially-normalized brain image. We also touch on points relevant to de-identification of the data, not only from DICOM metadata, but also removing identifiable information from the image itself such as the face.
+The pipeline presented here is similar to that of @csfedema.  We aim to discuss the merits of each part of the pipeline with a set of choices that have available code.  In addition, we present a supplement with a working example, including code, to go from DICOM data to a spatially-normalized brain image. We also touch on points relevant to de-identification of the data, not only from DICOM metadata, but also removing identifiable information from the image itself such as the face.  Overall, we aim to discuss the suite of tools available, many of which built specifically for MRI, but provide slight modifications if necessary to have these work for head CT.
 
 <!-- https://www.nitrc.org/projects/clinicaltbx/ -->
 
@@ -195,6 +195,10 @@ img1 <-  rasterGrob(as.raster(readPNG("bed_image.png")), interpolate = FALSE)
 img2 <-  rasterGrob(as.raster(readPNG("ss_image.png")), interpolate = FALSE)
 grid.arrange(img1, img2, ncol = 2)
 ```
+
+### Tissue-class Segmentation
+
+In many structural MRI applications, the next step may be tissue-class segmentation, denoting areas of the cerebrospinal fluid (CSF), white matter and gray matter.  Though @biasct provides an example of tissue-class segmentation of CT scans using available software (intended for MRI) [@zhang2001segmentation], we will not cover them in detail here.  One potential issue is the contrast between white and gray matter is much lower than compared to MRI T1-weighted imaging.  Rather than tissue-class segmentation, a number of examples exist of determing CSF space from CT, including scans with pathology [@oldcsf; @csfedema; @liu2010automatic; @li2012automatic; @poh2012automatic; @ferdian2017automated; @patel2017automatic].  These methods sometimes segment the CSF from the brain, including areas of the subarachnoid space, only the ventricles, or some combination of the two.  Moreover, these CT-specific methods have not released open-source implementations or trained models for broad use.  
 
 ## Removal of Identifiable Biometric Markers: Defacing
 As part of the Health Insurance Portability and Accountability Act (HIPAA) in the United States, under the "Safe Harbor" method, releasing of data requires the removal a number of protected health information (PHI) [@hipaa].  For head CT images, a notable identifier is "Full-face photographs and any comparable images".  Head CT images have the potential for 3D reconstructions, which likely fall under this PHI category, and present an issue for reidentification of participants [@schimke2015privacy].  Thus, removing areas of the face, called defacing, may be necessary for releasing data. If parts of the face and nasal cavaties are the target of the imaging, then defacing may be an issue.   As ears may be a future identifying biometric marker, and dental records may be used for identification, these areas may desriable to remove [@cadavid2009multi; @mosher_2010].  
