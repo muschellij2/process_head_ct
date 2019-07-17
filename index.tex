@@ -68,7 +68,7 @@
       \address[JHSPH]{Johns Hopkins Bloomberg School of Public Health, Department of Biostatistics, 615 N Wolfe St, Baltimore, MD, 21205}
   
   \begin{abstract}
-  Many research applications of neuroimaging use magnetic resonance imaging (MRI). As such, recommendations for image analysis and standardized imaging pipelines exist. Clinical imaging, however, relies heavily on X-ray computed tomography (CT) scans for diagnosis and prognosis. Currently, there are limited to no automated, complete image processing pipeline for head CT exist. We present tools and a complete pipeline for processing CT data, focusing on open-source solutions. We describe going from raw DICOM data to a spatially normalized brain within CT presenting a full example with code. Overall, we recommend anonymizing data with Clinical Trials Processor, converting DICOM data to NIfTI using \texttt{dcm2niix}, using BET for brain extraction, and registration using a publicly-available CT template for analysis.
+  Many research applications of neuroimaging use magnetic resonance imaging (MRI). As such, recommendations for image analysis and standardized imaging pipelines exist. Clinical imaging, however, relies heavily on X-ray computed tomography (CT) scans for diagnosis and prognosis. Currently, there is only one image processing pipeline for head CT, which focuses mainly on head CT data withlesions. We present tools and a complete pipeline for processing CT data, focusing on open-source solutions, that focus on head CT but are applicable to most CT analyses. We describe going from raw DICOM data to a spatially normalized brain within CT presenting a full example with code. Overall, we recommend anonymizing data with Clinical Trials Processor, converting DICOM data to NIfTI using \texttt{dcm2niix}, using BET for brain extraction, and registration using a publicly-available CT template for analysis.
   \end{abstract}
   
  \end{frontmatter}
@@ -79,6 +79,8 @@
 Many research applications of neuroimaging use magnetic resonance imaging (MRI). MRI allows researchers to study a multitude of applications and diseases, including studying healthy volunteers. Clinical imaging, however, relies heavily on X-ray computed tomography (CT) scans for diagnosis and prognosis. Studies using CT scans cannot generally recruit healthy volunteers or large non-clinical populations due to the radiation exposure and lack of substantial benefit. As such, much of head CT data is gathered from prospective clinical trials or retrospective studies based on health medical record data and hospital picture archiving and communication system (PACS). We discuss transforming this data from clinical to research data and provide some recommendations and guidelines from our experience with CT data similar insights from working with MRI studies. We will discuss existing software options, focusing on open-source tools, for neuroimaging in general and those that are specific to CT throughout the paper.
 
 We will focus on aspects of quantitatively analyzing the CT data and getting the data into a format familiar to most MRI neuroimaging researchers. Therefore, we will not go into detail of imaging suites designed for radiologists, which may be proprietary and quite costly. Moreover, we will be focusing specifically on non-contrast head CT data, though many of the recommendations and software is applicable to images of other areas of the body.
+
+The pipeline presented here is similar to that of Dhar et al. (2018). We aim to discuss the merits of each part of the pipeline with a set of choices that have available code. In addition, the supplement has a working example, with code, to go from DICOM data to a spatially-normalized brain image. We also touch on points relevant to de-identification of the data, not only from DICOM metadata, but also removing identifiable information from the image itself such as the face.
 
 \hypertarget{data-organization}{%
 \section{Data Organization}\label{data-organization}}
@@ -145,7 +147,7 @@ In some instances, only certain images are available for certain subjects. For e
 \hypertarget{contrast-agent}{%
 \subsection{Contrast Agent}\label{contrast-agent}}
 
-Though we are discussing non-contrast scans, head CT scans with contrast agent are common. The contrast/bolus agent again should be identified in the DICOM header field \texttt{(0018,0010)}, but may be omitted. The contrast changes CT images, especially where agent is delivered, notably the vascular system of the brain (Figure \ref{fig:overlay}G). These changes may affect the steps recommended in the next section of data preprocessing, where thresholds may need to be adjusted to include areas with with contrast which can have higher values than the rest of the tissue (e.g.~\textgreater{} 100HU). (FIGURE)
+Though we are discussing non-contrast scans, head CT scans with contrast agent are common. The contrast/bolus agent again should be identified in the DICOM header field \texttt{(0018,0010)}, but may be omitted. The contrast changes CT images, especially where agent is delivered, notably the vascular system of the brain (Figure \ref{fig:overlay}G). These changes may affect the steps recommended in the next section of data preprocessing, where thresholds may need to be adjusted to include areas with with contrast which can have higher values than the rest of the tissue (e.g.~\textgreater{} 100HU) (Figure \ref{fig:overlay}G).
 
 \hypertarget{data-preprocessing}{%
 \section{Data Preprocessing}\label{data-preprocessing}}
@@ -157,7 +159,9 @@ Now that the data is in a standard file format, we can discuss data preprocessin
 
 In MRI, the scan may be contaminated by a bias field or set of inhomogeneities. This field is generally due to inhomogeneities/inconsistencies in the MRI coils or can be generated by non-uniform physical effects on the coils, such as heating. One of the most common processing steps done first is to remove this bias field. In many cases, these differences can more general be considered non-uniformities, in the sense that the same area with the same physical composition and behavior may take on a different value if it were in a different spatial location of the image. Though CT data has no coil or assumed bias field due to the nature of the data, one can test if trying to harmonize the data spatially with one of these correction procedures improves performance of a method. Though we do not recommend this procedure generally, as it may reduce contrasts between areas of interest, such as hemorrhages in the brain, but has been used to improve segmentation (Cauley et al. 2018). We would like to discuss potential methods and CT-specific issues.
 
-Overall, the assumptions of this bias field are that it is multiplicative and is smoothly varying. One of the most popular inhomogeneity corrections are the N3 (Sled, Zijdenbos, and Evans 1998) an its updated improvement N4 (Tustison et al. 2010) in ANTs, though other methods exist in FSL (Zhang, Brady, and Smith 2001) and other software (Ashburner and Friston 1998; Belaroussi et al. 2006). Given the assumption of the multiplicative nature of the field, N4 performs an expectation--maximization (EM) algorithm on the log-transformed image, assuming a noise-free system. As CT data in HU has negative values, the log transform is inappropriate. Pre-transforming or shifting the data values may be necessary to perform this algorithm, though these transforms may affect performance. Moreover, artifacts or objects (described below), such as the bed, may largely effect the estimation of the field and segmentation may be appropriate before running these corrections, such as brain extraction or extracting only subject-related data and not imaged hardware. The \texttt{ANTsR} package (https://github.com/ANTsX/ANTsR) provides the \texttt{n4BiasFieldCorrection} function in \texttt{R}; \texttt{ANTsPy} (https://github.com/ANTsX/ANTsPy) and NiPype (Gorgolewski et al. 2011) provide \texttt{n4\_bias\_field\_correction} and \texttt{N4BiasFieldCorrection} in \texttt{Python}, respectively.
+Overall, the assumptions of this bias field are that it is multiplicative and is smoothly varying. One of the most popular inhomogeneity corrections are the N3 (Sled, Zijdenbos, and Evans 1998) an its updated improvement N4 (Tustison et al. 2010) in ANTs, though other methods exist in FSL (Zhang, Brady, and Smith 2001) and other software (Ashburner and Friston 1998; Belaroussi et al. 2006). Given the assumption of the multiplicative nature of the field, N4 performs an expectation--maximization (EM) algorithm on the log-transformed image, assuming a noise-free system. As CT data in HU has negative values, the log transform is inappropriate. Pre-transforming or shifting the data values may be necessary to perform this algorithm, though these transforms may affect performance. Moreover, artifacts or objects (described below), such as the bed, may largely effect the estimation of the field and segmentation may be appropriate before running these corrections, such as brain extraction or extracting only subject-related data and not imaged hardware. The \texttt{ANTsR} package (https://github.com/ANTsX/ANTsR) provides the \texttt{n4BiasFieldCorrection} function in \texttt{R}; \texttt{ANTsPy} (https://github.com/ANTsX/ANTsPy) and NiPype (Gorgolewski et al. 2011) provide \texttt{n4\_bias\_field\_correction} and
+
+\texttt{N4BiasFieldCorrection} in \texttt{Python}, respectively.
 
 \hypertarget{brain-extraction-in-ct}{%
 \subsection{Brain Extraction in CT}\label{brain-extraction-in-ct}}
@@ -172,6 +176,15 @@ One of the most common steps in processing imaging of the brain is to remove non
 \includegraphics[width=1\linewidth]{index_files/figure-latex/ss-1} \caption{Human and Brain Extraction Results.  Here we present a 5mm slice, non-contrast head CT with a soft-tissue convolution kernel.  The left figure represents the CT image, showing all the areas imaged, overlaid with the extracted head mask as described in the section of "Brain Extraction in CT".  The right hand side is the image overlaid with a brain mask.  The brain mask was created using an adaptation of the Brain Extraction Tool (BET) from FSL, published by Muschelli et al. (2015).}\label{fig:ss}
 \end{figure}
 
+\hypertarget{removal-of-identifiable-biometric-markers-defacing}{%
+\subsection{Removal of Identifiable Biometric Markers: Defacing}\label{removal-of-identifiable-biometric-markers-defacing}}
+
+As part of the Health Insurance Portability and Accountability Act (HIPAA) in the United States, under the ``Safe Harbor'' method, releasing of data requires the removal a number of protected health information (PHI) (Centers for Medicare \& Medicaid Services 1996). For head CT images, a notable identifier is ``Full-face photographs and any comparable images''. Head CT images have the potential for 3D reconstructions, which likely fall under this PHI category, and present an issue for reidentification of participants (Schimke and Hale 2015). Thus, removing areas of the face, called defacing, may be necessary for releasing data. If parts of the face and nasal cavaties are the target of the imaging, then defacing may be an issue. As ears may be a future identifying biometric marker, and dental records may be used for identification, these areas may desriable to remove (Cadavid, Mahoor, and Abdel-Mottaleb 2009; Mosher 2010).
+
+The obvious method for image defacing is to perform brain extraction we described above. If we consider defacing to be removing parts the face, while preserving the rest of the image as much as possible, this solution is not sufficient. Additional options for defacing exist such as the MRI Deface software (https://www.nitrc.org/projects/mri\_deface/), which is packaged in the FreeSurfer software and can be run using the \texttt{mri\_deface} function from the \texttt{freesurfer} R package (Fischl 2012; Bischoff-Grethe et al. 2007). We have found this method does not work well out of the box on head CT data, including when a large amount of the neck is imaged.
+
+Registration methods involve registering images to the CT and applying the tranformation of a mask of the removal areas (such as the face). Examples of this implementation in Python modules for defacing are \texttt{pydeface} (https://github.com/poldracklab/pydeface/tree/master/pydeface) and \texttt{mridefacer} (https://github.com/mih/mridefacer). These methods work since the registration from MRI to CT tends to performs adequately, usually with a cross-modality cost function such as mutual information. Other estimation methods such as the Quickshear Defacing method rely on finding the face by its relative placement compared to a modality-agnostic brain mask (Schimke and Hale 2011). The \texttt{fslr} R package implements both the methods of \texttt{pydeface} and Quickshear. The \texttt{ichseg} R package also has a function \texttt{ct\_biometric\_mask} that tries to remove the face and ears based registration to a CT template (described below). Overall, removing potential biometric markers from imaging data should be considered when releasing data and a number of methods exist, but do not guarantee complete de-identfication and may not work directly with CT without modification.
+
 \hypertarget{registration-to-a-ct-template}{%
 \subsection{Registration to a CT template}\label{registration-to-a-ct-template}}
 
@@ -180,13 +193,10 @@ Though many analyses in clinical data may be subject-specific, population-level 
 One interesting aspect of CT image registration is again that CT data has units within the same range. To say they are uniformly standardized is a bit too strong as tomography and other confounds can impact units. Thus, it is our practice to think of them as more standardized than MRI. This standardization may warrant or allow the user different search and evaluation cost functions for registration, such as least squares. We have found that normalized mutual information (NMI) still performs well in CT-to-CT registration and should be at least considered when using CT-to-MRI or CT-to-PET registration. Along with the template above, Rorden et al. (2012) released the Clinical toolbox (https://github.com/neurolabusc/Clinical) for SPM to allow researchers to register head CT data to a standard space. However, as the data are in the NIfTI format, almost all image registration software should work, though one should consider transforming the units using Cormack units or other transformations as negative values may implicitly be excluded in some software built for MRI registration. We have found using diffeomorphic registrations such as symmetric normalization (SyN) from \texttt{ANTs} and \texttt{ANTsR} with NMI cost functions to perform well. We present results of registering the head CT presented in brain extraction to the template from Rorden et al. (2012) using SyN in Figure \ref{fig:reg}.
 
 \begin{figure}
-\includegraphics[width=1\linewidth]{reg_image} \caption{Image Registration Result.  Here we use the same scan that we performed brain extraction before, and register it to a CT template (Rorden, 2012).  We registered the image using symmetric normalization (SyN), a non-linear registration done after affine registration.  We see areas of the image that align generally well, but may not be perfect.}\label{fig:reg}
+\includegraphics[width=1\linewidth]{index_files/figure-latex/reg-1} \caption{Image Registration Result.  Here we displayed the the scan (A) registered to a CT template (B) from Rorden (2012).  The registration by first doing an affine registration, followed by symmetric normalization (SyN), a non-linear registration implemented in ANTsR. The registration was done with the skull on the image and the template.  We see areas of the image that align generally well, but may not be perfect.}\label{fig:reg}
 \end{figure}
 
 In some cases, population-level analyses can be done, but while keeping information at a subject-specific level. For example, registration from a template to a subject space can provide information about brain structures that can be aggregated across people. For example, one can perform a label fusion approach to CT data to infer the size of the hippocampus and then analyze hippocampi sizes across the population. Numerous label fusion approaches exist (Wang et al. 2013; Sabuncu et al. 2010; Asman and Landman 2013; Langerak et al. 2010; Collins and Pruessner 2010), but rely on multiple templates and publicly available segmented CT images are still lacking. Additionally, the spatial contrast in CT is much lower than T1-weighted MRI for image segmentation. Therefore, concurrent MRI can be useful. One large issue is that any data gathered with concurrent MRI the high variability in MRI protocol done if it is not generally standardized within or across institution. We see these limits as a large area of growth and opportunity in CT image analysis.
-
-\hypertarget{concurrent-mri}{%
-\subsubsection{Concurrent MRI}\label{concurrent-mri}}
 
 \hypertarget{pipeline}{%
 \subsection{Pipeline}\label{pipeline}}
@@ -242,8 +252,17 @@ Asman, Andrew J, and Bennett A Landman. 2013. ``Non-Local Statistical Label Fusi
 \leavevmode\hypertarget{ref-belaroussi2006intensity}{}%
 Belaroussi, Boubakeur, Julien Milles, Sabin Carme, Yue Min Zhu, and Hugues Benoit-Cattin. 2006. ``Intensity Non-Uniformity Correction in MRI: Existing Methods and Their Validation.'' \emph{Medical Image Analysis} 10 (2): 234--46.
 
+\leavevmode\hypertarget{ref-mridefacer}{}%
+Bischoff-Grethe, Amanda, I Burak Ozyurt, Evelina Busa, Brian T Quinn, Christine Fennema-Notestine, Camellia P Clark, Shaunna Morris, et al. 2007. ``A Technique for the Deidentification of Structural Brain MR Images.'' \emph{Human Brain Mapping} 28 (9): 892--903.
+
+\leavevmode\hypertarget{ref-cadavid2009multi}{}%
+Cadavid, Steven, Mohammad H Mahoor, and Mohamed Abdel-Mottaleb. 2009. ``Multi-Modal Biometric Modeling and Recognition of the Human Face and Ear.'' In \emph{2009 Ieee International Workshop on Safety, Security \& Rescue Robotics (Ssrr 2009)}, 1--6. IEEE.
+
 \leavevmode\hypertarget{ref-biasct}{}%
 Cauley, Keith A, Joe Och, Patrick J Yorks, and Samuel W Fielden. 2018. ``Automated Segmentation of Head Computed Tomography Images Using FSL.'' \emph{Journal of Computer Assisted Tomography} 42 (1): 104--10.
+
+\leavevmode\hypertarget{ref-hipaa}{}%
+Centers for Medicare \& Medicaid Services. 1996. ``The Health Insurance Portability and Accountability Act of 1996 (HIPAA).'' Online at http://www.cms.hhs.gov/hipaa/.
 
 \leavevmode\hypertarget{ref-cq500}{}%
 Chilamkurthy, Sasank, Rohit Ghosh, Swetha Tanamala, Mustafa Biviji, Norbert G Campeau, Vasantha Kumar Venugopal, Vidur Mahajan, Pooja Rao, and Prashant Warier. 2018. ``Deep Learning Algorithms for Detection of Critical Findings in Head Ct Scans: A Retrospective Study.'' \emph{The Lancet} 392 (10162): 2388--96.
@@ -254,8 +273,14 @@ Clayden, Jon, and Chris Rorden. 2018. \emph{divest: Get Images Out of DICOM Form
 \leavevmode\hypertarget{ref-collins2010towards}{}%
 Collins, D Louis, and Jens C Pruessner. 2010. ``Towards Accurate, Automatic Segmentation of the Hippocampus and Amygdala from Mri by Augmenting ANIMAL with a Template Library and Label Fusion.'' \emph{Neuroimage} 52 (4): 1355--66.
 
+\leavevmode\hypertarget{ref-csfedema}{}%
+Dhar, Rajat, Yasheng Chen, Hongyu An, and Jin-Moo Lee. 2018. ``Application of Machine Learning to Automated Analysis of Cerebral Edema in Large Cohorts of Ischemic Stroke Patients.'' \emph{Frontiers in Neurology} 9: 687. \url{https://doi.org/10.3389/fneur.2018.00687}.
+
 \leavevmode\hypertarget{ref-dcmtk}{}%
 Eichelberg, Marco, Joerg Riesmeier, Thomas Wilkens, Andrew J Hewett, Andreas Barth, and Peter Jensch. 2004. ``Ten Years of Medical Imaging Standardization and Prototypical Implementation: The DICOM Standard and the OFFIS DICOM Toolkit (DCMTK).'' In \emph{Medical Imaging 2004: PACS and Imaging Informatics}, 5371:57--69. International Society for Optics; Photonics.
+
+\leavevmode\hypertarget{ref-freesurfer}{}%
+Fischl, Bruce. 2012. ``FreeSurfer.'' \emph{Neuroimage} 62 (2): 774--81.
 
 \leavevmode\hypertarget{ref-nipype}{}%
 Gorgolewski, Krzysztof, Christopher D Burns, Cindee Madison, Dav Clark, Yaroslav O Halchenko, Michael L Waskom, and Satrajit S Ghosh. 2011. ``Nipype: A Flexible, Lightweight and Extensible Neuroimaging Data Processing Framework in Python.'' \emph{Frontiers in Neuroinformatics} 5: 13.
@@ -271,6 +296,9 @@ Li, Xiangrui, Paul S Morgan, John Ashburner, Jolinda Smith, and Christopher Rord
 
 \leavevmode\hypertarget{ref-pydicom}{}%
 Mason, D. 2011. ``SU-E-T-33: pydicom: An Open Source DICOM Library.'' \emph{Medical Physics} 38 (6Part10): 3493--3.
+
+\leavevmode\hypertarget{ref-mosher_2010}{}%
+Mosher, Dave. 2010. ``Ears Could Make Better Unique IDs Than Fingerprints.'' \emph{WIRED}, November.
 
 \leavevmode\hypertarget{ref-neuroconductor}{}%
 Muschelli, J., A. Gherman, J. P. Fortin, B. Avants, B. Whitcher, J. D. Clayden, B. S. Caffo, and C. M. Crainiceanu. 2018. ``Neuroconductor: An R Platform for Medical Imaging Analysis.'' \emph{Biostatistics}, January.
@@ -304,6 +332,12 @@ Russell, Pamela H, and Debashis Ghosh. 2019. ``radtools: R Utilities for Conveni
 
 \leavevmode\hypertarget{ref-sabuncu2010generative}{}%
 Sabuncu, Mert R, BT Thomas Yeo, Van LeemputKoen, Bruce Fischl, and Polina Golland. 2010. ``A Generative Model for Image Segmentation Based on Label Fusion.'' \emph{IEEE Transactions on Medical Imaging} 29 (10): 1714--29.
+
+\leavevmode\hypertarget{ref-quickshear}{}%
+Schimke, Nakeisha, and John Hale. 2011. ``Quickshear Defacing for Neuroimages.'' In \emph{HealthSec}.
+
+\leavevmode\hypertarget{ref-schimke2015privacy}{}%
+---------. 2015. ``Privacy Considerations and Techniques for Neuroimages.'' In \emph{Medical Data Privacy Handbook}, 527--47. Springer.
 
 \leavevmode\hypertarget{ref-itk}{}%
 Schroeder, Will, Lydia Ng, and Josh Cates. 2003. ``The ITK Software Guide.''

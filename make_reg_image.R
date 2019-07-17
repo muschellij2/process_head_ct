@@ -27,6 +27,22 @@ double_ortho(
 text("Template\n(right)", col = "white", x = 0.9, y = 0.08, cex = 1.25)
 dev.off()
 
+pngname = "reg_image_left.png"
+png(pngname, height = 5, width = 8, units = "in", res = 600)
+ortho2(
+  wout,
+  text = "Registered\nImage (A)",
+  text.y = 33)
+dev.off()
+
+pngname = "reg_image_right.png"
+png(pngname, height = 5, width = 8, units = "in", res = 600)
+ortho2(
+  timg,
+  text = "Template\n(B)",
+  text.y = 33)
+dev.off()
+
 
 
 mask = readnii("data/CQ500CT23_CT-PRE-CONTRAST-5MM-STD_Mask.nii.gz")
@@ -49,6 +65,23 @@ double_ortho(
   text = "Registered\nBrain (left)",
   text.y = 33, crosshairs = FALSE)
 text("Template Brain\n(right)", col = "white", x = 0.88, y = 0.08, cex = 1.25)
+dev.off()
+
+
+pngname = "reg_ss_image_left.png"
+png(pngname, height = 5, width = 8, units = "in", res = 600)
+ortho2(
+  ss_out,
+  text = "Registered\nBrain (A)",
+  text.y = 33)
+dev.off()
+
+pngname = "reg_ss_image_right.png"
+png(pngname, height = 5, width = 8, units = "in", res = 600)
+ortho2(
+  ss_timg,
+  text = "Template\n(B)",
+  text.y = 33)
 dev.off()
 
 
