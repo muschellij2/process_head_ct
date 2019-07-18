@@ -72,7 +72,7 @@ pngname = "reg_ss_image_left.png"
 png(pngname, height = 5, width = 8, units = "in", res = 600)
 ortho2(
   ss_out,
-  text = "Registered\nBrain (A)",
+  text = "Registered\nBrain (C)",
   text.y = 33)
 dev.off()
 
@@ -80,7 +80,7 @@ pngname = "reg_ss_image_right.png"
 png(pngname, height = 5, width = 8, units = "in", res = 600)
 ortho2(
   ss_timg,
-  text = "Template\n(B)",
+  text = "Template\n(D)",
   text.y = 33)
 dev.off()
 

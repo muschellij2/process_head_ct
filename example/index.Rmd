@@ -150,8 +150,8 @@ We see that the face has been removed from the image.  If you want the mask inst
 If you have the `fslr` package 2.23.1 or above, the `quickshear` method [@quickshear] has been implemented.  This is different from the `deface_image` above, but requires a brain mask.  
 
 ```{r}
-qs_noface = fslr::quickshear_deface_image(file = img, brain_mask = ss > 0)
-ortho2(qs_noface)
+qs_noface = fslr::quickshear_deface_image(file = img + 1024, brain_mask = ss > 0)
+ortho2(qs_noface - 1024)
 ```
 
 
