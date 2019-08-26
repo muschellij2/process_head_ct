@@ -1,7 +1,7 @@
 Recommendations for Processing Head CT Data
 ================
 true
-2019-06-21
+2019-08-26
 
 # Introduction
 
@@ -28,6 +28,19 @@ designed for radiologists, which may be proprietary and quite costly.
 Moreover, we will be focusing specifically on non-contrast head CT data,
 though many of the recommendations and software is applicable to images
 of other areas of the body.
+
+The pipeline presented here is similar to that of Dhar et al. (2018). We
+aim to discuss the merits of each part of the pipeline with a set of
+choices that have available code. In addition, we present a supplement
+with a working example, including code, to go from DICOM data to a
+spatially-normalized brain image. We also touch on points relevant to
+de-identification of the data, not only from DICOM metadata, but also
+removing identifiable information from the image itself such as the
+face. Overall, we aim to discuss the suite of tools available, many of
+which built specifically for MRI, but provide slight modifications if
+necessary to have these work for head CT.
+
+<!-- https://www.nitrc.org/projects/clinicaltbx/ -->
 
 # Data Organization
 
@@ -112,17 +125,17 @@ format, with varying licenses and uses. The CQ500 (Chilamkurthy et al.
 clinical pathologies and diagnoses, with a non-commercial license. All
 examples in this article use data from 2 subjects within the the CQ500
 data set. The Cancer Imaging Archive (TCIA) has hundreds of CT scans,
-many cases with brain cancer. TCIA also has a RESTful API, which allows
-cases to be downloaded in a scripted way; for example, the
-`TCIApathfinder` R package (Russell 2018) and Python `tciaclient` module
-provide an interface. The Stroke Imaging Repository Consortium
-(<http://stir.dellmed.utexas.edu/>) also has head CT data available for
-stroke. The National Biomedical Imaging Archive (NBIA,
-<https://imaging.nci.nih.gov>) demo provides some head CT data, but are
-mostly duplicated from TCIA. The NeuroImaging Tools & Resources
-Collaboratory (NITRC, <https://www.nitrc.org/>) provides links to many
-data sets and tools, but no head CT images at this time. The RIRE
-(Retrospective Image Registration Evaluation,
+many cases with brain cancer. TCIA also has a RESTful (representational
+state transfer) interface, which allows cases to be downloaded in a
+programmatic way; for example, the `TCIApathfinder` R package (Russell
+2018) and Python `tciaclient` module provide an interface. The Stroke
+Imaging Repository Consortium (<http://stir.dellmed.utexas.edu/>) also
+has head CT data available for stroke. The National Biomedical Imaging
+Archive (NBIA, <https://imaging.nci.nih.gov>) demo provides some head CT
+data, but are mostly duplicated from TCIA. The NeuroImaging Tools &
+Resources Collaboratory (NITRC, <https://www.nitrc.org/>) provides links
+to many data sets and tools, but no head CT images at this time. The
+RIRE (Retrospective Image Registration Evaluation,
 <http://www.insight-journal.org/rire/>) and MIDAS
 (<http://www.insight-journal.org/midas>) projects have small set of
 publicly available head CT (under 10 participants).
@@ -180,8 +193,8 @@ conversion. Examples include `dicom2nifti` in the `oro.dicom` `R`
 package, `pydicom`, `dicom2nifti` in `MATLAB`, and using large imaging
 suites such as using `ITK` image reading functions for DICOM files and
 then write NIfTI outputs. We recommend `dcm2niix`
-(<https://github.com/rordenlab/dcm2niix>) (Li et al. 2016) from for CT
-data for the following reasons: 1) it works with all major scanners, 2)
+(<https://github.com/rordenlab/dcm2niix>) (Li et al. 2016) for CT data
+for the following reasons: 1) it works with all major scanners, 2)
 incorporates gantry-tilt correction for CT data, 3) can handle variable
 slice thickness, 4) is open-source, 5) is fast, 6) is an actively
 maintained project, and 7) works on all 3 major operating systems
@@ -300,7 +313,7 @@ high values of the image, such as detecting bone fractures (Figure
 the convolution kernel may be used to filter, stratify, or exclude
 data.
 
-<img src="overlaid_slices.png" title="Different Series for a Scanning Study.  Here we present different non-contrast head CT exported from a PACS.  We display a reconstructed scan with a bone convolution kernel (A), showing bright areas of the skull, which can be investigated for breaks or fractures.  When applying a window of 0 - 100 Hounsfield units (HU) of this image, we see the image resolution (B).  Using a Gaussian (C) or Perona-Malik (D) smoother, we see we get smoother images, similar to the image reconstructed with a soft-tissue convolution kernel (E).  Images (A-E) had a slice thickness of 5mm.  The thin-slice scan (F) had a slice thickess of 0.62mm and a soft-tissue convolution kernel." alt="Different Series for a Scanning Study.  Here we present different non-contrast head CT exported from a PACS.  We display a reconstructed scan with a bone convolution kernel (A), showing bright areas of the skull, which can be investigated for breaks or fractures.  When applying a window of 0 - 100 Hounsfield units (HU) of this image, we see the image resolution (B).  Using a Gaussian (C) or Perona-Malik (D) smoother, we see we get smoother images, similar to the image reconstructed with a soft-tissue convolution kernel (E).  Images (A-E) had a slice thickness of 5mm.  The thin-slice scan (F) had a slice thickess of 0.62mm and a soft-tissue convolution kernel." width="100%" />
+<img src="overlaid_slices.png" title="Different Series for a Scanning Study.  Here we present different non-contrast head CT exported from a PACS.  We display a reconstructed scan with a bone convolution kernel (A), showing bright areas of the skull, which can be investigated for breaks or fractures.  When applying a window of 0 - 100 Hounsfield units (HU) of this image, we see the image resolution (B).  Using a Gaussian (C) or Perona-Malik (D) smoother, we see the resulting image smoothness is similar to the image reconstructed with a soft-tissue convolution kernel (E).  Images (A-E) had a slice thickness of 5mm.  The thin-slice scan (F) had a slice thickess of 0.62mm and a soft-tissue convolution kernel." alt="Different Series for a Scanning Study.  Here we present different non-contrast head CT exported from a PACS.  We display a reconstructed scan with a bone convolution kernel (A), showing bright areas of the skull, which can be investigated for breaks or fractures.  When applying a window of 0 - 100 Hounsfield units (HU) of this image, we see the image resolution (B).  Using a Gaussian (C) or Perona-Malik (D) smoother, we see the resulting image smoothness is similar to the image reconstructed with a soft-tissue convolution kernel (E).  Images (A-E) had a slice thickness of 5mm.  The thin-slice scan (F) had a slice thickess of 0.62mm and a soft-tissue convolution kernel." width="100%" />
 
 Moreover, the noise and image contrast can be different depending on the
 image resolution of the reconstruction. Most standard head CT scans have
@@ -342,8 +355,8 @@ changes CT images, especially where agent is delivered, notably the
 vascular system of the brain (Figure @ref(fig:overlay)G). These changes
 may affect the steps recommended in the next section of data
 preprocessing, where thresholds may need to be adjusted to include areas
-with with contrast which can have higher values than the rest of the
-tissue (e.g. \> 100HU). (FIGURE)
+with contrast which can have higher values than the rest of the tissue
+(e.g. \> 100HU) (Figure @ref(fig:overlay)G).
 
 # Data Preprocessing
 
@@ -373,9 +386,10 @@ methods and CT-specific issues.
 
 Overall, the assumptions of this bias field are that it is
 multiplicative and is smoothly varying. One of the most popular
-inhomogeneity corrections are the N3 (Sled, Zijdenbos, and Evans 1998)
-an its updated improvement N4 (Tustison et al. 2010) in ANTs, though
-other methods exist in FSL (Zhang, Brady, and Smith 2001) and other
+inhomogeneity corrections are the nonparametric nonuniformity
+normalization (e.g. N3) (Sled, Zijdenbos, and Evans 1998) and its
+updated improvement N4 (Tustison et al. 2010) in ANTs, though other
+methods exist in FSL (Y. Zhang, Brady, and Smith 2001a) and other
 software (Ashburner and Friston 1998; Belaroussi et al. 2006). Given the
 assumption of the multiplicative nature of the field, N4 performs an
 expectation–maximization (EM) algorithm on the log-transformed image,
@@ -439,6 +453,71 @@ MRI.
 
 <img src="index_files/figure-gfm/ss-1.png" title="Human and Brain Extraction Results.  Here we present a 5mm slice, non-contrast head CT with a soft-tissue convolution kernel.  The left figure represents the CT image, showing all the areas imaged, overlaid with the extracted head mask as described in the section of &quot;Brain Extraction in CT&quot;.  The right hand side is the image overlaid with a brain mask.  The brain mask was created using an adaptation of the Brain Extraction Tool (BET) from FSL, published by Muschelli et al. (2015)." alt="Human and Brain Extraction Results.  Here we present a 5mm slice, non-contrast head CT with a soft-tissue convolution kernel.  The left figure represents the CT image, showing all the areas imaged, overlaid with the extracted head mask as described in the section of &quot;Brain Extraction in CT&quot;.  The right hand side is the image overlaid with a brain mask.  The brain mask was created using an adaptation of the Brain Extraction Tool (BET) from FSL, published by Muschelli et al. (2015)." width="100%" />
 
+### Tissue-class Segmentation
+
+In many structural MRI applications, the next step may be tissue-class
+segmentation, denoting areas of the cerebrospinal fluid (CSF), white
+matter and gray matter. Though Cauley et al. (2018) provides an example
+of tissue-class segmentation of CT scans using available software
+(intended for MRI) (Y. Zhang, Brady, and Smith 2001b), we will not cover
+them in detail here. One potential issue is the contrast between white
+and gray matter is much lower than compared to MRI T1-weighted imaging.
+Rather than tissue-class segmentation, a number of examples exist of
+determing CSF space from CT, including scans with pathology (Hacker and
+Artmann 1978; Dhar et al. 2018; Liu et al. 2010; Li et al. 2012; Poh et
+al. 2012; Ferdian et al. 2017; Patel et al. 2017). These methods
+sometimes segment the CSF from the brain, including areas of the
+subarachnoid space, only the ventricles, or some combination of the two.
+Moreover, these CT-specific methods have not released open-source
+implementations or trained models for broad use.
+
+## Removal of Identifiable Biometric Markers: Defacing
+
+As part of the Health Insurance Portability and Accountability Act
+(HIPAA) in the United States, under the “Safe Harbor” method, releasing
+of data requires the removal a number of protected health information
+(PHI) (Centers for Medicare & Medicaid Services 1996). For head CT
+images, a notable identifier is “Full-face photographs and any
+comparable images”. Head CT images have the potential for 3D
+reconstructions, which likely fall under this PHI category, and present
+an issue for reidentification of participants (Schimke and Hale 2015).
+Thus, removing areas of the face, called defacing, may be necessary for
+releasing data. If parts of the face and nasal cavaties are the target
+of the imaging, then defacing may be an issue. As ears may be a future
+identifying biometric marker, and dental records may be used for
+identification, these areas may desriable to remove (Cadavid, Mahoor,
+and Abdel-Mottaleb 2009; Mosher 2010).
+
+The obvious method for image defacing is to perform brain extraction we
+described above. If we consider defacing to be removing parts the face,
+while preserving the rest of the image as much as possible, this
+solution is not sufficient. Additional options for defacing exist such
+as the MRI Deface software
+(<https://www.nitrc.org/projects/mri_deface/>), which is packaged in the
+FreeSurfer software and can be run using the `mri_deface` function from
+the `freesurfer` R package (Fischl 2012; Bischoff-Grethe et al. 2007).
+We have found this method does not work well out of the box on head CT
+data, including when a large amount of the neck is imaged.
+
+Registration methods involve registering images to the CT and applying
+the tranformation of a mask of the removal areas (such as the face).
+Examples of this implementation in Python modules for defacing are
+`pydeface`
+(<https://github.com/poldracklab/pydeface/tree/master/pydeface>) and
+`mridefacer` (<https://github.com/mih/mridefacer>). These methods work
+since the registration from MRI to CT tends to performs adequately,
+usually with a cross-modality cost function such as mutual information.
+Other estimation methods such as the Quickshear Defacing method rely on
+finding the face by its relative placement compared to a
+modality-agnostic brain mask (Schimke and Hale 2011). The `fslr` R
+package implements both the methods of `pydeface` and Quickshear. The
+`ichseg` R package also has a function `ct_biometric_mask` that tries to
+remove the face and ears based registration to a CT template (described
+below). Overall, removing potential biometric markers from imaging data
+should be considered when releasing data and a number of methods exist,
+but do not guarantee complete de-identfication and may not work directly
+with CT without modification.
+
 ## Registration to a CT template
 
 Though many analyses in clinical data may be subject-specific,
@@ -485,7 +564,7 @@ results of registering the head CT presented in brain extraction to the
 template from Rorden et al. (2012) using SyN in Figure
 @ref(fig:reg).
 
-<img src="reg_image.png" title="Image Registration Result.  Here we use the same scan that we performed brain extraction before, and register it to a CT template (Rorden, 2012).  We registered the image using symmetric normalization (SyN), a non-linear registration done after affine registration.  We see areas of the image that align generally well, but may not be perfect." alt="Image Registration Result.  Here we use the same scan that we performed brain extraction before, and register it to a CT template (Rorden, 2012).  We registered the image using symmetric normalization (SyN), a non-linear registration done after affine registration.  We see areas of the image that align generally well, but may not be perfect." width="100%" />
+<img src="index_files/figure-gfm/reg-1.png" title="Image Registration Result.  Here we displayed the the scan (A) registered to a CT template (B) from Rorden (2012).  The registration by first doing an affine registration, followed by symmetric normalization (SyN), a non-linear registration implemented in ANTsR. The registration was done with the skull on the image and the template.  We see areas of the image that align generally well, but may not be perfect." alt="Image Registration Result.  Here we displayed the the scan (A) registered to a CT template (B) from Rorden (2012).  The registration by first doing an affine registration, followed by symmetric normalization (SyN), a non-linear registration implemented in ANTsR. The registration was done with the skull on the image and the template.  We see areas of the image that align generally well, but may not be perfect." width="100%" />
 
 In some cases, population-level analyses can be done, but while keeping
 information at a subject-specific level. For example, registration from
@@ -505,7 +584,7 @@ institution. We see these limits as a large area of growth and
 opportunity in CT image analysis.
 <!-- Data is not guaranteed to be even the same type of sequence, let alone the sequence parameters and order.   -->
 
-### Concurrent MRI
+<!-- ### Concurrent MRI  -->
 
 ## Pipeline
 
@@ -625,11 +704,37 @@ Existing Methods and Their Validation.” *Medical Image Analysis* 10 (2):
 
 </div>
 
+<div id="ref-mridefacer">
+
+Bischoff-Grethe, Amanda, I Burak Ozyurt, Evelina Busa, Brian T Quinn,
+Christine Fennema-Notestine, Camellia P Clark, Shaunna Morris, et al.
+2007. “A Technique for the Deidentification of Structural Brain MR
+Images.” *Human Brain Mapping* 28 (9): 892–903.
+
+</div>
+
+<div id="ref-cadavid2009multi">
+
+Cadavid, Steven, Mohammad H Mahoor, and Mohamed Abdel-Mottaleb. 2009.
+“Multi-Modal Biometric Modeling and Recognition of the Human Face and
+Ear.” In *2009 Ieee International Workshop on Safety, Security & Rescue
+Robotics (Ssrr 2009)*, 1–6. IEEE.
+
+</div>
+
 <div id="ref-biasct">
 
 Cauley, Keith A, Joe Och, Patrick J Yorks, and Samuel W Fielden. 2018.
 “Automated Segmentation of Head Computed Tomography Images Using FSL.”
 *Journal of Computer Assisted Tomography* 42 (1): 104–10.
+
+</div>
+
+<div id="ref-hipaa">
+
+Centers for Medicare & Medicaid Services. 1996. “The Health Insurance
+Portability and Accountability Act of 1996 (HIPAA).” Online at
+http://www.cms.hhs.gov/hipaa/.
 
 </div>
 
@@ -659,6 +764,15 @@ Augmenting ANIMAL with a Template Library and Label Fusion.”
 
 </div>
 
+<div id="ref-csfedema">
+
+Dhar, Rajat, Yasheng Chen, Hongyu An, and Jin-Moo Lee. 2018.
+“Application of Machine Learning to Automated Analysis of Cerebral
+Edema in Large Cohorts of Ischemic Stroke Patients.” *Frontiers in
+Neurology* 9: 687. <https://doi.org/10.3389/fneur.2018.00687>.
+
+</div>
+
 <div id="ref-dcmtk">
 
 Eichelberg, Marco, Joerg Riesmeier, Thomas Wilkens, Andrew J Hewett,
@@ -667,6 +781,23 @@ Standardization and Prototypical Implementation: The DICOM Standard and
 the OFFIS DICOM Toolkit (DCMTK).” In *Medical Imaging 2004: PACS and
 Imaging Informatics*, 5371:57–69. International Society for Optics;
 Photonics.
+
+</div>
+
+<div id="ref-ferdian2017automated">
+
+Ferdian, E, AM Boers, LF Beenen, BM Cornelissen, IG Jansen, KM
+Treurniet, Jordi Borst, CB Majoie, and Henk A Marquering. 2017.
+“Automated Ventricular System Segmentation in CT Images of Deformed
+Brains Due to Ischemic and Subarachnoid Hemorrhagic Stroke.” In
+*Molecular Imaging, Reconstruction and Analysis of Moving Body Organs,
+and Stroke Imaging and Treatment*, 149–57. Springer.
+
+</div>
+
+<div id="ref-freesurfer">
+
+Fischl, Bruce. 2012. “FreeSurfer.” *Neuroimage* 62 (2): 774–81.
 
 </div>
 
@@ -689,6 +820,13 @@ Outputs of Neuroimaging Experiments.” *Scientific Data* 3: 160044 EP.
 
 </div>
 
+<div id="ref-oldcsf">
+
+Hacker, H, and H Artmann. 1978. “The Calculation of CSF Spaces in CT.”
+*Neuroradiology* 16 (1): 190–92.
+
+</div>
+
 <div id="ref-langerak2010label">
 
 Langerak, Thomas Robin, Uulke A van der Heide, Alexis NTJ Kotte, Max A
@@ -708,10 +846,35 @@ Analysis: DICOM to NIfTI Conversion.” *Journal of Neuroscience Methods*
 
 </div>
 
+<div id="ref-li2012automatic">
+
+Li, Yong-Hong, Liang Zhang, Qing-Mao Hu, Hong-Wei Li, Fu-Cang Jia, and
+Jian-Huang Wu. 2012. “Automatic Subarachnoid Space Segmentation and
+Hemorrhage Detection in Clinical Head CT Scans.” *International Journal
+of Computer Assisted Radiology and Surgery* 7 (4): 507–16.
+
+</div>
+
+<div id="ref-liu2010automatic">
+
+Liu, Jimin, Su Huang, Volkau Ihar, Wojciech Ambrosius, Looi Chow Lee,
+and Wieslaw L Nowinski. 2010. “Automatic Model-Guided Segmentation of
+the Human Brain Ventricular System from CT Images.” *Academic Radiology*
+17 (6): 718–26.
+
+</div>
+
 <div id="ref-pydicom">
 
 Mason, D. 2011. “SU-E-T-33: pydicom: An Open Source DICOM Library.”
 *Medical Physics* 38 (6Part10): 3493–3.
+
+</div>
+
+<div id="ref-mosher_2010">
+
+Mosher, Dave. 2010. “Ears Could Make Better Unique IDs Than
+Fingerprints.” *WIRED*, November.
 
 </div>
 
@@ -745,6 +908,16 @@ Extraction of Head CT Images.” *Neuroimage* 114: 379–85.
 
 </div>
 
+<div id="ref-patel2017automatic">
+
+Patel, Ajay, Sil C van de Leemput, Mathias Prokop, Bram van Ginneken,
+and Rashindra Manniesing. 2017. “Automatic Cerebrospinal Fluid
+Segmentation in Non-Contrast CT Images Using a 3D Convolutional
+Network.” In *Medical Imaging 2017: Computer-Aided Diagnosis*,
+10134:1013420. International Society for Optics; Photonics.
+
+</div>
+
 <div id="ref-spm">
 
 Penny, William D, Karl J Friston, John T Ashburner, Stefan J Kiebel, and
@@ -758,6 +931,14 @@ Functional Brain Images*. Elsevier.
 Perona, Pietro, and Jitendra Malik. 1990. “Scale-Space and Edge
 Detection Using Anisotropic Diffusion.” *IEEE Transactions on Pattern
 Analysis and Machine Intelligence* 12 (7): 629–39.
+
+</div>
+
+<div id="ref-poh2012automatic">
+
+Poh, LE, V Gupta, A Johnson, R Kazmierski, and Wieslaw Lucjan Nowinski.
+2012. “Automatic Segmentation of Ventricular Cerebrospinal Fluid from
+Ischemic Stroke CT Images.” *Neuroinformatics* 10 (2): 159–72.
 
 </div>
 
@@ -797,6 +978,20 @@ Sabuncu, Mert R, BT Thomas Yeo, Van LeemputKoen, Bruce Fischl, and
 Polina Golland. 2010. “A Generative Model for Image Segmentation Based
 on Label Fusion.” *IEEE Transactions on Medical Imaging* 29 (10):
 1714–29.
+
+</div>
+
+<div id="ref-quickshear">
+
+Schimke, Nakeisha, and John Hale. 2011. “Quickshear Defacing for
+Neuroimages.” In *HealthSec*.
+
+</div>
+
+<div id="ref-schimke2015privacy">
+
+———. 2015. “Privacy Considerations and Techniques for Neuroimages.” In
+*Medical Data Privacy Handbook*, 527–47. Springer.
 
 </div>
 
@@ -843,11 +1038,19 @@ Software*, no. 6.
 
 <div id="ref-zhang_segmentation_2001">
 
-Zhang, Yongyue, Michael Brady, and Stephen Smith. 2001. “Segmentation of
-Brain MR Images Through a Hidden Markov Random Field Model and the
+Zhang, Yongyue, Michael Brady, and Stephen Smith. 2001a. “Segmentation
+of Brain MR Images Through a Hidden Markov Random Field Model and the
 Expectation-Maximization Algorithm.” *Medical Imaging, IEEE Transactions
 on* 20 (1): 45–57.
 <http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=906424>.
+
+</div>
+
+<div id="ref-zhang2001segmentation">
+
+———. 2001b. “Segmentation of Brain Mr Images Through a Hidden Markov
+Random Field Model and the Expectation-Maximization Algorithm.” *IEEE
+Transactions on Medical Imaging* 20 (1): 45–57.
 
 </div>
 

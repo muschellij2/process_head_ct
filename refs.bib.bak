@@ -1,0 +1,543 @@
+@article{aryanto2015free,
+  title={Free {DICOM} de-identification tools in clinical research: functioning and safety of patient privacy},
+  author={Aryanto, KYE and Oudkerk, M and van Ooijen, PMA},
+  journal={European radiology},
+  volume={25},
+  number={12},
+  pages={3685--3695},
+  year={2015},
+  publisher={Springer}
+}
+
+@inproceedings{ct_bet,
+  title={Extraction of brain tissue from {CT} head images using fully convolutional neural networks},
+  author={Akkus, Zeynettin and Kostandy, Petro M and Philbrick, Kenneth A and Erickson, Bradley J},
+  booktitle={Medical Imaging 2018: Image Processing},
+  volume={10574},
+  pages={1057420},
+  year={2018},
+  organization={International Society for Optics and Photonics}
+}
+
+@article{rorden2012age,
+  title={Age-specific {CT} and {MRI} templates for spatial normalization},
+  author={Rorden, Christopher and Bonilha, Leonardo and Fridriksson, Julius and Bender, Benjamin and Karnath, Hans-Otto},
+  journal={Neuroimage},
+  volume={61},
+  number={4},
+  pages={957--965},
+  year={2012},
+  publisher={Elsevier}
+}
+
+
+
+@article{bids,
+	Author = {Gorgolewski, Krzysztof J. and Auer, Tibor and Calhoun, Vince D. and Craddock, R. Cameron and Das, Samir and Duff, Eugene P. and Flandin, Guillaume and Ghosh, Satrajit S. and Glatard, Tristan and Halchenko, Yaroslav O. and Handwerker, Daniel A. and Hanke, Michael and Keator, David and Li, Xiangrui and Michael, Zachary and Maumet, Camille and Nichols, B. Nolan and Nichols, Thomas E. and Pellman, John and Poline, Jean-Baptiste and Rokem, Ariel and Schaefer, Gunnar and Sochat, Vanessa and Triplett, William and Turner, Jessica A. and Varoquaux, Ga{\"e}l and Poldrack, Russell A.},
+	Date = {2016/06/21/online},
+	Date-Added = {2019-02-19 05:54:18 +0000},
+	Date-Modified = {2019-02-19 05:54:40 +0000},
+	Day = {21},
+	Journal = {Scientific Data},
+	L3 = {10.1038/sdata.2016.44; https://www.nature.com/articles/sdata201644#supplementary-information},
+	M3 = {Article},
+	Month = {06},
+	Pages = {160044 EP  -},
+	Publisher = {The Author(s) SN  -},
+	Title = {The brain imaging data structure, a format for organizing and describing outputs of neuroimaging experiments},
+	Ty = {JOUR},
+	Url = {https://doi.org/10.1038/sdata.2016.44},
+	Volume = {3},
+	Year = {2016},
+	Bdsk-Url-1 = {https://doi.org/10.1038/sdata.2016.44}}
+
+
+@article{cq500,
+  title={Deep learning algorithms for detection of critical findings in head CT scans: a retrospective study},
+  author={Chilamkurthy, Sasank and Ghosh, Rohit and Tanamala, Swetha and Biviji, Mustafa and Campeau, Norbert G and Venugopal, Vasantha Kumar and Mahajan, Vidur and Rao, Pooja and Warier, Prashant},
+  journal={The Lancet},
+  volume={392},
+  number={10162},
+  pages={2388--2396},
+  year={2018},
+  publisher={Elsevier}
+}
+
+
+
+  @Manual{TCIApathfinder,
+    title = {TCIApathfinder: Client for the Cancer Imaging Archive REST API},
+    author = {Pamela Russell},
+    year = {2018},
+    note = {R package version 1.0.2},
+    url = {https://CRAN.R-project.org/package=TCIApathfinder},
+  }
+
+
+@Article{neuroconductor,
+        Author={Muschelli, J. and Gherman, A. and Fortin, J. P. and Avants, B. and Whitcher, B. and Clayden, J. D. and Caffo, B. S. and Crainiceanu, C. M. },
+        Title={{N}euroconductor: an {R} platform for medical imaging analysis},
+        Journal={Biostatistics},
+        Year={2018},
+        Month={Jan}
+        }
+
+
+@article{cq500,
+  title={Deep learning algorithms for detection of critical findings in head {CT} scans: a retrospective study},
+  author={Chilamkurthy, Sasank and Ghosh, Rohit and Tanamala, Swetha and Biviji, Mustafa and Campeau, Norbert G and Venugopal, Vasantha Kumar and Mahajan, Vidur and Rao, Pooja and Warier, Prashant},
+  journal={The Lancet},
+  volume={392},
+  number={10162},
+  pages={2388--2396},
+  year={2018},
+  publisher={Elsevier}
+}
+
+
+
+@article{dcm2niix,
+  title={The first step for neuroimaging data analysis: {DICOM} to {NIfTI} conversion},
+  author={Li, Xiangrui and Morgan, Paul S and Ashburner, John and Smith, Jolinda and Rorden, Christopher},
+  journal={Journal of neuroscience methods},
+  volume={264},
+  pages={47--56},
+  year={2016},
+  publisher={Elsevier}
+}
+
+
+@article{peronamalik,
+  title={Scale-space and edge detection using anisotropic diffusion},
+  author={Perona, Pietro and Malik, Jitendra},
+  journal={IEEE Transactions on pattern analysis and machine intelligence},
+  volume={12},
+  number={7},
+  pages={629--639},
+  year={1990},
+  publisher={IEEE}
+}
+
+@article{ctbet,
+  title={Validated automatic brain extraction of head {CT} images},
+  author={Muschelli, John and Ullman, Natalie L and Mould, W Andrew and Vespa, Paul and Hanley, Daniel F and Crainiceanu, Ciprian M},
+  journal={Neuroimage},
+  volume={114},
+  pages={379--385},
+  year={2015},
+  publisher={Elsevier}
+}
+
+
+@book{spm,
+  title={Statistical parametric mapping: the analysis of functional brain images},
+  author={Penny, William D and Friston, Karl J and Ashburner, John T and Kiebel, Stefan J and Nichols, Thomas E},
+  year={2011},
+  publisher={Elsevier}
+}
+
+
+  @Manual{R,
+    title = {{R}: A Language and Environment for Statistical Computing},
+    author = {{R Core Team}},
+    organization = {R Foundation for Statistical Computing},
+    address = {Vienna, Austria},
+    year = {2018},
+    url = {https://www.R-project.org/},
+  }
+
+@inproceedings{dcmtk,
+  title={Ten years of medical imaging standardization and prototypical implementation: the {DICOM} standard and the {OFFIS} {DICOM} toolkit ({DCMTK})},
+  author={Eichelberg, Marco and Riesmeier, Joerg and Wilkens, Thomas and Hewett, Andrew J and Barth, Andreas and Jensch, Peter},
+  booktitle={Medical Imaging 2004: PACS and Imaging Informatics},
+  volume={5371},
+  pages={57--69},
+  year={2004},
+  organization={International Society for Optics and Photonics}
+}
+
+@article{radtools,
+  title={{radtools}: {R} utilities for convenient extraction of medical image metadata},
+  author={Russell, Pamela H and Ghosh, Debashis},
+  journal={F1000Research},
+  volume={7},
+  year={2019}
+}
+
+@article{orodicom,
+  title={Working with the {DICOM} and {NIfTI} Data Standards in {R}},
+  author={Whitcher, Brandon and Schmid, Volker J and Thornton, Andrew},
+  journal={Journal of Statistical Software},
+  number={6},
+  year={2011},
+  publisher={American Statistical Association}
+}
+
+@article{pydicom,
+  title={SU-E-T-33: {pydicom}: an open source {DICOM} library},
+  author={Mason, D},
+  journal={Medical Physics},
+  volume={38},
+  number={6Part10},
+  pages={3493--3493},
+  year={2011},
+  publisher={Wiley Online Library}
+}
+
+@article{itk,
+  title={The {ITK} software guide},
+  author={Schroeder, Will and Ng, Lydia and Cates, Josh},
+  year={2003}
+}
+
+  @Manual{divest,
+    title = {{divest}: Get Images Out of {DICOM} Format Quickly},
+    author = {Jon Clayden and Chris Rorden},
+    year = {2018},
+    note = {R package version 0.7.2},
+    url = {https://CRAN.R-project.org/package=divest},
+  }
+
+
+@article{nipype,
+  title={{Nipype}: a flexible, lightweight and extensible neuroimaging data processing framework in {Python}},
+  author={Gorgolewski, Krzysztof and Burns, Christopher D and Madison, Cindee and Clark, Dav and Halchenko, Yaroslav O and Waskom, Michael L and Ghosh, Satrajit S},
+  journal={Frontiers in neuroinformatics},
+  volume={5},
+  pages={13},
+  year={2011},
+  publisher={Frontiers}
+}
+
+
+@article{sled1998nonparametric,
+  title={A nonparametric method for automatic correction of intensity nonuniformity in MRI data},
+  author={Sled, John G and Zijdenbos, Alex P and Evans, Alan C},
+  journal={IEEE transactions on medical imaging},
+  volume={17},
+  number={1},
+  pages={87--97},
+  year={1998},
+  publisher={IEEE}
+}
+
+
+@article{n4,
+  title={{N4ITK}: improved {N3} bias correction},
+  author={Tustison, Nicholas J and Avants, Brian B and Cook, Philip A and Zheng, Yuanjie and Egan, Alexander and Yushkevich, Paul A and Gee, James C},
+  journal={IEEE transactions on medical imaging},
+  volume={29},
+  number={6},
+  pages={1310},
+  year={2010},
+  publisher={NIH Public Access}
+}
+
+
+@Article{zhang_segmentation_2001,
+  title = {Segmentation of brain {MR} images through a hidden {Markov} random field model and the expectation-maximization algorithm},
+  volume = {20},
+  url = {http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=906424},
+  number = {1},
+  urldate = {2014-09-09},
+  journal = {Medical Imaging, IEEE Transactions on},
+  author = {Yongyue Zhang and Michael Brady and Stephen Smith},
+  year = {2001},
+  pages = {45--57},
+  file = {[PDF] from uwo.ca:/Users/johnmuschelli/Library/Application Support/Zotero/Profiles/9yinbn16.default/zotero/storage/D3FV5QKB/Zhang et al. - 2001 - Segmentation of brain MR images through a hidden M.pdf:application/pdf;Snapshot:/Users/johnmuschelli/Library/Application Support/Zotero/Profiles/9yinbn16.default/zotero/storage/RDFWQETM/login.html:text/html},
+}
+
+
+@article{ashburner1998mri,
+  title={{MRI} sensitivity correction and tissue classification},
+  author={Ashburner, John and Friston, Karl},
+  journal={NeuroImage},
+  volume={7},
+  number={4 PART I},
+  year={1998}
+}
+
+@article{belaroussi2006intensity,
+  title={Intensity non-uniformity correction in {MRI}: existing methods and their validation},
+  author={Belaroussi, Boubakeur and Milles, Julien and Carme, Sabin and Zhu, Yue Min and Benoit-Cattin, Hugues},
+  journal={Medical image analysis},
+  volume={10},
+  number={2},
+  pages={234--246},
+  year={2006},
+  publisher={Elsevier}
+}
+
+ @Manual{ichseg,
+    title = {{ichseg}: Intracerebral Hemorrhage Segmentation of X-Ray Computed Tomography ({CT}) Images},
+    author = {John Muschelli},
+    year = {2019},
+    note = {R package version 0.15.1},
+  }
+
+@article{malf,
+  title={Multi-atlas segmentation with joint label fusion},
+  author={Wang, Hongzhi and Suh, Jung W and Das, Sandhitsu R and Pluta, John B and Craige, Caryne and Yushkevich, Paul A},
+  journal={IEEE transactions on pattern analysis and machine intelligence},
+  volume={35},
+  number={3},
+  pages={611--623},
+  year={2013},
+  publisher={IEEE}
+}
+
+@article{sabuncu2010generative,
+  title={A generative model for image segmentation based on label fusion},
+  author={Sabuncu, Mert R and Yeo, BT Thomas and Van Leemput, Koen and Fischl, Bruce and Golland, Polina},
+  journal={IEEE transactions on medical imaging},
+  volume={29},
+  number={10},
+  pages={1714--1729},
+  year={2010},
+  publisher={IEEE}
+}
+
+
+@article{asman2013non,
+  title={Non-local statistical label fusion for multi-atlas segmentation},
+  author={Asman, Andrew J and Landman, Bennett A},
+  journal={Medical image analysis},
+  volume={17},
+  number={2},
+  pages={194--208},
+  year={2013},
+  publisher={Elsevier}
+}
+
+@article{langerak2010label,
+  title={Label fusion in atlas-based segmentation using a selective and iterative method for performance level estimation ({SIMPLE})},
+  author={Langerak, Thomas Robin and van der Heide, Uulke A and Kotte, Alexis NTJ and Viergever, Max A and Van Vulpen, Marco and Pluim, Josien PW and others},
+  journal={IEEE transactions on medical imaging},
+  volume={29},
+  number={12},
+  pages={2000--2008},
+  year={2010},
+  publisher={Institute of Electrical and Electronics Engineers, Inc., 345 E. 47 th St. NY~…}
+}
+
+
+@article{collins2010towards,
+  title={Towards accurate, automatic segmentation of the hippocampus and amygdala from MRI by augmenting {ANIMAL} with a template library and label fusion},
+  author={Collins, D Louis and Pruessner, Jens C},
+  journal={Neuroimage},
+  volume={52},
+  number={4},
+  pages={1355--1366},
+  year={2010},
+  publisher={Elsevier}
+}
+
+
+  @Manual{dcm2niir,
+    title = {{dcm2niir}: Conversion of {DICOM} to {NIfTI} Imaging Files Through {R}},
+    author = {John Muschelli},
+    year = {2018},
+    note = {R package version 0.6.6},
+    url = {https://github.com/muschellij2/dcm2niir}
+  }
+
+
+@article{biasct,
+  title={Automated segmentation of head computed tomography images using {FSL}},
+  author={Cauley, Keith A and Och, Joe and Yorks, Patrick J and Fielden, Samuel W},
+  journal={Journal of computer assisted tomography},
+  volume={42},
+  number={1},
+  pages={104--110},
+  year={2018},
+  publisher={LWW}
+}
+
+
+@ARTICLE{csfedema,
+
+AUTHOR={Dhar, Rajat and Chen, Yasheng and An, Hongyu and Lee, Jin-Moo},
+
+TITLE={Application of Machine Learning to Automated Analysis of Cerebral Edema in Large Cohorts of Ischemic Stroke Patients},
+
+JOURNAL={{F}rontiers in {N}eurology},
+
+VOLUME={9},
+
+PAGES={687},
+
+YEAR={2018},
+
+URL={https://www.frontiersin.org/article/10.3389/fneur.2018.00687},
+
+DOI={10.3389/fneur.2018.00687},
+
+ISSN={1664-2295},
+
+ABSTRACT={Cerebral edema contributes to neurological deterioration and death after hemispheric stroke but there remains no effective means of preventing or accurately predicting its occurrence. Big data approaches may provide insights into the biologic variability and genetic contributions to severity and time course of cerebral edema. These methods require quantitative analyses of edema severity across large cohorts of stroke patients. We have proposed that changes in cerebrospinal fluid (CSF) volume over time may represent a sensitive and dynamic marker of edema progression that can be measured from routinely available CT scans. To facilitate and scale up such approaches we have created a machine learning algorithm capable of segmenting and measuring CSF volume from serial CT scans of stroke patients. We now present results of our preliminary processing pipeline that was able to efficiently extract CSF volumetrics from an initial cohort of 155 subjects enrolled in a prospective longitudinal stroke study. We demonstrate a high degree of reproducibility in total cranial volume registration between scans (R=0.982) as well as a strong correlation of baseline CSF volume and patient age (as a surrogate of brain atrophy, R=0.725). Reduction in CSF volume from baseline to final CT was correlated wtih infarct volume (R=0.715) and degree of midline shift (quadratic model, p<2.2x10-16). We utilized generalized estimating equations (GEE) to model CSF volumes over time, (using linear and quadratic terms) adjusting for age. This model demonstrated that CSF volume decreases over time (p<2.2x10-13) and is lower in those with cerebral edema (p=0.0004). We are now fully automating this pipeline to allow rapid analysis of even larger cohorts of stroke patients from multiple sites using an XNAT (eXtensible Neuroimaging Archive Toolkit) platform. Data on kinetics of edema across thousands of patients will facilitate precision approaches to prediction of malignant edema as well as modeling of variability and further understanding of genetic variants that influence edema severity.}
+}
+
+
+@misc{hipaa,
+  added-at = {2009-01-31T03:43:30.000+0100},
+  author = {{Centers for Medicare \& Medicaid Services}},
+  biburl = {https://www.bibsonomy.org/bibtex/2c762ed125b77a08edb1a3998f25a7a8b/ragibhasan},
+  howpublished = {Online at http://www.cms.hhs.gov/hipaa/},
+  interhash = {4c0dfb55ab4a787637b71d40cd843c72},
+  intrahash = {c762ed125b77a08edb1a3998f25a7a8b},
+  keywords = {hipaa law},
+  timestamp = {2009-01-31T03:47:33.000+0100},
+  title = {{The Health Insurance Portability and Accountability Act of 1996 (HIPAA)}},
+  year = 1996
+}
+
+
+@incollection{schimke2015privacy,
+  title={Privacy Considerations and Techniques for Neuroimages},
+  author={Schimke, Nakeisha and Hale, John},
+  booktitle={Medical Data Privacy Handbook},
+  pages={527--547},
+  year={2015},
+  publisher={Springer}
+}
+
+
+  @Article{freesurfer,
+    title = {FreeSurfer},
+    author = {Bruce Fischl},
+    journal = {Neuroimage},
+    volume = {62},
+    number = {2},
+    pages = {774--781},
+    year = {2012},
+    publisher = {Elsevier},
+  }
+
+
+@article{mridefacer,
+  title={A technique for the deidentification of structural brain {MR} images},
+  author={Bischoff-Grethe, Amanda and Ozyurt, I Burak and Busa, Evelina and Quinn, Brian T and Fennema-Notestine, Christine and Clark, Camellia P and Morris, Shaunna and Bondi, Mark W and Jernigan, Terry L and Dale, Anders M and others},
+  journal={Human brain mapping},
+  volume={28},
+  number={9},
+  pages={892--903},
+  year={2007},
+  publisher={Wiley Online Library}
+}
+
+
+@inproceedings{quickshear,
+  title={Quickshear Defacing for Neuroimages},
+  author={Schimke, Nakeisha and Hale, John},
+  booktitle={HealthSec},
+  year={2011}
+}
+
+
+@inproceedings{cadavid2009multi,
+  title={Multi-modal biometric modeling and recognition of the human face and ear},
+  author={Cadavid, Steven and Mahoor, Mohammad H and Abdel-Mottaleb, Mohamed},
+  booktitle={2009 IEEE International Workshop on Safety, Security \& Rescue Robotics (SSRR 2009)},
+  pages={1--6},
+  year={2009},
+  organization={IEEE}
+}
+
+@article{mosher_2010,
+title={Ears Could Make Better Unique {ID}s Than Fingerprints},
+journal={WIRED},
+author={Mosher, Dave},
+year={2010},
+month={Nov}}
+
+
+@article{oldcsf,
+  title={The calculation of {CSF} spaces in {CT}},
+  author={Hacker, H and Artmann, H},
+  journal={Neuroradiology},
+  volume={16},
+  number={1},
+  pages={190--192},
+  year={1978},
+  publisher={Springer}
+}
+
+
+@article{li2012automatic,
+  title={Automatic subarachnoid space segmentation and hemorrhage detection in clinical head {CT} scans},
+  author={Li, Yong-Hong and Zhang, Liang and Hu, Qing-Mao and Li, Hong-Wei and Jia, Fu-Cang and Wu, Jian-Huang},
+  journal={International journal of computer assisted radiology and surgery},
+  volume={7},
+  number={4},
+  pages={507--516},
+  year={2012},
+  publisher={Springer}
+}
+
+
+@article{poh2012automatic,
+  title={Automatic segmentation of ventricular cerebrospinal fluid from ischemic stroke {CT} images},
+  author={Poh, LE and Gupta, V and Johnson, A and Kazmierski, R and Nowinski, Wieslaw Lucjan},
+  journal={Neuroinformatics},
+  volume={10},
+  number={2},
+  pages={159--172},
+  year={2012},
+  publisher={Springer}
+}
+
+
+@article{zhang2001segmentation,
+  title={Segmentation of brain MR images through a hidden {M}arkov random field model and the expectation-maximization algorithm},
+  author={Zhang, Yongyue and Brady, Michael and Smith, Stephen},
+  journal={IEEE transactions on medical imaging},
+  volume={20},
+  number={1},
+  pages={45--57},
+  year={2001},
+  publisher={Ieee}
+}
+
+
+@article{liu2010automatic,
+  title={Automatic model-guided segmentation of the human brain ventricular system from {CT} images},
+  author={Liu, Jimin and Huang, Su and Ihar, Volkau and Ambrosius, Wojciech and Lee, Looi Chow and Nowinski, Wieslaw L},
+  journal={Academic radiology},
+  volume={17},
+  number={6},
+  pages={718--726},
+  year={2010},
+  publisher={Elsevier}
+}
+
+
+@inproceedings{patel2017automatic,
+  title={Automatic cerebrospinal fluid segmentation in non-contrast {CT} images using a {3D} convolutional network},
+  author={Patel, Ajay and van de Leemput, Sil C and Prokop, Mathias and van Ginneken, Bram and Manniesing, Rashindra},
+  booktitle={Medical Imaging 2017: Computer-Aided Diagnosis},
+  volume={10134},
+  pages={1013420},
+  year={2017},
+  organization={International Society for Optics and Photonics}
+}
+
+
+@article{patel2017robust,
+  title={Robust cranial cavity segmentation in {CT} and {CT} perfusion images of trauma and suspected stroke patients},
+  author={Patel, Ajay and van Ginneken, Bram and Meijer, Frederick JA and van Dijk, Ewoud J and Prokop, Mathias and Manniesing, Rashindra},
+  journal={Medical image analysis},
+  volume={36},
+  pages={216--228},
+  year={2017},
+  publisher={Elsevier}
+}
+
+
+@incollection{ferdian2017automated,
+  title={Automated Ventricular System Segmentation in {CT} Images of Deformed Brains Due to Ischemic and Subarachnoid Hemorrhagic Stroke},
+  author={Ferdian, E and Boers, AM and Beenen, LF and Cornelissen, BM and Jansen, IG and Treurniet, KM and Borst, Jordi and Majoie, CB and Marquering, Henk A},
+  booktitle={Molecular Imaging, Reconstruction and Analysis of Moving Body Organs, and Stroke Imaging and Treatment},
+  pages={149--157},
+  year={2017},
+  publisher={Springer}
+}
